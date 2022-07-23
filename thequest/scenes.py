@@ -2,20 +2,22 @@ import os
 
 import pygame as pg
 
-from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES,  MESSAGE_COLOUR,   WIDTH 
+from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES,  MESSAGE_COLOUR,   WIDTH
+
 
 class Scenes:
-    def __init__(self, display: pg.Surface):
-        self.pantalla = display
+    def __init__(self, screen: pg.Surface):
+        self.screen = screen
         self.time = pg.time.Clock()
 
-class Home(Scenes):
-    #first scene, home
-    def __init__(self, display: pg.Surface):
-        super().__init__(display)
 
-        #self.logo = pg.image.load(
-            #os.path.join("resources", "images", "arkanoid_name.png"))
+class Home(Scenes):
+    # first scene, home
+    def __init__(self, screen: pg.Surface):
+        super().__init__(screen)
+
+        # self.logo = pg.image.load(
+        # os.path.join("resources", "images", "arkanoid_name.png"))
 
         #font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         #self.tipography = pg.font.Font(font_file, 40)
@@ -30,10 +32,10 @@ class Home(Scenes):
                 if event.type == pg.QUIT:
                     pg.quit()
 
-            self.display.fill(BACKGROUND_COLOUR)
+            self.screen.fill(BACKGROUND_COLOUR)
 
             self.draw_logo()
-            self.pintar_texto()
+            self.draw_text()
 
             pg.display.flip()
 
@@ -41,12 +43,12 @@ class Home(Scenes):
         width_logo = self.logo.get_width()
         pos_x = (WIDTH - width_logo) / 2
         pos_y = HEIGHT / 3
-        self.display.blit(self.logo, (pos_x, pos_y))
+        self.screen.blit(self.logo, (pos_x, pos_y))
 
-    def pintar_texto(self):
+    def draw_text(self):
         message = "'Space' to start playing"
         text = self.tipography.render(message, True, MESSAGE_COLOUR)
         width_text = text.get_width()
         pos_x = (WIDTH - width_text) / 2     # ANCHO/2 - ancho_texto/2
         pos_y = .75 * HEIGHT
-        self.pantalla.blit(text, (pos_x, pos_y))
+        self.screen.blit(text, (pos_x, pos_y))
