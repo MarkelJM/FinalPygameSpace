@@ -4,4 +4,6 @@ from thequest.game import TheQuest
 
 
 if __name__ == "__main__":
-    TheQuest()
+    game = TheQuest()
+    game.play()
+    
