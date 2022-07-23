@@ -4,7 +4,7 @@ import pygame as pg
 
 
 from thequest import WIDTH, HEIGHT
-from thequest.scenes import Home
+from thequest.scenes import Home, Information
 
 class TheQuest:
     def __init__(self):
@@ -22,7 +22,8 @@ class TheQuest:
         pg.display.set_icon(icon)
         """
         self.scenes = [
-            Home(self.display)
+            Home(self.display),
+            Information(self.display)
             
            
         ]

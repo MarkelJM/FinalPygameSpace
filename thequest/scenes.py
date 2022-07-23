@@ -59,7 +59,7 @@ class Home(Scenes):
         
         text = self.tipography.render(text_input, True, MESSAGE_COLOUR)
         width_text = text.get_width()
-        pos_x = (WIDTH - width_text) / 2     # ANCHO/2 - ancho_texto/2
+        pos_x = (WIDTH - width_text) / 2     
         
         self.screen.blit(text, (pos_x, sum_pos_y))
 
@@ -70,6 +70,17 @@ class Information(Scenes):
 
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 20)
+
+        self.message =  "'Space' to go back"
+        self.information_text_1 = " Viaja de planeta en planeta" 
+        self.information_text_2 = "- EL objetivo es no ser golpeado por las rocas espaciales" 
+        self.information_text_3 = "- Al subir de nivel aumentará la dificultad" 
+        self.information_text_4 = "- Tendrás 3 vidas" 
+       
+
+        self.message_pos =  0.3 * HEIGHT
+        self.separator = MAIN_TEXT_SIZE + TEXT_MARGIN #to separate diferent lines, actually it should be in __init__
+        self.information_pos = self.message_pos + self.separator
 
     def play(self):
         exit = False
@@ -84,21 +95,34 @@ class Information(Scenes):
 
             self.screen.fill(BACKGROUND_COLOUR)
 
-            self.draw_logo()
-            self.draw_text()
+            
+            self.draw_text(self.message, self.message_pos)
+            self.draw_text(self.information_text_1, self.information_pos + self.separator)
+            self.draw_text(self.information_text_2, self.information_pos +self.separator*2) 
+            self.draw_text(self.information_text_3, self.information_pos +self.separator*3)
+            self.draw_text(self.information_text_4, self.information_pos +self.separator*4)
 
             pg.display.flip()
 
-    def draw_logo(self):
-        width_logo = self.logo.get_width()
-        pos_x = (WIDTH - width_logo) / 2
-        pos_y = HEIGHT / 3
-        self.screen.blit(self.logo, (pos_x, pos_y))
+    def write_text(self):
+        #creating
+        
+        self.information_text_1 = " Viaja de planeta en planeta" 
+        self.information_text_2 = "- EL objetivo es no ser golpeado por las rocas espaciales" 
+        self.information_text_3 = "- Al subir de nivel aumentará la dificultad" 
+        self.information_text_4 = "- Tendrás 3 vidas" 
 
-    def draw_text(self):
-        message = "'Space' to start playing"
-        text = self.tipography.render(message, True, MESSAGE_COLOUR)
+        self.text_list = [self.information_text_1, self.information_text_2, self.information_text_3, self.information_text_4]
+        self.line_amount = len(self.text_list)
+    
+
+
+
+
+    def draw_text(self, text_input, sum_pos_y):
+        
+        text = self.tipography.render(text_input, True, MESSAGE_COLOUR)
         width_text = text.get_width()
-        pos_x = (WIDTH - width_text) / 2     # ANCHO/2 - ancho_texto/2
-        pos_y = .75 * HEIGHT
-        self.screen.blit(text, (pos_x, pos_y))
+        pos_x = (WIDTH - width_text) / 2     
+        
+        self.screen.blit(text, (pos_x, sum_pos_y))
