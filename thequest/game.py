@@ -10,42 +10,33 @@ from thequest.scenes import Game, Home, Information
 class TheQuest:
     def __init__(self):
         pg.init()
-        #create the display screen
-        
+        # create the display screen
+
         self.display = pg.display.set_mode((WIDTH, HEIGHT))
-        #create title name
+        # create title name
         pg.display.set_caption("The Quest MJM")
-        #create logo: 1. upload 2. set
-        #NOTE:this is the code, but I have to create the logo an named it
+        # create logo: 1. upload 2. set
+        # NOTE:this is the code, but I have to create the logo an named it
         """
         icon = pg.image.load(
             os.path.join("resources", "images", "icon.png"))
         pg.display.set_icon(icon)
         """
-        
+
         self.scenes = [
             Home(self.display),
             Information(self.display),
-            Game(self.display)           
+            Game(self.display),
             
-           
         ]
 
-      
-
     def play(self):
-        
-        #in loop
-        for scene in self.scenes:
-            scene.play() 
-            if Information.play == True:
-                scene = self.scenes[0]
-            
-           
 
+        # in loop
+        for scene in self.scenes:
+            scene.play()
 
 
 if __name__ == "__main__":
     game = TheQuest()
     game.play()
-
