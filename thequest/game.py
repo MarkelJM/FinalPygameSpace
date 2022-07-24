@@ -4,7 +4,8 @@ import pygame as pg
 
 
 from thequest import WIDTH, HEIGHT
-from thequest.scenes import Home, Information
+from thequest.scenes import Game, Home, Information
+
 
 class TheQuest:
     def __init__(self):
@@ -21,9 +22,11 @@ class TheQuest:
             os.path.join("resources", "images", "icon.png"))
         pg.display.set_icon(icon)
         """
+        
         self.scenes = [
             Home(self.display),
-            Information(self.display)
+            Information(self.display),
+            Game(self.display)           
             
            
         ]
@@ -31,9 +34,13 @@ class TheQuest:
       
 
     def play(self):
-        #main loop
+        
+        #in loop
         for scene in self.scenes:
-            scene.play()
+            scene.play() 
+            if Information.play == True:
+                scene = self.scenes[0]
+            
            
 
 

@@ -1,5 +1,6 @@
 import os
 
+
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
@@ -84,12 +85,19 @@ class Information(Scenes):
 
     def play(self):
         exit = False
-
+        self.change = False
+        
         while not exit:
             for event in pg.event.get():
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:
+                    self.change = self.change_scene(event.type, event.key)  
+                    return self.change
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     exit = True
-                
+                                        
+                    
+              
+                                   
                 if event.type == pg.QUIT:
                     pg.quit()
 
@@ -103,6 +111,13 @@ class Information(Scenes):
             self.draw_text(self.information_text_4, self.information_pos +self.separator*4)
 
             pg.display.flip()
+
+    def change_scene(self, event1, event2):
+        
+        if event1 == pg.KEYDOWN and event2 == pg.K_SPACE:
+            return  True
+             
+
 
     def write_text(self):
         #creating
@@ -126,3 +141,29 @@ class Information(Scenes):
         pos_x = (WIDTH - width_text) / 2     
         
         self.screen.blit(text, (pos_x, sum_pos_y))
+
+
+class Game(Scenes):
+    def __init__(self, pantalla: pg.Surface):
+        super().__init__(pantalla)
+        bg_file = os.path.join("resources", "images", "background.png")
+        self.background = pg.image.load(bg_file)
+    
+
+
+    def play(self):
+        exit = False
+        
+        while not exit:
+
+            
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+        
+        
+        
+
+
+
