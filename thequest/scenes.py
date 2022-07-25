@@ -5,6 +5,8 @@ import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
 from .objects import Plane
+from .game import MainGame
+
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
@@ -16,6 +18,7 @@ class Home(Scenes):
     # first scene, home
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
+        self.main = MainGame()
 
         self.logo = pg.image.load(
             os.path.join("resources", "images", "icon.png"))
@@ -34,7 +37,9 @@ class Home(Scenes):
         while not exit:
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    exit = True
+                    Information(self.main.display)
+                
+                                        
 
                     # go to information scene
                 if event.type == pg.QUIT:
@@ -46,8 +51,9 @@ class Home(Scenes):
             self.draw_logo()
             self.draw_text(self.message, self.message_pos)
             self.draw_text(self.information_text, self.information_pos)
-
+            
             pg.display.flip()
+            
 
     def draw_logo(self):
         width_logo = self.logo.get_width()
@@ -63,10 +69,11 @@ class Home(Scenes):
 
         self.screen.blit(text, (pos_x, sum_pos_y))
 
-
+            
 class Information(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
+        self.main = MainGame()
 
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 20)
@@ -89,10 +96,8 @@ class Information(Scenes):
         while not exit:
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_a:
-                    self.change = self.change_scene(event.type, event.key)
-                    return self.change
+                    Home(self.main.display)
+                
 
                 if event.type == pg.QUIT:
                     pg.quit()
