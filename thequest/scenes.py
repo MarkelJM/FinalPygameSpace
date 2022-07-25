@@ -4,7 +4,7 @@ import sys
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-
+from .objects import Plane
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
@@ -142,6 +142,7 @@ class Game(Scenes):
         super().__init__(screen)
         bg_file = os.path.join("resources", "images", "background.png")
         self.background = pg.image.load(bg_file)
+        self.player = Plane()
         
     def play(self):
 
@@ -157,8 +158,22 @@ class Game(Scenes):
                     pg.quit()
                     sys.exit()
 
+            ### UPDATE OBJECTS SETUP ###
+
+            self.player.update()
+
             self.screen.fill(BACKGROUND_COLOUR)
+            ###  PAINT BACKGROUND METHOD    ###
+            self.paint_background()
+            self.screen.blit(
+                self.player.image, self.player.rect)  #PLayer   
 
             
 
+            
+            
             pg.display.flip()
+
+    #background method
+    def paint_background(self):
+        self.screen.blit(self.background, (0, 0))

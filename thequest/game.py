@@ -17,11 +17,11 @@ class TheQuest:
         pg.display.set_caption("The Quest MJM")
         # create logo: 1. upload 2. set
         # NOTE:this is the code, but I have to create the logo an named it
-        """
+        
         icon = pg.image.load(
             os.path.join("resources", "images", "icon.png"))
         pg.display.set_icon(icon)
-        """
+        
 
         self.scenes = [
             Home(self.display),
