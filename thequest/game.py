@@ -4,7 +4,7 @@ import pygame as pg
 
 
 from thequest import WIDTH, HEIGHT
-from thequest.scenes import Game, Home, Information
+from thequest.scenes import  Home, Information, Game
 
 
 class TheQuest:
@@ -26,9 +26,8 @@ class TheQuest:
         self.scenes = [
             Home(self.display),
             Information(self.display),
-            Game(self.display),
-            
-        ]
+            Game(self.display)         
+            ]
 
     def play(self):
 

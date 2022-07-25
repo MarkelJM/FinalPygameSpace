@@ -35,7 +35,7 @@ class Home(Scenes):
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     exit = True
-                
+
                     # go to information scene
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -83,7 +83,7 @@ class Information(Scenes):
         self.information_pos = self.message_pos + self.separator
 
     def play(self):
-        
+
         exit = False
 
         while not exit:
@@ -137,25 +137,28 @@ class Information(Scenes):
 
         self.screen.blit(text, (pos_x, sum_pos_y))
 
-
 class Game(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
         bg_file = os.path.join("resources", "images", "background.png")
         self.background = pg.image.load(bg_file)
-
+        
     def play(self):
+
         exit = False
 
         while not exit:
             self.time.tick(FPS)
-
             for event in pg.event.get():
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    exit = True                
+
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    exit = True
 
-        self.screen.fill(BACKGROUND_COLOUR)
-        pg.display.flip()
+            self.screen.fill(BACKGROUND_COLOUR)
+
+            
+
+            pg.display.flip()
