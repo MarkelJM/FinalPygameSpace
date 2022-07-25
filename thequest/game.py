@@ -35,7 +35,4 @@ class TheQuest:
         for scene in self.scenes:
             scene.play()
 
-
-if __name__ == "__main__":
-    game = TheQuest()
-    game.play()
+        
