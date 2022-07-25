@@ -29,7 +29,8 @@ class MainGame:
             
 
     def start(self):
-        Home(self.display)
+        self.pantalla = Home(self.display)
+        self.pantalla.play()
         
        
 
