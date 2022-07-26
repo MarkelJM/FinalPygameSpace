@@ -36,6 +36,4 @@ class TheQuest:
             scene.play()
 
 
-if __name__ == "__main__":
-    game = TheQuest()
-    game.play()
+
