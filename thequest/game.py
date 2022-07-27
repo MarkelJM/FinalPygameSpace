@@ -7,7 +7,7 @@ from thequest import WIDTH, HEIGHT
 from thequest.scenes import  Home, Information, Game
 
 
-class TheQuest:
+class MainGame:
     def __init__(self):
         pg.init()
         # create the display screen
@@ -23,11 +23,11 @@ class TheQuest:
         pg.display.set_icon(icon)
         
 
-        self.scenes = [
-            Home(self.display),
-            Information(self.display),
-            Game(self.display)         
-            ]
+        
+            
+                   
+            
+
 
         
 
@@ -54,4 +54,13 @@ class TheQuest:
             scene.play()
 
 
+
+
+    def start(self):
+        self.pantalla = Home(self.display)
+        self.pantalla.play()
+        
+       
+
+        
 

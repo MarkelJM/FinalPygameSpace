@@ -1,10 +1,10 @@
 from thequest import WIDTH, HEIGHT
 
-from thequest.game import TheQuest
+from thequest.game import MainGame
 
 
 if __name__ == "__main__":
-    game = TheQuest()
-    game.play()
+    game = MainGame()
+    game.start()
     
     

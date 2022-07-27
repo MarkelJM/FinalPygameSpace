@@ -1,3 +1,6 @@
+from .game import MainGame
+from .objects import Plane
+from .objects import Plane, Rock
 import os
 import sys
 from random import randint
@@ -5,7 +8,8 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Plane, Rock
+
+
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
@@ -17,6 +21,7 @@ class Home(Scenes):
     # first scene, home
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
+        self.main = MainGame()
 
         self.logo = pg.image.load(
             os.path.join("resources", "images", "icon.png"))
@@ -68,6 +73,7 @@ class Home(Scenes):
 class Information(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
+        self.main = MainGame()
 
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 20)
@@ -90,10 +96,17 @@ class Information(Scenes):
         while not exit:
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+
+
+
                     exit = True
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:
                     self.change_scene(Information)
                     
+
+                    Home(self.main.display)
+                
+
 
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -171,14 +184,14 @@ class Game(Scenes):
                 self.player.image, self.player.rect)  #PLayer   
 
 
-            #draw in the game rocks
+            # draw in the game rocks
             self.rocks.draw(self.screen)
 
             
             
             pg.display.flip()
 
-    #background method
+    # background method
     def paint_background(self):
         self.screen.blit(self.background, (0, 0))
 
