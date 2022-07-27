@@ -1,5 +1,5 @@
-from .game import MainGame
-from .objects import Plane
+
+
 from .objects import Plane, Rock
 import os
 import sys
@@ -21,7 +21,7 @@ class Home(Scenes):
     # first scene, home
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
-        self.main = MainGame()
+       
 
         self.logo = pg.image.load(
             os.path.join("resources", "images", "icon.png"))
@@ -73,7 +73,7 @@ class Home(Scenes):
 class Information(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
-        self.main = MainGame()
+        
 
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 20)

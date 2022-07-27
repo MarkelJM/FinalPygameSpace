@@ -23,7 +23,11 @@ class MainGame:
         pg.display.set_icon(icon)
         
 
-        
+        self.scenes = [
+            Home(self.display),
+            Information(self.display),
+            Game(self.display)         
+            ]
             
                    
             
@@ -33,11 +37,7 @@ class MainGame:
 
     def play(self ):
 
-        self.scenes = [
-            Home(self.display),
-            Information(self.display),
-            Game(self.display)         
-            ]
+        
         """
         current_scene = Home(self.display)
         current_scene.play()
@@ -49,16 +49,16 @@ class MainGame:
             changed_scene = 1
         """
 
-        # in loop
-        for scene in self.scenes:
-            scene.play()
-
+        
 
 
 
     def start(self):
-        self.pantalla = Home(self.display)
-        self.pantalla.play()
+        # in loop
+        for scene in self.scenes:
+            scene.play()
+
+        
         
        
 
