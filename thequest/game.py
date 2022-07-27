@@ -29,7 +29,25 @@ class TheQuest:
             Game(self.display)         
             ]
 
-    def play(self):
+        
+
+    def play(self ):
+
+        self.scenes = [
+            Home(self.display),
+            Information(self.display),
+            Game(self.display)         
+            ]
+        """
+        current_scene = Home(self.display)
+        current_scene.play()
+        desesperada...crear un metodo especifico para cada escenario posible 
+        que devuelva true y no pida nada
+
+        if current_scene.change_scene():
+        
+            changed_scene = 1
+        """
 
         # in loop
         for scene in self.scenes:

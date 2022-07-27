@@ -1,10 +1,11 @@
 import os
 import sys
+from random import randint
 
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Plane
+from .objects import Plane, Rock
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
@@ -91,8 +92,8 @@ class Information(Scenes):
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     exit = True
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:
-                    self.change = self.change_scene(event.type, event.key)
-                    return self.change
+                    self.change_scene(Information)
+                    
 
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -112,10 +113,8 @@ class Information(Scenes):
 
             pg.display.flip()
 
-    def change_scene(self, event1, event2):
-
-        if event1 == pg.KEYDOWN and event2 == pg.K_SPACE:
-            return True
+    def change_scene(self,scene):        
+            return scene
 
     def write_text(self):
         # creating
@@ -143,6 +142,7 @@ class Game(Scenes):
         bg_file = os.path.join("resources", "images", "background.png")
         self.background = pg.image.load(bg_file)
         self.player = Plane()
+        self.rock =  self.rock_group()
         
     def play(self):
 
@@ -161,6 +161,8 @@ class Game(Scenes):
             ### UPDATE OBJECTS SETUP ###
 
             self.player.update()
+            self.rock.update()
+
 
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -168,7 +170,9 @@ class Game(Scenes):
             self.screen.blit(
                 self.player.image, self.player.rect)  #PLayer   
 
-            
+
+            #draw in the game rocks
+            self.rocks.draw(self.screen)
 
             
             
@@ -177,3 +181,25 @@ class Game(Scenes):
     #background method
     def paint_background(self):
         self.screen.blit(self.background, (0, 0))
+
+
+    ### Create Rock group ###
+    def rock_group(self):
+           
+        pos_y = randint(0, HEIGHT)       
+        self.rocks = pg.sprite.Group()
+        self.rocks.empty()
+        #  1 rock
+        rock = Rock(pos_y)
+        rock_speed = Rock.choose_speed()
+        pos_x = pos_x - rock_speed
+
+        self.rocks.add(rock)
+
+
+
+
+        
+
+        
+                

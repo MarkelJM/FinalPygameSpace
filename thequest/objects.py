@@ -41,16 +41,18 @@ class Plane(Sprite):
 
 
 class Rock(Sprite):
-    def __init__(self): # , points
-        super().__init__()
+    def __init__(self, pos_y): # , points
+        super().__init__(self)
 
         rock_yellow = self.choose_size()
         self.image = pg.image.load(rock_yellow)
-        width = self.image.get_width()
-        height = self.image.get_height()
+        #width = self.image.get_width()
+        #height = self.image.get_height()
         #self.points = points
-
-        self.rect = self.image.get_rect(x= width, y= height)
+        pos_x = WIDTH
+        
+        self.rect = self.image.get_rect(x= pos_x, y= pos_y)
+        
 
         
         self.choose_speed()
@@ -71,3 +73,4 @@ class Rock(Sprite):
         self.list_speed = [5,10,20]
         number = randint(1,3)
         self.rock_speed = self.list_speed[number]
+        return self.rock_speed
