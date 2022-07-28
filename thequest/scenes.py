@@ -7,7 +7,7 @@ from random import randint
 
 import pygame as pg
 
-from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
+from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
 from .objects import Plane, Rock
 
 class Scenes:
@@ -148,10 +148,11 @@ class Game(Scenes):
         bg_file = os.path.join("resources", "images", "background.png")
         self.background = pg.image.load(bg_file)
         self.player = Plane()
-        self.rock = self.rock_group()
-
+        self.rocks_groups = self.rock_group()
+        
+    
     def play(self):
-
+        
         exit = False
 
         while not exit:
@@ -163,11 +164,13 @@ class Game(Scenes):
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
-
+            
+            self.created_rock = self.create_rocks()
             ### UPDATE OBJECTS SETUP ###
 
             self.player.update()
             self.rock_object.update()
+            self.rocks.update()
 
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -187,14 +190,21 @@ class Game(Scenes):
     ### Create Rock group ###
 
     def rock_group(self):
-        pos_x = WIDTH
-        pos_y = randint(0, HEIGHT)
+        
+        
         self.rocks = pg.sprite.Group()
         self.rocks.empty()
-        #  1 rock
-        self.rock_object = Rock(pos_x,pos_y)
+    def create_rocks(self):
+        pos_x = WIDTH 
+        pos_y = randint(0, HEIGHT)
+        self.rock_object = Rock( pos_x, pos_y)
+        self.rocks.add(self.rock_object)  
+        """
+        repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
+        for i in range(repeated):
+            pos_y = randint(0, HEIGHT)
+            self.rock_object = Rock(pos_x,pos_y)
+            self.rocks.add(self.rock_object)
+        """
         
-
-        
-
-        self.rocks.add(self.rock_object)
+            

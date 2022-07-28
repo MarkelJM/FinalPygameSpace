@@ -74,7 +74,7 @@ class Rock(Sprite):
         return self.rock_size
 
     def choose_speed(self):
-        self.list_speed = [5,10,20]
+        self.list_speed = [7,13,19]
         number = randint(0,2)
         self.rock_speed = self.list_speed[number]
         return self.rock_speed
@@ -83,13 +83,11 @@ class Rock(Sprite):
         
         if self.rect.x >  0:
             self.rect.x -=  self.rock_speed 
-        """
-        if self.rect.x < 0 - 100:
-            self.rect.x = 0 - self.rect.x-100 
-        """            
         
-        if self.rect.x == 0:
-            self.rect.x = 0 - self.rect.x-100
+        if self.rect.x < 0 or self.rect.x == 0:
+            self.rect.x = 0 -500
+        
+        
         
         
         
