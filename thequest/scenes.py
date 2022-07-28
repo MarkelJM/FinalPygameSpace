@@ -187,12 +187,12 @@ class Game(Scenes):
     ### Create Rock group ###
 
     def rock_group(self):
-
+        pos_x = WIDTH
         pos_y = randint(0, HEIGHT)
         self.rocks = pg.sprite.Group()
         self.rocks.empty()
         #  1 rock
-        self.rock_object = Rock(pos_y)
+        self.rock_object = Rock(pos_x,pos_y)
         
 
         

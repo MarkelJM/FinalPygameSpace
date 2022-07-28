@@ -41,7 +41,7 @@ class Plane(Sprite):
 
 
 class Rock(Sprite):
-    def __init__(self, position_y): # , points
+    def __init__(self,position_x, position_y): # , points
         super().__init__()
 
         self.image = self.choose_size()
@@ -51,12 +51,13 @@ class Rock(Sprite):
         #self.points = points
         
         self.pos_y = position_y
-        
+        self.pos_x = position_x
+        self.rect = self.image.get_rect(x= self.pos_x, y= self.pos_y)
         
         
 
         
-        self.choose_speed()
+        self.rock_speed = self.choose_speed()
 
     def choose_size(self):
         self.rock_list = []
@@ -78,14 +79,17 @@ class Rock(Sprite):
         self.rock_speed = self.list_speed[number]
         return self.rock_speed
 
-    def update(self):
-        self.pos_x = WIDTH
-        self.rect = self.image.get_rect(x= self.pos_x, y= self.pos_y)
+    def update(self):     
         
-        rock_speed = self.choose_speed()
-        self.rect.x -=  rock_speed
-        if self.rect.x < 0:
-            self.rect.x = 0 - self.rect -10
+        if self.rect.x >  0:
+            self.rect.x -=  self.rock_speed 
+        """
+        if self.rect.x < 0 - 100:
+            self.rect.x = 0 - self.rect.x-100 
+        """            
+        
+        if self.rect.x == 0:
+            self.rect.x = 0 - self.rect.x-100
         
         
         
