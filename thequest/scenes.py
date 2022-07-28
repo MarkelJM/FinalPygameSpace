@@ -156,9 +156,9 @@ class Game(Scenes):
     def play(self):
 
         exit = False
-
+        contador = 0
         while not exit:
-            
+            contador += 1
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     exit = True
@@ -166,10 +166,14 @@ class Game(Scenes):
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
-
-
-            self.created_rock = self.create_rocks()
             
+            
+            if contador == 1:
+                
+                self.created_rock = self.create_rocks()
+            if contador % 5 == 0:
+                
+                self.created_rock = self.create_rocks()
             
             
             ### UPDATE OBJECTS SETUP ###
@@ -177,6 +181,7 @@ class Game(Scenes):
             self.player.update()
             self.rock_object.update()
             self.rocks.update()
+            
 
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -202,18 +207,19 @@ class Game(Scenes):
         self.rocks.empty()
 
     def create_rocks(self):
-        
+        pos_x = WIDTH
+        repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
+        for i in range(repeated):
+            pos_y = randint(0, HEIGHT)
+            self.rock_object = Rock(pos_x,pos_y)
+            self.rocks.add(self.rock_object)
             
-       
+        """
         pos_x = WIDTH
         pos_y = randint(0, HEIGHT)
         self.rock_object = Rock(pos_x, pos_y)
         self.rocks.add(self.rock_object)
 
         """
-        repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
-        for i in range(repeated):
-            pos_y = randint(0, HEIGHT)
-            self.rock_object = Rock(pos_x,pos_y)
-            self.rocks.add(self.rock_object)
-        """
+        
+        

@@ -77,6 +77,7 @@ class Rock(Sprite):
         self.list_speed = [7,13,19]
         number = randint(0,2)
         self.rock_speed = self.list_speed[number]
+        
         return self.rock_speed
 
     def update(self):     
