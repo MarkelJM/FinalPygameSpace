@@ -1,5 +1,5 @@
 import os
-from random import randint, random
+from random import randint
 
 import pygame as pg
 from pygame.sprite import Sprite
@@ -41,17 +41,18 @@ class Plane(Sprite):
 
 
 class Rock(Sprite):
-    def __init__(self, pos_y): # , points
-        super().__init__(self)
+    def __init__(self, position_y): # , points
+        super().__init__()
 
-        rock_yellow = self.choose_size()
-        self.image = pg.image.load(rock_yellow)
+        self.image = self.choose_size()
+        
         #width = self.image.get_width()
         #height = self.image.get_height()
         #self.points = points
-        pos_x = WIDTH
         
-        self.rect = self.image.get_rect(x= pos_x, y= pos_y)
+        self.pos_y = position_y
+        
+        
         
 
         
@@ -66,11 +67,28 @@ class Rock(Sprite):
                 )
             )
         
-        number = randint(1,3)
+        number = randint(0,2)
+
         self.rock_size = self.rock_list[number]
+        return self.rock_size
 
     def choose_speed(self):
         self.list_speed = [5,10,20]
-        number = randint(1,3)
+        number = randint(0,2)
         self.rock_speed = self.list_speed[number]
         return self.rock_speed
+
+    def update(self):
+        self.pos_x = WIDTH
+        self.rect = self.image.get_rect(x= self.pos_x, y= self.pos_y)
+        
+        rock_speed = self.choose_speed()
+        self.rect.x -=  rock_speed
+        if self.rect.x < 0:
+            self.rect.x = 0 - self.rect -10
+        
+        
+        
+
+
+   

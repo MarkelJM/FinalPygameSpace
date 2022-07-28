@@ -1,6 +1,6 @@
 
 
-from .objects import Plane, Rock
+
 import os
 import sys
 from random import randint
@@ -8,8 +8,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-
-
+from .objects import Plane, Rock
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
@@ -21,7 +20,6 @@ class Home(Scenes):
     # first scene, home
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
-       
 
         self.logo = pg.image.load(
             os.path.join("resources", "images", "icon.png"))
@@ -73,7 +71,6 @@ class Home(Scenes):
 class Information(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
-        
 
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 20)
@@ -97,16 +94,11 @@ class Information(Scenes):
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
 
-
-
                     exit = True
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:
                     self.change_scene(Information)
-                    
 
                     Home(self.main.display)
-                
-
 
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -126,8 +118,8 @@ class Information(Scenes):
 
             pg.display.flip()
 
-    def change_scene(self,scene):        
-            return scene
+    def change_scene(self, scene):
+        return scene
 
     def write_text(self):
         # creating
@@ -149,14 +141,15 @@ class Information(Scenes):
 
         self.screen.blit(text, (pos_x, sum_pos_y))
 
+
 class Game(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
         bg_file = os.path.join("resources", "images", "background.png")
         self.background = pg.image.load(bg_file)
         self.player = Plane()
-        self.rock =  self.rock_group()
-        
+        self.rock = self.rock_group()
+
     def play(self):
 
         exit = False
@@ -165,7 +158,7 @@ class Game(Scenes):
             self.time.tick(FPS)
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    exit = True                
+                    exit = True
 
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -174,45 +167,34 @@ class Game(Scenes):
             ### UPDATE OBJECTS SETUP ###
 
             self.player.update()
-            self.rock.update()
-
+            self.rock_object.update()
 
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
             self.paint_background()
             self.screen.blit(
-                self.player.image, self.player.rect)  #PLayer   
-
+                self.player.image, self.player.rect)  # PLayer
 
             # draw in the game rocks
             self.rocks.draw(self.screen)
 
-            
-            
             pg.display.flip()
 
     # background method
     def paint_background(self):
         self.screen.blit(self.background, (0, 0))
 
-
     ### Create Rock group ###
+
     def rock_group(self):
-           
-        pos_y = randint(0, HEIGHT)       
+
+        pos_y = randint(0, HEIGHT)
         self.rocks = pg.sprite.Group()
         self.rocks.empty()
         #  1 rock
-        rock = Rock(pos_y)
-        rock_speed = Rock.choose_speed()
-        pos_x = pos_x - rock_speed
-
-        self.rocks.add(rock)
-
-
-
-
+        self.rock_object = Rock(pos_y)
         
 
         
-                
+
+        self.rocks.add(self.rock_object)
