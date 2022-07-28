@@ -1,14 +1,14 @@
 
 
-
 import os
 import sys
 from random import randint
 
 import pygame as pg
 
-from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE,MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
+from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
 from .objects import Plane, Rock
+
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
@@ -149,14 +149,16 @@ class Game(Scenes):
         self.background = pg.image.load(bg_file)
         self.player = Plane()
         self.rocks_groups = self.rock_group()
+        self.clock = pg.time.Clock()
         
-    
+        
+
     def play(self):
-        
+
         exit = False
 
         while not exit:
-            self.time.tick(FPS)
+            
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     exit = True
@@ -164,8 +166,12 @@ class Game(Scenes):
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
-            
+
+
             self.created_rock = self.create_rocks()
+            
+            
+            
             ### UPDATE OBJECTS SETUP ###
 
             self.player.update()
@@ -182,6 +188,7 @@ class Game(Scenes):
             self.rocks.draw(self.screen)
 
             pg.display.flip()
+            self.clock.tick(FPS)
 
     # background method
     def paint_background(self):
@@ -190,15 +197,19 @@ class Game(Scenes):
     ### Create Rock group ###
 
     def rock_group(self):
-        
-        
+
         self.rocks = pg.sprite.Group()
         self.rocks.empty()
+
     def create_rocks(self):
-        pos_x = WIDTH 
+        
+            
+       
+        pos_x = WIDTH
         pos_y = randint(0, HEIGHT)
-        self.rock_object = Rock( pos_x, pos_y)
-        self.rocks.add(self.rock_object)  
+        self.rock_object = Rock(pos_x, pos_y)
+        self.rocks.add(self.rock_object)
+
         """
         repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
         for i in range(repeated):
@@ -206,5 +217,3 @@ class Game(Scenes):
             self.rock_object = Rock(pos_x,pos_y)
             self.rocks.add(self.rock_object)
         """
-        
-            
