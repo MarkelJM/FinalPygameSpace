@@ -38,7 +38,9 @@ class Plane(Sprite):
             if self.rect.bottom  > HEIGHT:
                 self.rect.bottom = HEIGHT
 
+    
 
+    
 
 class Rock(Sprite):
     def __init__(self,position_x, position_y): # , points
@@ -83,7 +85,8 @@ class Rock(Sprite):
     def update(self):     
         
         if self.rect.x >  0:
-            self.rect.x -=  self.rock_speed 
+            self.rect.x -=  self.rock_speed
+             
         
         if self.rect.x < 0 or self.rect.x == 0:
             self.rect.x = 0 -500

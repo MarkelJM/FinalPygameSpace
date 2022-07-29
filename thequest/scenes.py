@@ -150,8 +150,6 @@ class Game(Scenes):
         self.player = Plane()
         self.rocks_groups = self.rock_group()
         self.clock = pg.time.Clock()
-        
-        
 
     def play(self):
 
@@ -166,22 +164,20 @@ class Game(Scenes):
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
-            
-            
-            if contador == 1:
-                
+
+            if contador == 1:  # create first rocks to don´t have problems with create method
+
                 self.created_rock = self.create_rocks()
-            if contador % 5 == 0:
-                
+            if contador % 5 == 0:  # to control difficulty: allows to cntrolling creating rocks every X time
+
                 self.created_rock = self.create_rocks()
-            
-            
+
             ### UPDATE OBJECTS SETUP ###
 
             self.player.update()
             self.rock_object.update()
             self.rocks.update()
-            
+            plane_crash =  pg.sprite.spritecollide(self.player, self.rocks, True)
 
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -207,19 +203,16 @@ class Game(Scenes):
         self.rocks.empty()
 
     def create_rocks(self):
+        """
         pos_x = WIDTH
         repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
         for i in range(repeated):
             pos_y = randint(0, HEIGHT)
             self.rock_object = Rock(pos_x,pos_y)
             self.rocks.add(self.rock_object)
-            
+
         """
         pos_x = WIDTH
         pos_y = randint(0, HEIGHT)
         self.rock_object = Rock(pos_x, pos_y)
         self.rocks.add(self.rock_object)
-
-        """
-        
-        
