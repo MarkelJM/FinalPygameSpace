@@ -36,18 +36,30 @@ class MainGame:
         
 
     def play(self ):
-
-        
         """
-        current_scene = Home(self.display)
-        current_scene.play()
         desesperada...crear un metodo especifico para cada escenario posible 
         que devuelva true y no pida nada
-
-        if current_scene.change_scene():
+        """       
         
-            changed_scene = 1
-        """
+        current_scene = Home(self.display)
+        
+        change = False
+        
+        while not change:
+            current_scene.play()
+            if current_scene.change_Home_Information() == True:
+                current_scene = Information(self.display)
+            elif current_scene.change_Home_Game() == True:
+                current_scene = Game(self.display)
+            elif current_scene.change_Information_Home() == True:
+                current_scene = Home(self.display)
+            elif current_scene.change_Information_Game() == True:
+                current_scene = Game(self.display)
+            elif current_scene.change_Game_Home() == True:
+                current_scene = Home(self.display)
+            
+            
+        
 
         
 

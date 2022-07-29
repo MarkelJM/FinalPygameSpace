@@ -39,6 +39,10 @@ class Home(Scenes):
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     exit = True
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:
+                    exit = True
+                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                    exit = True
 
                     # go to information scene
                 if event.type == pg.QUIT:
@@ -67,6 +71,23 @@ class Home(Scenes):
 
         self.screen.blit(text, (pos_x, sum_pos_y))
 
+    def change_Home_Information(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_a]:
+            return True
+    def change_Home_Game(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_b]:            
+            return True
+
+    def change_Information_Home(self):
+        return False
+    def change_Information_Game(self):
+        return False
+    
+    def change_Game_Home(self):
+        return False
+
 
 class Information(Scenes):
     def __init__(self, screen: pg.Surface):
@@ -92,13 +113,13 @@ class Information(Scenes):
 
         while not exit:
             for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                if event.type == pg.KEYDOWN and event.key == pg.K_c:
 
                     exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_a:
-                    self.change_scene(Information)
+                if event.type == pg.KEYDOWN and event.key == pg.K_d:
+                    exit = True
 
-                    Home(self.main.display)
+                    
 
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -118,8 +139,7 @@ class Information(Scenes):
 
             pg.display.flip()
 
-    def change_scene(self, scene):
-        return scene
+    
 
     def write_text(self):
         # creating
@@ -141,6 +161,20 @@ class Information(Scenes):
 
         self.screen.blit(text, (pos_x, sum_pos_y))
 
+    def change_Information_Home(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_c]:
+            return True
+    def change_Information_Game(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_d]:            
+            return True
+    def change_Home_Information(self):
+        return False
+    def change_Home_Game(self):
+        return False
+    def change_Game_Home(self):
+        return False
 
 class Game(Scenes):
     def __init__(self, screen: pg.Surface):
@@ -158,7 +192,7 @@ class Game(Scenes):
         while not exit:
             contador += 1
             for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                if event.type == pg.KEYDOWN and event.key == pg.K_e:
                     exit = True
 
                 if event.type == pg.QUIT:
@@ -216,3 +250,18 @@ class Game(Scenes):
         pos_y = randint(0, HEIGHT)
         self.rock_object = Rock(pos_x, pos_y)
         self.rocks.add(self.rock_object)
+    
+    def change_Home_Information(self):
+        return False
+    def change_Home_Game(self):
+        return False
+
+    def change_Information_Home(self):
+        return False
+    def change_Information_Game(self):
+        return False
+    
+    def change_Game_Home(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_e]:            
+            return True
