@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Plane, Rock
+from .objects import LifesCounting, Plane, Rock
 
 
 class Scenes:
@@ -183,6 +183,8 @@ class Game(Scenes):
         self.background = pg.image.load(bg_file)
         self.player = Plane()
         self.rocks_groups = self.rock_group()
+        self.lifes_counter = LifesCounting(LIFES)
+
         self.clock = pg.time.Clock()
 
     def play(self):
@@ -199,6 +201,7 @@ class Game(Scenes):
                     pg.quit()
                     sys.exit()
 
+            #ROCK CREATER CONTROLLER
             if contador == 1:  # create first rocks to don´t have problems with create method
 
                 self.created_rock = self.create_rocks()
@@ -212,6 +215,9 @@ class Game(Scenes):
             self.rock_object.update()
             self.rocks.update()
             plane_crash =  pg.sprite.spritecollide(self.player, self.rocks, True)
+            
+            if plane_crash:
+                remove_life = self.lifes_counter.lost_life()
 
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -221,6 +227,9 @@ class Game(Scenes):
 
             # draw in the game rocks
             self.rocks.draw(self.screen)
+
+            #draw lifes counting
+            self.lifes_counter.paint_lifes(self.screen)
 
             pg.display.flip()
             self.clock.tick(FPS)

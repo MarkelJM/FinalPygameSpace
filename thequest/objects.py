@@ -4,7 +4,7 @@ from random import randint
 import pygame as pg
 from pygame.sprite import Sprite
 
-from thequest import HEIGHT, WIDTH
+from thequest import HEIGHT,MESSAGE_COLOUR, WIDTH
 
 class Plane(Sprite):
 
@@ -93,7 +93,27 @@ class Rock(Sprite):
         
         
         
+
+class LifesCounting():
+    def __init__(self, first_lifes_count):
+        self.lifes = first_lifes_count
+        font_file = os.path.join(
+            "resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipography = pg.font.Font(font_file, 20)
+
+    def lost_life(self):
+        self.lifes -= 1
+        return self.lifes < 1
+
+    def paint_lifes(self, screen):
         
+        message = f"Vidas: {self.lifes}"
+        text = self.tipography.render(message, True, MESSAGE_COLOUR)
+        pos_x = WIDTH-20-text.get_width()
+        pos_y = HEIGHT-text.get_height()-10
+        screen.blit(text, (pos_x, pos_y))  
+
+      
         
 
 
