@@ -1,10 +1,12 @@
 import os
 
+
 import pygame as pg
 
 
 from thequest import WIDTH, HEIGHT
 from thequest.scenes import  Home, Information, Game
+from thequest.objects import LifesCounting as LC
 
 
 class MainGame:
@@ -56,6 +58,11 @@ class MainGame:
             elif current_scene.change_Information_Game() == True:
                 current_scene = Game(self.display)
             elif current_scene.change_Game_Home() == True:
+                current_scene = Home(self.display)
+                
+            """implementar para que salga de game cuando vidas  se queden en 0"""
+            if current_scene == Game(self.display) and current_scene.remove_life == 0:
+                print("si")
                 current_scene = Home(self.display)
             
             

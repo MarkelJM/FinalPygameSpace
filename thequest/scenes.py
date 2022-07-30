@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import LifesCounting, Plane, Rock
+from .objects import Bullet,LifesCounting, Plane, Rock
 
 
 class Scenes:
@@ -184,22 +184,31 @@ class Game(Scenes):
         self.player = Plane()
         self.rocks_groups = self.rock_group()
         self.lifes_counter = LifesCounting(LIFES)
+        #self.no_life = LifesCounting.no_lifes()
+        self.bullet = self.bullet_group()
 
         self.clock = pg.time.Clock()
 
     def play(self):
-
+        self.shot_exist = False
         exit = False
         contador = 0
         while not exit:
+            
             contador += 1
             for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_e:
-                    exit = True
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    #print("si")
+                    self.shot = self.create_bullet()
+                    self.shot_exist = True
+                    
+                    
 
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
+            
+            
 
             #ROCK CREATER CONTROLLER
             if contador == 1:  # create first rocks to don´t have problems with create method
@@ -212,12 +221,25 @@ class Game(Scenes):
             ### UPDATE OBJECTS SETUP ###
 
             self.player.update()
+            
+            if self.shot_exist:
+                              
+                self.bullet_object.update()
+                self.bullets.update()
+
             self.rock_object.update()
             self.rocks.update()
             plane_crash =  pg.sprite.spritecollide(self.player, self.rocks, True)
-            
+
+
+            """implementar para que salga de game cuando vidas  se queden en 0"""
             if plane_crash:
-                remove_life = self.lifes_counter.lost_life()
+                self.remove_life = self.lifes_counter.lost_life()            
+                if self.remove_life == 0:
+                    
+                    self.without_lifes = self.lifes_counter.no_lifes()
+                    
+            
 
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -227,6 +249,9 @@ class Game(Scenes):
 
             # draw in the game rocks
             self.rocks.draw(self.screen)
+            #draw bullet
+            if self.shot_exist:
+                self.bullets.draw(self.screen)
 
             #draw lifes counting
             self.lifes_counter.paint_lifes(self.screen)
@@ -237,6 +262,15 @@ class Game(Scenes):
     # background method
     def paint_background(self):
         self.screen.blit(self.background, (0, 0))
+
+    def bullet_group(self):
+        self.bullets = pg.sprite.Group()
+        self.bullets.empty()
+    def create_bullet(self):
+        pos_x = self.player.rect.x
+        pos_y = self.player.rect.y
+        self.bullet_object = Bullet(pos_x, pos_y)
+        self.bullets.add(self.bullet_object)
 
     ### Create Rock group ###
 

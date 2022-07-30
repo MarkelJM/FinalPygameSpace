@@ -103,7 +103,9 @@ class LifesCounting():
 
     def lost_life(self):
         self.lifes -= 1
-        return self.lifes < 1
+        return self.lifes 
+    def no_lifes(self ): 
+       return True
 
     def paint_lifes(self, screen):
         
@@ -111,7 +113,33 @@ class LifesCounting():
         text = self.tipography.render(message, True, MESSAGE_COLOUR)
         pos_x = WIDTH-20-text.get_width()
         pos_y = HEIGHT-text.get_height()-10
-        screen.blit(text, (pos_x, pos_y))  
+        screen.blit(text, (pos_x, pos_y)) 
+
+class Bullet(Sprite):
+    def __init__(self, position_x, position_y) :
+        super().__init__()
+        self.pos_y = position_y
+        self.pos_x = position_x
+
+        self.image = pg.image.load(
+                    os.path.join("resources", "images", "bullet.png"))
+
+        self.rect = self.image.get_rect(x=self.pos_x, y= self.pos_y)
+
+
+        self.bullet_speed = 10       
+       
+
+    def update(self):
+        
+
+        if self.rect.x <  HEIGHT:
+            self.rect.x +=  self.bullet_speed
+             
+        
+        if self.rect.x < HEIGHT or self.rect.x == HEIGHT:
+            self.rect.x = HEIGHT +500
+        
 
       
         
