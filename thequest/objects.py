@@ -56,7 +56,8 @@ class Rock(Sprite):
         self.rect = self.image.get_rect(x= self.pos_x ,  y= self.pos_y )
         
         self.rock_speed = self.choose_speed()
-        self.points = self.get_points()
+        
+        
         
     def get_points(self):
         points_list = [[1,2,3],[3,5,7],[7,10,13]]
@@ -159,10 +160,10 @@ class Points():
 
     def draw_points(self, screen):
         
-        mensaje = f"Points: {self.value}"
-        text = self.tipography.render(mensaje, True, MESSAGE_COLOUR)
+        message = f"Points: {self.value}"
+        text = self.tipography.render(message, True, MESSAGE_COLOUR)
         pos_x = 20
-        pos_y = HEIGHT-text.get_height()-10
+        pos_y = HEIGHT-text.get_height() -10
         screen.blit(text, (pos_x, pos_y))
         
 

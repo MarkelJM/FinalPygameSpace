@@ -10,6 +10,7 @@ from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REP
 from .objects import Bullet,LifesCounting, Plane, Points, Rock
 
 
+
 class Scenes:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
@@ -182,13 +183,18 @@ class Game(Scenes):
         bg_file = os.path.join("resources", "images", "background.png")
         self.background = pg.image.load(bg_file)
         self.player = Plane()
+
         self.rocks_groups = self.rock_group()
+
         self.lifes_counter = LifesCounting(LIFES)
+
         #self.no_life = LifesCounting.no_lifes()
         self.bullets_groups = self.bullet_group()
+
         self.pointer = Points()
 
         self.clock = pg.time.Clock()
+        
 
     def play(self):
         self.shot_exist = False
@@ -215,6 +221,7 @@ class Game(Scenes):
             if  contador == 1 or contador % 5 == 0:  # create first rocks to don´t have problems with create method
                 self.created_rock = self.create_rocks()
                 
+                
 
             ### UPDATE OBJECTS SETUP ###
 
@@ -233,8 +240,9 @@ class Game(Scenes):
 
             ### POINTER ### 
             if len(rock_bullet_crash) > 0:
-                for self.rock_object in rock_bullet_crash:
-                    self.pointer.increase_points(self.rock_object.points)
+                for self.rock_object in rock_bullet_crash:                    
+                    self.pointer.increase_points(self.rock_pointer)
+                    
             
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
@@ -257,6 +265,9 @@ class Game(Scenes):
             #draw bullet
             if self.shot_exist:
                 self.bullets.draw(self.screen)
+
+            #draw points counting
+            self.pointer.draw_points(self.screen)
 
             #draw lifes counting
             self.lifes_counter.paint_lifes(self.screen)
@@ -296,10 +307,12 @@ class Game(Scenes):
             self.rocks.add(self.rock_object)
 
         """
+
         pos_x = WIDTH
         pos_y = randint(0, HEIGHT)
         self.rock_object = Rock(pos_x, pos_y)
         self.rocks.add(self.rock_object)
+        self.rock_pointer = self.rock_object.get_points()
     
     def change_Home_Information(self):
         return False
