@@ -39,7 +39,7 @@ class Plane(Sprite):
                 self.rect.bottom = HEIGHT
 
     
-
+    
     
 
 class Rock(Sprite):
@@ -122,7 +122,8 @@ class Bullet(Sprite):
         self.pos_x = position_x
 
         self.image = pg.image.load(
-                    os.path.join("resources", "images", "bullet.png"))
+                    os.path.join("resources", "images", "bullet.png")
+                    )
 
         self.rect = self.image.get_rect(x=self.pos_x, y= self.pos_y)
 
@@ -133,12 +134,12 @@ class Bullet(Sprite):
     def update(self):
         
 
-        if self.rect.x <  HEIGHT:
+        if self.rect.x <  WIDTH:
             self.rect.x +=  self.bullet_speed
              
         
-        if self.rect.x < HEIGHT or self.rect.x == HEIGHT:
-            self.rect.x = HEIGHT +500
+        if self.rect.x > WIDTH or self.rect.x == WIDTH:
+            self.rect.x = WIDTH +100
         
 
       

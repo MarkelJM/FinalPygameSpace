@@ -185,7 +185,7 @@ class Game(Scenes):
         self.rocks_groups = self.rock_group()
         self.lifes_counter = LifesCounting(LIFES)
         #self.no_life = LifesCounting.no_lifes()
-        self.bullet = self.bullet_group()
+        self.bullets_groups = self.bullet_group()
 
         self.clock = pg.time.Clock()
 
@@ -231,6 +231,7 @@ class Game(Scenes):
             self.rocks.update()
             plane_crash =  pg.sprite.spritecollide(self.player, self.rocks, True)
 
+            
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
             if plane_crash:
@@ -267,8 +268,10 @@ class Game(Scenes):
         self.bullets = pg.sprite.Group()
         self.bullets.empty()
     def create_bullet(self):
-        pos_x = self.player.rect.x
-        pos_y = self.player.rect.y
+        pos_x = (self.player.rect.x) + 50
+        pos_y = self.player.rect.y + 15
+
+    
         self.bullet_object = Bullet(pos_x, pos_y)
         self.bullets.add(self.bullet_object)
 
