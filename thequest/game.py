@@ -73,7 +73,7 @@ class MainGame:
 
 
     def start(self):
-        # in loop
+        # in loop lineal
         for scene in self.scenes:
             scene.play()
 

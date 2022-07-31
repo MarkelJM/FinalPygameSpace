@@ -57,7 +57,7 @@ class Rock(Sprite):
         
         self.rock_speed = self.choose_speed()
         self.points = self.get_points()
-        print(self.points)
+        
     def get_points(self):
         points_list = [[1,2,3],[3,5,7],[7,10,13]]
         size_table = points_list[self.size_number]
@@ -147,7 +147,23 @@ class Bullet(Sprite):
             self.rect.x = WIDTH +100
         
 
-      
+class Points():
+    def __init__(self):
+        self.value = 0
+        font_file = os.path.join(
+            "resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipography = pg.font.Font(font_file, 20)
+
+    def increase_points(self, points):
+        self.value += points
+
+    def draw_points(self, screen):
+        
+        mensaje = f"Points: {self.value}"
+        text = self.tipography.render(mensaje, True, MESSAGE_COLOUR)
+        pos_x = 20
+        pos_y = HEIGHT-text.get_height()-10
+        screen.blit(text, (pos_x, pos_y))
         
 
 

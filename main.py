@@ -1,4 +1,4 @@
-from thequest import WIDTH, HEIGHT
+
 
 from thequest.game import MainGame
 

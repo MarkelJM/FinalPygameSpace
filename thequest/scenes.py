@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Bullet,LifesCounting, Plane, Rock
+from .objects import Bullet,LifesCounting, Plane, Points, Rock
 
 
 class Scenes:
@@ -186,6 +186,7 @@ class Game(Scenes):
         self.lifes_counter = LifesCounting(LIFES)
         #self.no_life = LifesCounting.no_lifes()
         self.bullets_groups = self.bullet_group()
+        self.pointer = Points()
 
         self.clock = pg.time.Clock()
 
@@ -228,7 +229,12 @@ class Game(Scenes):
             self.rocks.update()
             plane_crash =  pg.sprite.spritecollide(self.player, self.rocks, True) #plane-rock crask
             rock_bullet_crash =  pg.sprite.groupcollide(self.bullets, self.rocks, True, True) #plane-rock crask
-                            
+
+
+            ### POINTER ### 
+            if len(rock_bullet_crash) > 0:
+                for self.rock_object in rock_bullet_crash:
+                    self.pointer.increase_points(self.rock_object.points)
             
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
