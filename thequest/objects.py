@@ -50,20 +50,19 @@ class Rock(Sprite):
 
         self.image = self.choose_size()
         
-        
-        #self.points = points
-        
         self.pos_y = position_y
         self.pos_x = position_x
         
         self.rect = self.image.get_rect(x= self.pos_x ,  y= self.pos_y )
         
-        
-        
-        
-
-        
         self.rock_speed = self.choose_speed()
+        self.points = self.get_points()
+        print(self.points)
+    def get_points(self):
+        points_list = [[1,2,3],[3,5,7],[7,10,13]]
+        size_table = points_list[self.size_number]
+        points = size_table[self.speed_number]
+        return points
 
     def choose_size(self):
         self.rock_list = []
@@ -74,15 +73,15 @@ class Rock(Sprite):
                 )
             )
         
-        number = randint(0,2)
+        self.size_number = randint(0,2)
 
-        self.rock_size = self.rock_list[number]
+        self.rock_size = self.rock_list[self.size_number]
         return self.rock_size
 
     def choose_speed(self):
         self.list_speed = [7,13,19]
-        number = randint(0,2)
-        self.rock_speed = self.list_speed[number]
+        self.speed_number = randint(0,2)
+        self.rock_speed = self.list_speed[self.speed_number]
         
         return self.rock_speed
 
