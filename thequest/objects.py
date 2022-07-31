@@ -1,6 +1,8 @@
 import os
 from random import randint
 
+
+
 import pygame as pg
 from pygame.sprite import Sprite
 
@@ -48,13 +50,15 @@ class Rock(Sprite):
 
         self.image = self.choose_size()
         
-        #width = self.image.get_width()
-        #height = self.image.get_height()
+        
         #self.points = points
         
         self.pos_y = position_y
         self.pos_x = position_x
-        self.rect = self.image.get_rect(x= self.pos_x, y= self.pos_y)
+        
+        self.rect = self.image.get_rect(x= self.pos_x ,  y= self.pos_y )
+        
+        
         
         
 
@@ -126,6 +130,8 @@ class Bullet(Sprite):
                     )
 
         self.rect = self.image.get_rect(x=self.pos_x, y= self.pos_y)
+        self.rect.width = self.image.get_width()
+        self.rect.height = self.image.get_height()
 
 
         self.bullet_speed = 10       

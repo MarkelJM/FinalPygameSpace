@@ -211,12 +211,9 @@ class Game(Scenes):
             
 
             #ROCK CREATER CONTROLLER
-            if contador == 1:  # create first rocks to don´t have problems with create method
-
+            if  contador == 1 or contador % 5 == 0:  # create first rocks to don´t have problems with create method
                 self.created_rock = self.create_rocks()
-            if contador % 5 == 0:  # to control difficulty: allows to cntrolling creating rocks every X time
-
-                self.created_rock = self.create_rocks()
+                
 
             ### UPDATE OBJECTS SETUP ###
 
@@ -229,8 +226,9 @@ class Game(Scenes):
 
             self.rock_object.update()
             self.rocks.update()
-            plane_crash =  pg.sprite.spritecollide(self.player, self.rocks, True)
-
+            plane_crash =  pg.sprite.spritecollide(self.player, self.rocks, True) #plane-rock crask
+            rock_bullet_crash =  pg.sprite.groupcollide(self.bullets, self.rocks, True, True) #plane-rock crask
+                            
             
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
