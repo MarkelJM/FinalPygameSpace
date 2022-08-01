@@ -6,7 +6,7 @@ from random import randint
 import pygame as pg
 from pygame.sprite import Sprite
 
-from thequest import HEIGHT,MESSAGE_COLOUR, WIDTH
+from thequest import BULLET_MARGIN_OUT_SCREEN,BULLET_SPEED,HEIGHT,MAIN_POINTS,MESSAGE_COLOUR,ROCK_MARGIN_OUT_SCREEN,SPEED_LIST, WIDTH
 
 class Plane(Sprite):
 
@@ -60,7 +60,7 @@ class Rock(Sprite):
         
         
     def get_points(self):
-        points_list = [[1,2,3],[3,5,7],[7,10,13]]
+        points_list = MAIN_POINTS
         size_table = points_list[self.size_number]
         points = size_table[self.speed_number]
         return points
@@ -80,7 +80,7 @@ class Rock(Sprite):
         return self.rock_size
 
     def choose_speed(self):
-        self.list_speed = [7,13,19]
+        self.list_speed = SPEED_LIST
         self.speed_number = randint(0,2)
         self.rock_speed = self.list_speed[self.speed_number]
         
@@ -93,7 +93,7 @@ class Rock(Sprite):
              
         
         if self.rect.x < 0 or self.rect.x == 0:
-            self.rect.x = 0 -500
+            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
         
         
         
@@ -134,7 +134,7 @@ class Bullet(Sprite):
         self.rect.height = self.image.get_height()
 
 
-        self.bullet_speed = 10       
+        self.bullet_speed = BULLET_SPEED       
        
 
     def update(self):
@@ -145,7 +145,7 @@ class Bullet(Sprite):
              
         
         if self.rect.x > WIDTH or self.rect.x == WIDTH:
-            self.rect.x = WIDTH +100
+            self.rect.x = WIDTH +BULLET_MARGIN_OUT_SCREEN
         
 
 class Points():
