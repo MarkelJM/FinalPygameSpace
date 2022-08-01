@@ -14,7 +14,7 @@ from .objects import Bullet,LifesCounting, Plane, Points, Rock
 class Scenes:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        self.time = pg.time.Clock()
+        #self.time = pg.time.Clock()
 
 
 class Home(Scenes):
@@ -194,13 +194,17 @@ class Game(Scenes):
         self.pointer = Points()
 
         self.clock = pg.time.Clock()
+       
         
 
     def play(self):
         self.shot_exist = False
         exit = False
         contador = 0
+        self.time_start = pg.time.get_ticks()
         while not exit:
+            self.time_loop = pg.time.get_ticks()
+            self.timer = self.get_level_time_controller(self.time_start, self.time_loop)
             
             contador += 1
             for event in pg.event.get():
@@ -214,6 +218,7 @@ class Game(Scenes):
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
+            
             
             
 
@@ -314,6 +319,18 @@ class Game(Scenes):
         self.rocks.add(self.rock_object)
         self.rock_pointer = self.rock_object.get_points()
     
+    def get_level_time_controller(self,time0, time1):
+        real_time = (time1 - time0) 
+        if real_time < 30001:
+            print("nivel1")
+            pass #meter class nivel 1
+        elif 30002 < real_time < 90001:
+            print("nivel2")
+            pass #meter class nivel 2 
+        elif 90002 < real_time < 2720001:
+            print("nivel3")
+            pass
+
     def change_Home_Information(self):
         return False
     def change_Home_Game(self):

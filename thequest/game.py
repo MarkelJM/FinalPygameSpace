@@ -62,7 +62,7 @@ class MainGame:
                 
             """implementar para que salga de game cuando vidas  se queden en 0"""
             if current_scene == Game(self.display) and current_scene.remove_life == 0:
-                print("si")
+                print("si game.py")
                 current_scene = Home(self.display)
             
             
