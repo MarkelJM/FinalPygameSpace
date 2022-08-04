@@ -1,5 +1,6 @@
 import os
 from random import randint
+from turtle import right
 
 
 
@@ -185,18 +186,30 @@ class Points():
 
 class Levels():
     def __init__(self):    
-        create_leve_rock = True
-        speed_planet = 10
-        activate_plane_control = True
+        self.create_leve_rock = True
+        self.speed_planet = 10
+        self.activate_level_control = False
 
     def star_level_1(self):
-        pass
+        self.image = pg.image.load(os.path.join("resources", "images", "planet0.png"))
+        self.pos_y = 0
+        self.pos_x = WIDTH
+        self.rect = self.image.get_rect(x= self.pos_x ,  y= self.pos_y , right=WIDTH -self.image.get_width())
 
     def star_level_2(self):
-        pass
+        self.image = pg.image.load(os.path.join("resources", "images", "planet2.png"))
+        self.pos_y = 0
+        self.pos_x = WIDTH
+        self.rect = self.image.get_rect(x= self.pos_x ,  y= self.pos_y, right=WIDTH -self.image.get_width() )
 
     def star_level_3(self):
-        pass
+        self.image = pg.image.load(os.path.join("resources", "images", "planet1.png"))
+        self.pos_y = 0
+        self.pos_x = WIDTH
+        self.rect = self.image.get_rect(x= self.pos_x ,  y= self.pos_y , right=WIDTH -self.image.get_width())
 
     def update(self):
-        pass
+        if self.activate_level_control == True:
+            self.rect.x -= self.speed_planet
+            if self.rect.x == self.rect.right:
+                self.rect.x = self.rect.right
