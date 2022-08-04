@@ -6,7 +6,7 @@ from random import randint
 import pygame as pg
 from pygame.sprite import Sprite
 
-from thequest import BULLET_MARGIN_OUT_SCREEN,BULLET_SPEED,HEIGHT,MAIN_POINTS,MESSAGE_COLOUR,ROCK_MARGIN_OUT_SCREEN,SPEED_LIST, WIDTH
+from thequest import BULLET_MARGIN_OUT_SCREEN,BULLET_SPEED,HEIGHT,MAIN_POINTS,MESSAGE_COLOUR,ROCK_LIFE_LIST,ROCK_MARGIN_OUT_SCREEN,SPEED_LIST, WIDTH
 
 class Plane(Sprite):
 
@@ -44,40 +44,55 @@ class Plane(Sprite):
     
     
 
-class Rock(Sprite):
+class Rock_small(Sprite):
     def __init__(self,position_x, position_y): # , points
         super().__init__()
 
-        self.image = self.choose_size()
-        
+        self.image = pg.image.load(os.path.join("resources", "images", "rock_yellow0.png"))
         self.pos_y = position_y
         self.pos_x = position_x
-        
         self.rect = self.image.get_rect(x= self.pos_x ,  y= self.pos_y )
         
         self.rock_speed = self.choose_speed()
+        self.rock_final_life = 2
+        #rock_life = self.get_lifes()
+        #self.rock_final_life = rock_life
+        #self.rock_point = self.get_points()
+        
+    
+    def rock_lost_life(self):
+        self.rock_final_life = self.rock_final_life - 1
+        return  self.rock_final_life
         
         
+    """
+    def get_lifes(self):
+        self.rock_life_list = ROCK_LIFE_LIST
+        self.hits = self.rock_life_list[self.size_number]
         
+        return self.hits
+        """    
+    """ 
     def get_points(self):
         points_list = MAIN_POINTS
         size_table = points_list[self.size_number]
         points = size_table[self.speed_number]
+        
         return points
-
+        """ 
+    """ 
     def choose_size(self):
         self.rock_list = []
         for i in range(3):
             self.rock_list.append(
-                pg.image.load(
-                    os.path.join("resources", "images", f"rock_yellow{i}.png")
-                )
+                
             )
         
         self.size_number = randint(0,2)
 
         self.rock_size = self.rock_list[self.size_number]
         return self.rock_size
+        """ 
 
     def choose_speed(self):
         self.list_speed = SPEED_LIST
