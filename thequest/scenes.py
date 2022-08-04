@@ -201,6 +201,7 @@ class Game(Scenes):
         self.shot_exist = False
         exit = False
         contador = 0
+        counting_bullet_time = 0
         self.time_start = pg.time.get_ticks()
         while not exit:
             self.time_loop = pg.time.get_ticks()
@@ -208,20 +209,22 @@ class Game(Scenes):
                 self.time_start, self.time_loop)
 
             contador += 1
+            
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    # print("si")
-                    self.shot = self.create_bullet()
-                    self.shot = self.create_bullet()
-                    self.shot = self.create_bullet()
-                    self.shot_exist = True
+                    if counting_bullet_time % 10 == 0:
+                        self.shot = self.create_bullet()
+                        self.shot = self.create_bullet()
+                        self.shot = self.create_bullet()
+                        self.shot_exist = True
+                    counting_bullet_time += 1
 
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
 
             # ROCK CREATER CONTROLLER
-            if contador == 1 or contador % 15 == 0:  # create first rocks to don´t have problems with create method
+            if contador == 1 or contador % 30 == 0:  # create first rocks to don´t have problems with create method
                 self.created_rock_small = self.create_rocks_small()
 
             ### UPDATE OBJECTS SETUP ###

@@ -183,4 +183,20 @@ class Points():
         
 
 
-   
+class Levels():
+    def __init__(self):    
+        create_leve_rock = True
+        speed_planet = 10
+        activate_plane_control = True
+
+    def star_level_1(self):
+        pass
+
+    def star_level_2(self):
+        pass
+
+    def star_level_3(self):
+        pass
+
+    def update(self):
+        pass
