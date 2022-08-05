@@ -206,12 +206,12 @@ class Game(Scenes):
         self.create_leve_rock = True
         self.activate_level_control = False        
         self.time_start = pg.time.get_ticks()
+        self.level_endtime = 30001
         while not exit:
             
             self.time_loop = pg.time.get_ticks()
-            self.timer = self.get_level_time_controller(
-                self.time_start, self.time_loop)
-
+            #self.timer = self.get_level_time_controller(self.time_start, self.time_loop)
+            """self.timer está en desarrollo"""
             contador += 1
             
             for event in pg.event.get():
@@ -335,23 +335,35 @@ class Game(Scenes):
 
     def get_level_time_controller(self, time0, time1):
         real_time = (time1 - time0)
-        if real_time < 30001:
-            
+        pausa_time = (pause_time_controller - self.level_endtime )
+        limit_time = self.level_endtime + pausa_time
+        if real_time < self.level_endtime:
+            level1 = True
             self.create_leve_rock = True
             self.activate_level_control = False 
             print("level 1")
         
 
 
-        elif 30002 < real_time < 90001:
+        elif self.level_endtime + pausa_time < real_time < limit_time +60001:
+            level2 = True
             print("level2")
             #pass  # meter class nivel 2
-        elif 90002 < real_time < 2720001:
+        elif limit_time +60001 +pausa_time < real_time < limit_time + limit_time +60001 +pausa_time +1200001:
 
             pass
         else:
-            self.create_leve_rock = True
-            self.activate_level_control = False 
+            
+            self.create_leve_rock = False
+            self.activate_level_control = True 
+            #pause_time_controller = pg.time.get_ticks()
+            """
+            if collide entre planeta y nave---> salta puntuacion  y "Play"---> pulsando:
+                pausa_time_controller =  pg.time.get_ticks() ---> indicarlo en el init como pausa_time_controller= 0
+                
+
+            """
+
 
 
     def change_Home_Information(self):
