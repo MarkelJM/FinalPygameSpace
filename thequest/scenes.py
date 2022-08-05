@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Bullet, LifesCounting, Plane, Points, Rock_small
+from .objects import Bullet,Levels, LifesCounting, Plane, Points, Rock_small
 
 
 class Scenes:
@@ -189,7 +189,7 @@ class Game(Scenes):
         self.rocks_groups = self.rock_group_small()
 
         self.lifes_counter = LifesCounting(LIFES)
-
+        self.levels = Levels()
         #self.no_life = LifesCounting.no_lifes()
         self.bullets_groups = self.bullet_group()
 
@@ -198,21 +198,26 @@ class Game(Scenes):
         self.clock = pg.time.Clock()
 
     def play(self):
-        self.shot_exist = False
+        
         exit = False
         contador = 0
         counting_bullet_time = 0
+        self.shot_exist = False
+        self.create_leve_rock = True
+        self.activate_level_control = False        
         self.time_start = pg.time.get_ticks()
         while not exit:
+            
             self.time_loop = pg.time.get_ticks()
             self.timer = self.get_level_time_controller(
                 self.time_start, self.time_loop)
 
             contador += 1
-            
+            print(self.create_leve_rock)
+            print(self.activate_level_control)
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    if counting_bullet_time % 10 == 0:
+                    if counting_bullet_time == 0 or counting_bullet_time % 10 == 0:
                         self.shot = self.create_bullet()
                         self.shot = self.create_bullet()
                         self.shot = self.create_bullet()
@@ -224,7 +229,7 @@ class Game(Scenes):
                     sys.exit()
 
             # ROCK CREATER CONTROLLER
-            if contador == 1 or contador % 30 == 0:  # create first rocks to don´t have problems with create method
+            if self.create_leve_rock == True and contador == 1 or contador % 30 == 0:  # create first rocks to don´t have problems with create method
                 self.created_rock_small = self.create_rocks_small()
 
             ### UPDATE OBJECTS SETUP ###
@@ -235,8 +240,8 @@ class Game(Scenes):
 
                 self.bullet_object.update()
                 self.bullets.update()
-
-            self.rock_object_small.update()
+            if self.create_leve_rock == True:
+                self.rock_object_small.update()
             self.rocks_small.update()
 
             plane_crash = pg.sprite.spritecollide(
@@ -333,14 +338,21 @@ class Game(Scenes):
     def get_level_time_controller(self, time0, time1):
         real_time = (time1 - time0)
         if real_time < 30001:
+            self.levels.start_level_1()
+            self.create_leve_rock = False
+            self.activate_level_control = True 
+            print("ñevel 1")
 
-            pass  # meter class nivel 1
         elif 30002 < real_time < 90001:
-
-            pass  # meter class nivel 2
+            print("level2")
+            #pass  # meter class nivel 2
         elif 90002 < real_time < 2720001:
 
             pass
+        else:
+            self.create_leve_rock = True
+            self.activate_level_control = False 
+
 
     def change_Home_Information(self):
         return False
