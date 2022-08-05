@@ -213,8 +213,7 @@ class Game(Scenes):
                 self.time_start, self.time_loop)
 
             contador += 1
-            print(self.create_leve_rock)
-            print(self.activate_level_control)
+            
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     if counting_bullet_time == 0 or counting_bullet_time % 10 == 0:
@@ -247,7 +246,6 @@ class Game(Scenes):
             plane_crash = pg.sprite.spritecollide(
                 self.player, self.rocks_small, True)  # plane-rock crask
             rock_small_bullet_crash = pg.sprite.groupcollide(self.rocks_small, self.bullets, False, True, pg.sprite.collide_mask)  # plane-rock crask
-            #rock_small_bullet_crash =  pg.sprite.groupcollide( self.bullets,self.rocks_small,True,False, pg.sprite.collide_mask) #plane-rock crask
 
             ### POINTER ###
 
@@ -338,10 +336,12 @@ class Game(Scenes):
     def get_level_time_controller(self, time0, time1):
         real_time = (time1 - time0)
         if real_time < 30001:
-            self.levels.start_level_1()
-            self.create_leve_rock = False
-            self.activate_level_control = True 
-            print("ñevel 1")
+            
+            self.create_leve_rock = True
+            self.activate_level_control = False 
+            print("level 1")
+        
+
 
         elif 30002 < real_time < 90001:
             print("level2")
