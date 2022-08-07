@@ -1,6 +1,6 @@
 import os
 from random import randint
-
+from turtle import width
 
 
 import pygame as pg
@@ -108,15 +108,18 @@ class Rock_small(Sprite):
 
 
 class LifesCounting():
-    def __init__(self, first_lifes_count):
+    def __init__(self, first_lifes_count,status):
+        self.status = status
         self.lifes = first_lifes_count
         font_file = os.path.join(
             "resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 20)
 
     def lost_life(self):
+        
         self.lifes -= 1
         return self.lifes
+    
 
     def no_lifes(self):
         return True
@@ -174,38 +177,140 @@ class Points():
         screen.blit(text, (pos_x, pos_y))
 
 
-class Levels():
-    def __init__(self):
+class Levels(Sprite):
+    def __init__(self, player):
+        super().__init__()
         self.create_leve_rock = True
         self.speed_planet = 10
         self.activate_level_control = False
+        self.player = player
 
     def start_level_1(self):
-        self.image = pg.image.load(os.path.join(
+        self.image1 = pg.image.load(os.path.join(
             "resources", "images", "planet0.png"))
         self.pos_y = 0
         self.pos_x = WIDTH
-        self.rect = self.image.get_rect(
-            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image.get_width())
+        self.rect = self.image1.get_rect(
+            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image1.get_width())
 
     def start_level_2(self):
-        self.image = pg.image.load(os.path.join(
+        self.image2 = pg.image.load(os.path.join(
             "resources", "images", "planet2.png"))
         self.pos_y = 0
         self.pos_x = WIDTH
-        self.rect = self.image.get_rect(
-            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image.get_width())
+        self.rect = self.image2.get_rect(
+            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image2.get_width())
 
     def start_level_3(self):
-        self.image = pg.image.load(os.path.join(
+        self.image3 = pg.image.load(os.path.join(
             "resources", "images", "planet1.png"))
         self.pos_y = 0
         self.pos_x = WIDTH
-        self.rect = self.image.get_rect(
-            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image.get_width())
+        self.rect = self.image3.get_rect(
+            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image3.get_width())
 
-    def update_planet(self):
+    def update_planet1(self):
         if self.activate_level_control == True:
-            self.rect.x -= self.speed_planet
-            if self.rect.x == self.rect.right:
+            self.rect.x -= self.speed_planet  # Planet movement
+            if self.rect.x <= self.rect.right:
                 self.rect.x = self.rect.right
+            self.player += self.speed_planet
+            if self.player.rect.x >= WIDTH - self.image1.get_width() + 20:
+                self.player.rect.x = WIDTH - self.image1.get_width() + 20
+            if self.player.rect.y <= self.rect.center:
+                self.player.rect.y += self.speed_planet
+                if self.player.rect.y >= self.rect.center:
+                    self.player.rect.y = self.rect.center
+            if self.player.rect.y > self.rect.center:
+                self.player.rect.y -= self.speed_planet
+                if self.player.rect.y <= self.rect.center:
+                    self.player.rect.y = self.rect.center
+
+    def update_planet2(self):
+        if self.activate_level_control == True:
+            self.rect.x -= self.speed_planet  # Planet movement
+            if self.rect.x <= self.rect.right:
+                self.rect.x = self.rect.right
+            self.player += self.speed_planet
+            if self.player.rect.x >= WIDTH - self.image2.get_width() + 20:
+                self.player.rect.x = WIDTH - self.image2.get_width() + 20
+            if self.player.rect.y <= self.rect.center:
+                self.player.rect.y += self.speed_planet
+                if self.player.rect.y >= self.rect.center:
+                    self.player.rect.y = self.rect.center
+            if self.player.rect.y > self.rect.center:
+                self.player.rect.y -= self.speed_planet
+                if self.player.rect.y <= self.rect.center:
+                    self.player.rect.y = self.rect.center
+
+    def update_planet3(self):
+        if self.activate_level_control == True:
+            self.rect.x -= self.speed_planet  # Planet movement
+            if self.rect.x <= self.rect.right:
+                self.rect.x = self.rect.right
+            self.player += self.speed_planet
+            if self.player.rect.x >= WIDTH - self.image3.get_width() + 20:
+                self.player.rect.x = WIDTH - self.image3.get_width() + 20
+            if self.player.rect.y <= self.rect.center:
+                self.player.rect.y += self.speed_planet
+                if self.player.rect.y >= self.rect.center:
+                    self.player.rect.y = self.rect.center
+            if self.player.rect.y > self.rect.center:
+                self.player.rect.y -= self.speed_planet
+                if self.player.rect.y <= self.rect.center:
+                    self.player.rect.y = self.rect.center
+
+
+class Completed(Sprite):
+    def __init__(self, screen, points):
+        super().__init__()
+        self.screen = screen
+        self.wn_x = 10
+        self.wn_y = 10
+        self.wn_width = 300
+        self.wn_height = 300
+        pg.draw.rect(screen, (255, 255, 255), (self.wn_x,
+                     self.wn_y, self.wn_width, self.wn_height))
+
+        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipography = pg.font.Font(font_file, 30)
+
+        message_completed = "NIVEL COMPLETADO"
+        message_pos_level = self.wn_y + 30
+        self.draw_text(message_completed, message_pos_level)
+
+        text_continue = "CONTINUAR"
+        text_continue_position = self.wn_height - self.continue_height -10
+        self.draw_text(text_continue, text_continue_position)
+
+        self.draw_text(message_completed)
+        self.draw_points(points)
+        self.click_continue()
+
+    def click_continue(self):
+        self.continue_width = 80
+        self.continue_height = 60
+
+        pos_x = (self.wn_width - self.continue_width)/2
+        pos_y = self.wn_height - self.continue_height - 20 #20 de margen inferior
+        pg.draw.rect(self.screen, (0, 0, 0,), (pos_x, pos_y,
+                     self.continue_width, self.continue_height))
+
+        
+
+    def draw_text(self, message1, position):
+
+        text = self.tipography.render(message1, True, MESSAGE_COLOUR)
+        width_text = text.get_width()
+        pos_x = (self.wn_width - width_text) / 2
+
+        self.screen.blit(text, (pos_x, position))
+
+    def draw_points(self,  points):
+
+        message = f"Puntos: {points}"
+        text = self.tipography.render(message, True, MESSAGE_COLOUR)
+        width_text = text.get_width()
+        pos_x = (self.wn_width - width_text) / 2
+        pos_y = self.wn_height + 150
+        self.screen.blit(text, (pos_x, pos_y))

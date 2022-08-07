@@ -7,20 +7,20 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Bullet,Levels, LifesCounting, Plane, Points, Rock_small
+from .objects import Bullet,Completed, Levels, LifesCounting, Plane, Points, Rock_small
 
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        #self.time = pg.time.Clock()
+        # self.time = pg.time.Clock()
 
 
 class Home(Scenes):
     # first scene, home
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
-
+        
         self.logo = pg.image.load(
             os.path.join("resources", "images", "icon.png"))
 
@@ -187,10 +187,14 @@ class Game(Scenes):
         self.player = Plane()
 
         self.rocks_groups = self.rock_group_small()
-
-        self.lifes_counter = LifesCounting(LIFES)
-        self.levels = Levels()
-        #self.no_life = LifesCounting.no_lifes()
+        self.activate_level_control = False
+        self.lifes_counter = LifesCounting(LIFES,self.activate_level_control)
+        self.levels = Levels(self.player)
+        # se crean los planetas, pero están escondidos a la derecha del plano
+        self.level1_planet = self.levels.start_level_1()
+        self.level2_planet = self.levels.start_level_2()
+        self.level3_planet = self.levels.start_level_3()
+        # self.no_life = LifesCounting.no_lifes()
         self.bullets_groups = self.bullet_group()
 
         self.pointer = Points()
@@ -198,54 +202,73 @@ class Game(Scenes):
         self.clock = pg.time.Clock()
 
     def play(self):
-        
-        exit = False
+
+        self.exit = False
         contador = 0
-        counting_bullet_time = 0
+        #counting_bullet_time = 0
+        self.bullet_timer0= 0
         self.shot_exist = False
+        self.shot_exist_2 = True
         self.create_leve_rock = True
-        self.activate_level_control = False        
+        self.activate_level_control = False
         self.time_start = pg.time.get_ticks()
         self.level_endtime = 30001
-        while not exit:
-            
+        self.pause_time_controller = 0
+        self.pausa_time = 60000
+        self.pausa_time2 = 60000
+        self.limit_time = 60000
+        self.level1 = True
+        while not self.exit:
+
             self.time_loop = pg.time.get_ticks()
-            #self.timer = self.get_level_time_controller(self.time_start, self.time_loop)
+            self.timer = self.get_level_time_controller(self.time_start, self.time_loop)
             """self.timer está en desarrollo"""
             contador += 1
-            
+
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    if counting_bullet_time == 0 or counting_bullet_time % 10 == 0:
-                        self.shot = self.create_bullet()
-                        self.shot = self.create_bullet()
-                        self.shot = self.create_bullet()
-                        self.shot_exist = True
-                    counting_bullet_time += 1
+                    
+                    #if counting_bullet_time == 0 or counting_bullet_time % 10 == 0:
+                    bullet_time = self.time_loop - self.bullet_timer0
+                    if self.bullet_timer0 == 0 or bullet_time >= 2000:
+                        
+                        if self.activate_level_control == False and self.shot_exist_2 == True :
+                            
+                            self.shot = self.create_bullet()
+                            self.shot = self.create_bullet()
+                            self.shot = self.create_bullet()
+                            self.shot_exist == True
+                            
+                    #counting_bullet_time += 1
+                        self.bullet_timer0 = pg.time.get_ticks()
+                    
 
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
-
+            
             # ROCK CREATER CONTROLLER
-            if self.create_leve_rock == True and contador == 1 or contador % 30 == 0:  # create first rocks to don´t have problems with create method
+            # create first rocks to don´t have problems with create method
+            if self.create_leve_rock == True and contador == 1 or contador % 30 == 0:
                 self.created_rock_small = self.create_rocks_small()
+                print(self.create_leve_rock)
 
             ### UPDATE OBJECTS SETUP ###
 
             self.player.update()
 
             if self.shot_exist:
-
+                
                 self.bullet_object.update()
-                self.bullets.update()
-            if self.create_leve_rock == True:
-                self.rock_object_small.update()
+            self.bullets.update()
+            
+            self.rock_object_small.update()
             self.rocks_small.update()
 
             plane_crash = pg.sprite.spritecollide(
                 self.player, self.rocks_small, True)  # plane-rock crask
-            rock_small_bullet_crash = pg.sprite.groupcollide(self.rocks_small, self.bullets, False, True, pg.sprite.collide_mask)  # plane-rock crask
+            rock_small_bullet_crash = pg.sprite.groupcollide(
+                self.rocks_small, self.bullets, False, True, pg.sprite.collide_mask)  # plane-rock crask
 
             ### POINTER ###
 
@@ -256,11 +279,9 @@ class Game(Scenes):
                         if rock_life == 0:
                             self.pointer.increase_points(5)
                             self.rocks_small.remove(rock)
-                            
-
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
-            if plane_crash:
+            if plane_crash and self.activate_level_control == False:
                 self.remove_life = self.lifes_counter.lost_life()
                 if self.remove_life == 0:
 
@@ -269,20 +290,25 @@ class Game(Scenes):
             self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
             self.paint_background()
-            self.screen.blit(
-                self.player.image, self.player.rect)  # PLayer
+            self.screen.blit(self.player.image, self.player.rect)  # PLayer
 
             # draw in the game rocks
+            
             self.rocks_small.draw(self.screen)
             # draw bullet
-            if self.shot_exist:
-                self.bullets.draw(self.screen)
+            
+            self.bullets.draw(self.screen)
 
             # draw points counting
             self.pointer.draw_points(self.screen)
 
             # draw lifes counting
             self.lifes_counter.paint_lifes(self.screen)
+
+            # level and planet draw
+
+            if self.activate_level_control:
+                self.levels.draw(self.screen)
 
             pg.display.flip()
             self.clock.tick(FPS)
@@ -301,7 +327,7 @@ class Game(Scenes):
 
         self.bullet_object = Bullet(pos_x, pos_y)
         self.bullets.add(self.bullet_object)
-        
+
     ### Create Rock group ###
 
     def rock_group_small(self):
@@ -319,52 +345,100 @@ class Game(Scenes):
             self.rocks.add(self.rock_object)
 
         """
-
-        pos_x = WIDTH
-        pos_y = randint(0, HEIGHT)
-        self.rock_object_small = Rock_small(pos_x, pos_y)
-        self.rocks_small.add(self.rock_object_small)
-        
+        if self.create_leve_rock == True :
+            pos_x = WIDTH
+            pos_y = randint(0, HEIGHT)
+            self.rock_object_small = Rock_small(pos_x, pos_y)
+            print("si")
+            self.rocks_small.add(self.rock_object_small)
+            
 
     def remove_rock_small(self, rock):
         self.rocks_small.remove(rock)
-    
-
-
-
 
     def get_level_time_controller(self, time0, time1):
         real_time = (time1 - time0)
-        pausa_time = (pause_time_controller - self.level_endtime )
-        limit_time = self.level_endtime + pausa_time
-        if real_time < self.level_endtime:
-            level1 = True
+        # limit_time----> indicar ambos en ele init como 6000 asi nos aseguramos que permanecera minimo un minuto con los planetas y puntos
+        # pausa_time---->, pero si le damos play obtendremos un numero numero para ambos y podra saltal siguiente nivel
+        # pausa_time2
+        if real_time < 10000:
+            self.level1 = True
             self.create_leve_rock = True
-            self.activate_level_control = False 
+            self.activate_level_control = False
+            self.shot_exist_2 = True
+
             print("level 1")
-        
 
-
-        elif self.level_endtime + pausa_time < real_time < limit_time +60001:
-            level2 = True
+        elif 10000 + self.pausa_time < real_time < self.limit_time + 20000:
+            self.level2 = True
+            self.create_leve_rock = True
+            self.activate_level_control = False
+            self.shot_exist_2 = True
             print("level2")
-            #pass  # meter class nivel 2
-        elif limit_time +60001 +pausa_time < real_time < limit_time + limit_time +60001 +pausa_time +1200001:
+            # pass  # meter class nivel 2
+        elif self.limit_time + 20000 + self.pausa_time2 < real_time < self.limit_time + 20000 + self.pausa_time2 + 30000:
 
-            pass
+            self.level3 = True
+            self.create_leve_rock = True
+            self.activate_level_control = False
+            self.shot_exist_2 = True
+            print("level 3")
         else:
-            
+            print("niveles")
             self.create_leve_rock = False
-            self.activate_level_control = True 
-            #pause_time_controller = pg.time.get_ticks()
-            """
-            if collide entre planeta y nave---> salta puntuacion  y "Play"---> pulsando:
-                pausa_time_controller =  pg.time.get_ticks() ---> indicarlo en el init como pausa_time_controller= 0
-                
+            print(self.create_leve_rock)
 
-            """
+            # pause_time_controller = pg.time.get_ticks()
+            if self.rock_object_small.rect.x <= 0 -300:
+                print("x menor 0")
+                self.activate_level_control = True
+                self.shot_exist_2 = False
+                if self.level1:
+                    self.levels.update_planet1()
+                    plane_in_planet1 = pg.sprite.collide_rect(self.player, self.level1_planet)
+
+                if self.level2:
+                    self.levels.update_planet2()
+                    plane_in_planet2 = pg.sprite.collide_rect(self.player, self.level2_planet)
+                if self.level3:
+                    self.levels.update_planet2()
+                    plane_in_planet3 = pg.sprite.collide_rect(self.player, self.level3_planet)
+
+                if plane_in_planet1 or plane_in_planet2 or plane_in_planet3:
+                    if plane_in_planet1:
+                        self.pointer.increase_points(100)
+                    if plane_in_planet2:
+                        self.pointer.increase_points(200)
+                    if plane_in_planet3:
+                        self.pointer.increase_points(400)
 
 
+                    self.level_window = Completed()
+                    for event in pg.event.get():
+                        if event.type == pg.MOUSEBUTTONDOWN :
+                            pressed_key = pg.mouse.get_pressed()
+                            mouse_pos = pg.mouse.get_pos()
+                            if pressed_key[0] and 120 <= mouse_pos[0] <= 200 and 230 <= mouse_pos[1] <= 290:                           
+
+                                self.pause_time_controller =  pg.time.get_ticks() #indicarlo en el init como pausa_time_controller= 0
+                                if self.level1 == True:            #necesitamos la informacion del level 1 para prepar el nivel 2
+                                    pausa_time = (self.pause_time_controller - 10000)
+                                    limit_time =10000 + pausa_time
+                                    self.level1 = False
+                                    self.level2 = True
+                                if self.level2 ==True:
+                                    pausa_time2 = (self.pause_time_controller - limit_time + 20000)
+                                    limit_time =20000 + pausa_time2
+                                    self.level2 = False
+                                    self.level3 = True
+                                if self.level3 == True:
+                                    pausa_time2 = (self.pause_time_controller - limit_time + 20000)
+                                    limit_time =20000 + pausa_time2
+                                    self.level3 = False
+                                    if level1 == False and level2 == False and level3 == False:
+                                        self.exit = True
+                                        print("termino")
+        
 
     def change_Home_Information(self):
         return False
