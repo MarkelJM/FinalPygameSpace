@@ -395,7 +395,10 @@ class Game(Scenes):
                 self.shot_exist_2 = False
                 if self.level1:
                     self.levels.update_planet1()
-                    plane_in_planet1 = pg.sprite.collide_rect(self.player, self.level1_planet)
+                    """
+                    rect de planeta da error comprobar
+                    """
+                    plane_in_planet1 = pg.sprite.collide_rect(self.player.rect, self.level1_planet.rect)
 
                 if self.level2:
                     self.levels.update_planet2()
