@@ -213,9 +213,14 @@ class Levels(Sprite):
     def update_planet1(self,status, player):
         self.player = player
         if status == True:
-            self.rect.x -= self.speed_planet  # Planet movement
-            if self.rect.x <= self.rect.right:
+            if self.rect.x >= self.rect.right:
+                self.rect.x -= self.speed_planet 
+            print(self.speed_planet)
+            print(self.rect.x)
+            print(self.rect.right)
+            if self.rect.x >= self.rect.right:
                 self.rect.x = self.rect.right
+                print(self.rect.x)
                 
             self.player.rect.x += self.speed_planet
             if self.player.rect.x >= WIDTH - self.image1.get_width() + 20:

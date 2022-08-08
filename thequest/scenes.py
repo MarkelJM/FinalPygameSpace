@@ -13,7 +13,6 @@ from .objects import Bullet, Completed, Levels, LifesCounting, Plane, Points, Ro
 class Scenes:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
-        
 
 
 class Home(Scenes):
@@ -223,7 +222,8 @@ class Game(Scenes):
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()
-            self.timer = self.get_level_time_controller(self.time_start, self.time_loop)
+            self.timer = self.get_level_time_controller(
+                self.time_start, self.time_loop)
             """self.timer está en desarrollo"""
             contador += 1
 
@@ -288,9 +288,10 @@ class Game(Scenes):
 
                     self.without_lifes = self.lifes_counter.no_lifes()
 
-            self.screen.fill(BACKGROUND_COLOUR)
+            # self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
             self.paint_background()
+
             self.screen.blit(self.player.image, self.player.rect)  # PLayer
 
             # draw in the game rocks
@@ -306,11 +307,13 @@ class Game(Scenes):
             # draw lifes counting
             self.lifes_counter.paint_lifes(self.screen)
 
+            self.planet_group.draw(self.screen)
+
             # level and planet draw
 
             if self.activate_level_control:
-               self.planet_group.draw(self.screen)
-               self.planet_group.update()
+                self.planet_group.draw(self.screen)
+                self.planet_group.update()
 
             pg.display.flip()
             self.clock.tick(FPS)
@@ -387,32 +390,37 @@ class Game(Scenes):
         else:
             print("niveles")
             self.create_leve_rock = False
-            
 
             # pause_time_controller = pg.time.get_ticks()
-            if self.rock_object_small.rect.x <=  - 20:
+            if self.rock_object_small.rect.x <= - 20:
                 print("x menor 0")
                 self.activate_level_control = True
                 self.shot_exist_2 = False
                 print(self.create_leve_rock)
                 if self.level1:
-                    self.levels.update_planet1(self.activate_level_control,self.player)
+                    self.levels.update_planet1(
+                        self.activate_level_control, self.player)
                     """
                     rect de planeta da error comprobar
                     """
-                    print("a") 
-                    self.plane_in_planet1 = pg.sprite.spritecollide(self.player, self.planet_group,False)
-                
+                    print("a")
+                    self.plane_in_planet1 = pg.sprite.spritecollide(
+                        self.player, self.planet_group, False)
+
                 if self.level2:
 
-                    self.levels.update_planet2(self.activate_level_control,self.player)
-                    
-                    print("b")
-                    self.plane_in_planet2 = pg.sprite.spritecollide(self.player, self.planet_group, False)
-                if self.level3:
-                    self.levels.update_planet2(self.activate_level_control,self.player)
+                    self.levels.update_planet2(
+                        self.activate_level_control, self.player)
 
-                    self.plane_in_planet3 = pg.sprite.spritecollide(self.player, self.planet_group, False)
+                    print("b")
+                    self.plane_in_planet2 = pg.sprite.spritecollide(
+                        self.player, self.planet_group, False)
+                if self.level3:
+                    self.levels.update_planet2(
+                        self.activate_level_control, self.player)
+
+                    self.plane_in_planet3 = pg.sprite.spritecollide(
+                        self.player, self.planet_group, False)
 
                 if self.plane_in_planet1:
                     if self.plane_in_planet1:
@@ -421,9 +429,9 @@ class Game(Scenes):
                         self.pointer.increase_points(200)
                     if self.plane_in_planet3:
                         self.pointer.increase_points(400)
-                    
+
                     self.level_window = Completed()
-                    
+
                     for event in pg.event.get():
                         if event.type == pg.MOUSEBUTTONDOWN:
                             pressed_key = pg.mouse.get_pressed()
@@ -472,3 +480,40 @@ class Game(Scenes):
         key = pg.key.get_pressed()
         if key[pg.K_e]:
             return True
+
+
+"""
+class Halloffame(Scenes):
+    
+
+    def __init__(self, pantalla: pg.Surface):
+        super().__init__(pantalla)
+        bg_file = os.path.join("resources", "images", "background.jpg")
+        self.fondo = pg.image.load(bg_file)
+        self.records = Records()
+        self.records.cargar_records()
+        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipografia = pg.font.Font(font_file, 20)
+
+    def bucle_principal(self):
+        borde = 100
+        salir = False
+        while not salir:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+            self.pintar_fondo()
+            self.records.cargar_records()
+            for records in range(len(self.records.game_records)):
+                texto_render = self.tipografia.render(
+                    str(self.records.game_records[records]), True, COLOR_BLANCO)
+                pos_x = ANCHO/2 - texto_render.get_width()
+                pos_y = records*texto_render.get_height() + borde*2
+                self.pantalla.blit(texto_render, (pos_x, pos_y))
+
+            pg.display.flip()
+
+    def pintar_fondo(self):
+        self.pantalla.blit(self.fondo, (0, 0))
+
+        """
