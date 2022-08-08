@@ -22,24 +22,25 @@ class Plane(Sprite):
 
         self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
 
-    def update(self):
-        button = pg.key.get_pressed()
-        if button[pg.K_RIGHT]:
-            self.rect.x += self.speed
-            if self.rect.right > WIDTH:
-                self.rect.right = WIDTH
-        if button[pg.K_LEFT]:
-            self.rect.x -= self.speed
-            if self.rect.left < 0:
-                self.rect.left = 0
-        if button[pg.K_UP]:
-            self.rect.y -= self.speed
-            if self.rect.top < 0:
-                self.rect.top = 0
-        if button[pg.K_DOWN]:
-            self.rect.y += self.speed
-            if self.rect.bottom > HEIGHT:
-                self.rect.bottom = HEIGHT
+    def update(self, status):
+        if status == False:
+            button = pg.key.get_pressed()
+            if button[pg.K_RIGHT]:
+                self.rect.x += self.speed
+                if self.rect.right > WIDTH:
+                    self.rect.right = WIDTH
+            if button[pg.K_LEFT]:
+                self.rect.x -= self.speed
+                if self.rect.left < 0:
+                    self.rect.left = 0
+            if button[pg.K_UP]:
+                self.rect.y -= self.speed
+                if self.rect.top < 0:
+                    self.rect.top = 0
+            if button[pg.K_DOWN]:
+                self.rect.y += self.speed
+                if self.rect.bottom > HEIGHT:
+                    self.rect.bottom = HEIGHT
 
 
 class Rock_small(Sprite):
@@ -209,56 +210,60 @@ class Levels(Sprite):
         self.rect = self.image3.get_rect(
             x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image3.get_width())
 
-    def update_planet1(self):
-        if self.activate_level_control == True:
+    def update_planet1(self,status, player):
+        self.player = player
+        if status == True:
             self.rect.x -= self.speed_planet  # Planet movement
             if self.rect.x <= self.rect.right:
                 self.rect.x = self.rect.right
-            self.player += self.speed_planet
+                
+            self.player.rect.x += self.speed_planet
             if self.player.rect.x >= WIDTH - self.image1.get_width() + 20:
                 self.player.rect.x = WIDTH - self.image1.get_width() + 20
-            if self.player.rect.y <= self.rect.center:
+            if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
-                if self.player.rect.y >= self.rect.center:
-                    self.player.rect.y = self.rect.center
-            if self.player.rect.y > self.rect.center:
+                if self.player.rect.y >= HEIGHT/2:
+                    self.player.rect.y = HEIGHT/2
+            if self.player.rect.y > HEIGHT/2:
                 self.player.rect.y -= self.speed_planet
-                if self.player.rect.y <= self.rect.center:
-                    self.player.rect.y = self.rect.center
+                if self.player.rect.y <= HEIGHT/2:
+                    self.player.rect.y = HEIGHT/2
 
-    def update_planet2(self):
-        if self.activate_level_control == True:
+    def update_planet2(self,status, player):
+        self.player = player
+        if status == True:
             self.rect.x -= self.speed_planet  # Planet movement
             if self.rect.x <= self.rect.right:
                 self.rect.x = self.rect.right
-            self.player += self.speed_planet
+            self.player.rect.x += self.speed_planet
             if self.player.rect.x >= WIDTH - self.image2.get_width() + 20:
                 self.player.rect.x = WIDTH - self.image2.get_width() + 20
-            if self.player.rect.y <= self.rect.center:
+            if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
-                if self.player.rect.y >= self.rect.center:
-                    self.player.rect.y = self.rect.center
-            if self.player.rect.y > self.rect.center:
+                if self.player.rect.y >= HEIGHT/2:
+                    self.player.rect.y = HEIGHT/2
+            if self.player.rect.y > HEIGHT/2:
                 self.player.rect.y -= self.speed_planet
-                if self.player.rect.y <= self.rect.center:
-                    self.player.rect.y = self.rect.center
+                if self.player.rect.y <= HEIGHT/2:
+                    self.player.rect.y = HEIGHT/2
 
-    def update_planet3(self):
-        if self.activate_level_control == True:
+    def update_planet3(self,status, player):
+        self.player = player
+        if status == True:
             self.rect.x -= self.speed_planet  # Planet movement
             if self.rect.x <= self.rect.right:
                 self.rect.x = self.rect.right
-            self.player += self.speed_planet
+            self.player.rect.x += self.speed_planet
             if self.player.rect.x >= WIDTH - self.image3.get_width() + 20:
                 self.player.rect.x = WIDTH - self.image3.get_width() + 20
-            if self.player.rect.y <= self.rect.center:
+            if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
-                if self.player.rect.y >= self.rect.center:
-                    self.player.rect.y = self.rect.center
-            if self.player.rect.y > self.rect.center:
+                if self.player.rect.y >= HEIGHT/2:
+                    self.player.rect.y = HEIGHT/2
+            if self.player.rect.y > HEIGHT/2:
                 self.player.rect.y -= self.speed_planet
-                if self.player.rect.y <= self.rect.center:
-                    self.player.rect.y = self.rect.center
+                if self.player.rect.y <= HEIGHT/2:
+                    self.player.rect.y = HEIGHT/2
 
 
 class Completed(Sprite):
@@ -286,7 +291,7 @@ class Completed(Sprite):
         self.draw_text(message_completed)
         self.draw_points(points)
         self.click_continue()
-
+        print("play")
     def click_continue(self):
         self.continue_width = 80
         self.continue_height = 60
