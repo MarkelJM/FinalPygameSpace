@@ -387,6 +387,7 @@ class Game(Scenes):
             self.activate_level_control = False
             self.shot_exist_2 = True
             
+            
 
             print("level 1")
 
@@ -395,6 +396,7 @@ class Game(Scenes):
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
+            
             print("level2")
             
         elif self.limit_time + 20000 + self.pausa_time2 < real_time < self.limit_time + 20000 + self.pausa_time2 + 30000:
@@ -408,19 +410,24 @@ class Game(Scenes):
         else:
             print("niveles")
             self.create_leve_rock = False
+            
 
             # pause_time_controller = pg.time.get_ticks()
             if self.rock_object_small.rect.x <= - 20:
-                self.planet_group.add(self.level1_planet)
-                self.planet_group.add(self.level2_planet)
-                self.planet_group.add(self.level3_planet)
+                
+                
                 self.activate_level_control = True
                 self.shot_exist_2 = False
                 if self.level1:
+                    self.planet_group.add(self.level1_planet)
                     self.level1_active = True
                 if self.level2:
+                    self.planet_group.remove(self.level1_planet)
+                    self.planet_group.add(self.level2_planet)
                     self.level2_active = True
                 if self.level3:
+                    self.planet_group.remove(self.level2_planet)
+                    self.planet_group.add(self.level3_planet)
                     self.level3_active = True
                 if self.level1_active:
                     #self.levels.update_planet1(self.activate_level_control, self.player)
@@ -498,38 +505,3 @@ class Game(Scenes):
             return True
 
 
-"""
-class Halloffame(Scenes):
-    
-
-    def __init__(self, pantalla: pg.Surface):
-        super().__init__(pantalla)
-        bg_file = os.path.join("resources", "images", "background.jpg")
-        self.fondo = pg.image.load(bg_file)
-        self.records = Records()
-        self.records.cargar_records()
-        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
-        self.tipografia = pg.font.Font(font_file, 20)
-
-    def bucle_principal(self):
-        borde = 100
-        salir = False
-        while not salir:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-            self.pintar_fondo()
-            self.records.cargar_records()
-            for records in range(len(self.records.game_records)):
-                texto_render = self.tipografia.render(
-                    str(self.records.game_records[records]), True, COLOR_BLANCO)
-                pos_x = ANCHO/2 - texto_render.get_width()
-                pos_y = records*texto_render.get_height() + borde*2
-                self.pantalla.blit(texto_render, (pos_x, pos_y))
-
-            pg.display.flip()
-
-    def pintar_fondo(self):
-        self.pantalla.blit(self.fondo, (0, 0))
-
-        """
