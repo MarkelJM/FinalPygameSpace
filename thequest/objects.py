@@ -109,7 +109,7 @@ class Rock_small(Sprite):
 
 
 class LifesCounting():
-    def __init__(self, first_lifes_count,status):
+    def __init__(self, first_lifes_count, status):
         self.status = status
         self.lifes = first_lifes_count
         font_file = os.path.join(
@@ -117,10 +117,9 @@ class LifesCounting():
         self.tipography = pg.font.Font(font_file, 20)
 
     def lost_life(self):
-        
+
         self.lifes -= 1
         return self.lifes
-    
 
     def no_lifes(self):
         return True
@@ -178,53 +177,36 @@ class Points():
         screen.blit(text, (pos_x, pos_y))
 
 
-class Levels(Sprite):
+class Level_1(Sprite):
     def __init__(self, player):
         super().__init__()
         self.create_leve_rock = True
         self.speed_planet = 10
         self.activate_level_control = False
         self.player = player
-
-    def start_level_1(self):
-        self.image1 = pg.image.load(os.path.join(
+        self.image = pg.image.load(os.path.join(
             "resources", "images", "planet0.png"))
         self.pos_y = 0
         self.pos_x = WIDTH
-        self.rect = self.image1.get_rect(
-            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image1.get_width())
+        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image.get_width())
 
-    def start_level_2(self):
-        self.image2 = pg.image.load(os.path.join(
-            "resources", "images", "planet2.png"))
-        self.pos_y = 0
-        self.pos_x = WIDTH
-        self.rect = self.image2.get_rect(
-            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image2.get_width())
 
-    def start_level_3(self):
-        self.image3 = pg.image.load(os.path.join(
-            "resources", "images", "planet1.png"))
-        self.pos_y = 0
-        self.pos_x = WIDTH
-        self.rect = self.image3.get_rect(
-            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image3.get_width())
 
-    def update_planet1(self,status, player):
+    def update_planet1(self, status, player):
         self.player = player
         if status == True:
-            if self.rect.x >= self.rect.right:
-                self.rect.x -= self.speed_planet 
+            
+            self.rect.x -= self.speed_planet
             print(self.speed_planet)
             print(self.rect.x)
             print(self.rect.right)
-            if self.rect.x >= self.rect.right:
-                self.rect.x = self.rect.right
+            if self.rect.x >= WIDTH - self.image.get_width():
+                self.rect.x = WIDTH - self.image.get_width()
                 print(self.rect.x)
-                
+
             self.player.rect.x += self.speed_planet
-            if self.player.rect.x >= WIDTH - self.image1.get_width() + 20:
-                self.player.rect.x = WIDTH - self.image1.get_width() + 20
+            if self.player.rect.x >= WIDTH - self.image.get_width() + 20:
+                self.player.rect.x = WIDTH - self.image.get_width() + 20
             if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
                 if self.player.rect.y >= HEIGHT/2:
@@ -234,15 +216,30 @@ class Levels(Sprite):
                 if self.player.rect.y <= HEIGHT/2:
                     self.player.rect.y = HEIGHT/2
 
-    def update_planet2(self,status, player):
+
+class Level_2(Sprite):
+    def __init__(self, player):
+        super().__init__()
+        self.create_leve_rock = True
+        self.speed_planet = 10
+        self.activate_level_control = False
+        self.player = player
+        self.image = pg.image.load(os.path.join(
+            "resources", "images", "planet2.png"))
+        self.pos_y = 0
+        self.pos_x = WIDTH
+        self.rect = self.image.get_rect(
+            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image.get_width())
+    
+    def update_planet2(self, status, player):
         self.player = player
         if status == True:
             self.rect.x -= self.speed_planet  # Planet movement
             if self.rect.x <= self.rect.right:
                 self.rect.x = self.rect.right
             self.player.rect.x += self.speed_planet
-            if self.player.rect.x >= WIDTH - self.image2.get_width() + 20:
-                self.player.rect.x = WIDTH - self.image2.get_width() + 20
+            if self.player.rect.x >= WIDTH - self.image.get_width() + 20:
+                self.player.rect.x = WIDTH - self.image.get_width() + 20
             if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
                 if self.player.rect.y >= HEIGHT/2:
@@ -251,16 +248,35 @@ class Levels(Sprite):
                 self.player.rect.y -= self.speed_planet
                 if self.player.rect.y <= HEIGHT/2:
                     self.player.rect.y = HEIGHT/2
+    
 
-    def update_planet3(self,status, player):
+class Level_3(Sprite):
+    def __init__(self, player):
+        super().__init__()
+        self.create_leve_rock = True
+        self.speed_planet = 10
+        self.activate_level_control = False
+        self.player = player
+        self.image = pg.image.load(os.path.join(
+            "resources", "images", "planet1.png"))
+        self.pos_y = 0
+        self.pos_x = WIDTH
+        self.rect = self.image.get_rect(
+            x=self.pos_x,  y=self.pos_y, right=WIDTH - self.image.get_width())
+
+    
+
+    
+
+    def update_planet3(self, status, player):
         self.player = player
         if status == True:
             self.rect.x -= self.speed_planet  # Planet movement
             if self.rect.x <= self.rect.right:
                 self.rect.x = self.rect.right
             self.player.rect.x += self.speed_planet
-            if self.player.rect.x >= WIDTH - self.image3.get_width() + 20:
-                self.player.rect.x = WIDTH - self.image3.get_width() + 20
+            if self.player.rect.x >= WIDTH - self.image.get_width() + 20:
+                self.player.rect.x = WIDTH - self.image.get_width() + 20
             if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
                 if self.player.rect.y >= HEIGHT/2:
@@ -290,23 +306,22 @@ class Completed(Sprite):
         self.draw_text(message_completed, message_pos_level)
 
         text_continue = "CONTINUAR"
-        text_continue_position = self.wn_height - self.continue_height -10
+        text_continue_position = self.wn_height - self.continue_height - 10
         self.draw_text(text_continue, text_continue_position)
 
         self.draw_text(message_completed)
         self.draw_points(points)
         self.click_continue()
         print("play")
+
     def click_continue(self):
         self.continue_width = 80
         self.continue_height = 60
 
         pos_x = (self.wn_width - self.continue_width)/2
-        pos_y = self.wn_height - self.continue_height - 20 #20 de margen inferior
+        pos_y = self.wn_height - self.continue_height - 20  # 20 de margen inferior
         pg.draw.rect(self.screen, (0, 0, 0,), (pos_x, pos_y,
                      self.continue_width, self.continue_height))
-
-        
 
     def draw_text(self, message1, position):
 
