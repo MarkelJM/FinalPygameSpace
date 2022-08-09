@@ -206,7 +206,7 @@ class Level_1(Sprite):
 
             self.player.rect.x += self.speed_planet
             
-            if self.player.rect.x >= WIDTH - self.image.get_width():
+            if self.player.rect.x >= WIDTH - self.image.get_width()  :
                 self.player.rect.x = WIDTH - self.image.get_width()
             if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
@@ -232,7 +232,7 @@ class Level_2(Sprite):
         self.rect = self.image.get_rect(
             x=self.pos_x,  y=self.pos_y)
     
-    def update_planet1(self, status, player):
+    def update_planet2(self, status, player):
         self.player = player
         if status == True:
             
@@ -246,8 +246,8 @@ class Level_2(Sprite):
 
             self.player.rect.x += self.speed_planet
             
-            if self.player.rect.x >= WIDTH - self.image.get_width():
-                self.player.rect.x = WIDTH - self.image.get_width()
+            if self.player.rect.x >= WIDTH - self.image.get_width() :
+                self.player.rect.x = WIDTH - self.image.get_width() 
             if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet
                 if self.player.rect.y >= HEIGHT/2:
@@ -276,7 +276,7 @@ class Level_3(Sprite):
 
     
 
-    def update_planet1(self, status, player):
+    def update_planet3(self, status, player):
         self.player = player
         if status == True:
             
@@ -290,7 +290,7 @@ class Level_3(Sprite):
 
             self.player.rect.x += self.speed_planet
             
-            if self.player.rect.x >= WIDTH - self.image.get_width():
+            if self.player.rect.x >= WIDTH - self.image.get_width() :
                 self.player.rect.x = WIDTH - self.image.get_width()
             if self.player.rect.y <= HEIGHT/2:
                 self.player.rect.y += self.speed_planet

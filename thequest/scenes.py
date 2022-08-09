@@ -181,7 +181,7 @@ class Information(Scenes):
 class Game(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
-        bg_file = os.path.join("resources", "images", "background.png")
+        bg_file = os.path.join("resources", "images", "background2.png")
         self.background = pg.image.load(bg_file)
         self.player = Plane()
 
@@ -222,6 +222,7 @@ class Game(Scenes):
         self.level1_active = False
         self.level2_active = False
         self.level3_active = False
+        self.a=0;self.b=0;self.c=0  # as plane is hidden behing planet to stop collision pointer counting(just once)
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()
@@ -295,6 +296,7 @@ class Game(Scenes):
                             self.rocks_small.remove(rock)
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
+            
             if plane_crash and self.activate_level_control == False:
                 self.remove_life = self.lifes_counter.lost_life()
                 if self.remove_life == 0:
@@ -445,13 +447,21 @@ class Game(Scenes):
                     #self.level3_planet.update_planet3(self.activate_level_control, self.player)
                     self.plane_in_planet3 = pg.sprite.spritecollide(self.player, self.planet_group, False)
 
-            
+                
                 if self.plane_in_planet1:
-                    self.pointer.increase_points(100)
+                    if self.a==0:
+                        print(self.a)
+                        self.pointer.increase_points(100)
+                        self.a+=1
+                        print(self.a)
                 if self.plane_in_planet2:
-                    self.pointer.increase_points(200)
+                    if self.b==0:
+                        self.b+=1
+                        self.pointer.increase_points(200)
                 if self.plane_in_planet3:
-                    self.pointer.increase_points(400)
+                    if self.c==0:
+                        self.c+=1
+                        self.pointer.increase_points(400)
 
                 self.level_window = Completed(self.screen, self.pointer.value)
 
