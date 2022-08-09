@@ -199,6 +199,7 @@ class Game(Scenes):
         self.pointer = Points()
 
         self.clock = pg.time.Clock()
+        self.level_window = Completed(self.screen)
 
     def play(self):
 
@@ -463,7 +464,11 @@ class Game(Scenes):
                         self.c+=1
                         self.pointer.increase_points(400)
 
-                self.level_window = Completed(self.screen, self.pointer.value)
+                self.level_window.draw_points(self.pointer.value)
+                #self.level_window.draw_text()
+                self.level_window.click_continue()
+                #self.level_window.draw_text()
+                
 
                 for event in pg.event.get():
                     if event.type == pg.MOUSEBUTTONDOWN:

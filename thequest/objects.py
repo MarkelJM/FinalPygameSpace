@@ -303,7 +303,7 @@ class Level_3(Sprite):
 
 
 class Completed(Sprite):
-    def __init__(self, screen, points):
+    def __init__(self, screen):
         super().__init__()
         self.screen = screen
         self.wn_x = 10
@@ -317,18 +317,20 @@ class Completed(Sprite):
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 30)
 
-        message_completed = "NIVEL COMPLETADO"
-        message_pos_level = self.wn_y + 30
-        self.draw_text(message_completed, message_pos_level)
+        self.message_completed = "NIVEL COMPLETADO"
+        self.message_pos_level = self.wn_y + 30
+        
+        #self.draw_text(message_completed, message_pos_level)
 
-        text_continue = "CONTINUAR"
-        text_continue_position = self.wn_height - self.continue_height - 10
-        self.draw_text(text_continue, text_continue_position)
+        self.text_continue = "CONTINUAR"
+        self.text_continue_position = self.wn_height - self.continue_height - 10
+        #self.draw_text(text_continue, text_continue_position)
 
         
-        self.draw_points(points)
-        self.click_continue()
+        #self.draw_points(points)
+        #self.click_continue()
         print("play")
+        
 
     def click_continue(self):
         self.continue_width = 80
@@ -336,8 +338,9 @@ class Completed(Sprite):
 
         pos_x = (self.wn_width - self.continue_width)/2
         pos_y = self.wn_height - self.continue_height - 20  # 20 de margen inferior
-        pg.draw.rect(self.screen, (0, 0, 0,), (pos_x, pos_y,
+        self.rec_continue = pg.draw.rect(self.screen, (0, 0, 0,), (pos_x, pos_y,
                      self.continue_width, self.continue_height))
+        self.screen.blit(self.screen, (pos_x, pos_y))
 
     def draw_text(self, message1, position):
 
