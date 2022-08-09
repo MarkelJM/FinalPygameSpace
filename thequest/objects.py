@@ -295,6 +295,7 @@ class Completed(Sprite):
         self.wn_y = 10
         self.wn_width = 300
         self.wn_height = 300
+        self.continue_height = 60
         pg.draw.rect(screen, (255, 255, 255), (self.wn_x,
                      self.wn_y, self.wn_width, self.wn_height))
 
@@ -309,7 +310,7 @@ class Completed(Sprite):
         text_continue_position = self.wn_height - self.continue_height - 10
         self.draw_text(text_continue, text_continue_position)
 
-        self.draw_text(message_completed)
+        
         self.draw_points(points)
         self.click_continue()
         print("play")

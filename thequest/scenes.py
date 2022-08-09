@@ -220,8 +220,8 @@ class Game(Scenes):
         self.level2 = False
         self.level3 = False
         self.level1_active = False
-        #self.level2_active = False
-        #self.level3_active = False
+        self.level2_active = False
+        self.level3_active = False
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()
@@ -271,6 +271,12 @@ class Game(Scenes):
 
             if self.level1_active:
                 self.level1_planet.update_planet1(self.activate_level_control, self.player)
+                self.planet_group.update()
+            if self.level2_active:
+                self.level2_planet.update_planet2(self.activate_level_control, self.player)
+                self.planet_group.update()
+            if self.level3_active:
+                self.level3_planet.update_planet3(self.activate_level_control, self.player)
                 self.planet_group.update()
 
             plane_crash = pg.sprite.spritecollide(
@@ -390,14 +396,14 @@ class Game(Scenes):
             self.activate_level_control = False
             self.shot_exist_2 = True
             print("level2")
-            self.planet_group.add(self.level2_planet)
+            
         elif self.limit_time + 20000 + self.pausa_time2 < real_time < self.limit_time + 20000 + self.pausa_time2 + 30000:
 
             self.level3 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
-            self.planet_group.add(self.level3_planet)
+            
             print("level 3")
         else:
             print("niveles")
@@ -406,32 +412,31 @@ class Game(Scenes):
             # pause_time_controller = pg.time.get_ticks()
             if self.rock_object_small.rect.x <= - 20:
                 self.planet_group.add(self.level1_planet)
+                self.planet_group.add(self.level2_planet)
+                self.planet_group.add(self.level3_planet)
                 self.activate_level_control = True
                 self.shot_exist_2 = False
-                self.level1_active = True
+                if self.level1:
+                    self.level1_active = True
+                if self.level2:
+                    self.level2_active = True
+                if self.level3:
+                    self.level3_active = True
                 if self.level1_active:
                     #self.levels.update_planet1(self.activate_level_control, self.player)
                     """
                     rect de planeta da error comprobar
                     """
-                    print("a")
-                    self.plane_in_planet1 = pg.sprite.spritecollide(
-                        self.player, self.planet_group, False)
+                    
+                    self.plane_in_planet1 = pg.sprite.spritecollide(self.player, self.planet_group, False)
 
-                if self.level2:
+                if self.level2_active:
 
-                    self.level2_planet.update_planet2(
-                        self.activate_level_control, self.player)
-
-                    print("b")
-                    self.plane_in_planet2 = pg.sprite.spritecollide(
-                        self.player, self.planet_group, False)
-                if self.level3:
-                    self.level3_planet.update_planet3(
-                        self.activate_level_control, self.player)
-
-                    self.plane_in_planet3 = pg.sprite.spritecollide(
-                        self.player, self.planet_group, False)
+                    #self.level2_planet.update_planet2(self.activate_level_control, self.player)                  
+                    self.plane_in_planet2 = pg.sprite.spritecollide(self.player, self.planet_group, False)
+                if self.level3_active:
+                    #self.level3_planet.update_planet3(self.activate_level_control, self.player)
+                    self.plane_in_planet3 = pg.sprite.spritecollide(self.player, self.planet_group, False)
 
             
                 if self.plane_in_planet1:
