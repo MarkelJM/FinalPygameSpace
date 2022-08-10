@@ -257,7 +257,7 @@ class Game(Scenes):
             # create first rocks to don´t have problems with create method
             if self.create_leve_rock == True and contador == 1 or contador % 30 == 0:
                 self.created_rock_small = self.create_rocks_small()
-                print(self.create_leve_rock)
+                
 
             ### UPDATE OBJECTS SETUP ###
 
@@ -391,7 +391,7 @@ class Game(Scenes):
         self.plane_in_planet2 = False
         self.plane_in_planet3 = False
         if real_time < 10000:
-            self.level1 = True
+            #self.level1 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
@@ -401,7 +401,7 @@ class Game(Scenes):
             print("level 1")
 
         elif 10000 + self.pausa_time < real_time < self.limit_time + 20000:
-            self.level2 = True
+            #self.level2 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
@@ -410,7 +410,7 @@ class Game(Scenes):
             
         elif self.limit_time + 20000 + self.pausa_time2 < real_time < self.limit_time + 20000 + self.pausa_time2 + 30000:
 
-            self.level3 = True
+            #self.level3 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
@@ -457,10 +457,8 @@ class Game(Scenes):
                 
                 if self.plane_in_planet1:
                     if self.a==0:
-                        print(self.a)
                         self.pointer.increase_points(100)
                         self.a+=1
-                        print(self.a)
                 if self.plane_in_planet2:
                     if self.b==0:
                         self.b+=1
@@ -478,6 +476,9 @@ class Game(Scenes):
                 
 
                 for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                        sys.exit()
                     if event.type == pg.MOUSEBUTTONDOWN:
                         pressed_key = pg.mouse.get_pressed()
                         mouse_pos = pg.mouse.get_pos()
@@ -488,18 +489,21 @@ class Game(Scenes):
                             if self.level1 == True:  # necesitamos la informacion del level 1 para prepar el nivel 2
                                 self.pausa_time = (
                                     self.pause_time_controller - 10000)
+                                print("aqui 1")
                                 self.limit_time = 10000 + self.pausa_time
                                 self.level1 = False
                                 self.level2 = True
                                 self.player.rect.midleft
-                            if self.level2 == True:
+                            elif self.level2 == True:
+                                print("aqui 2")
                                 self.pausa_time2 = (
                                     self.pause_time_controller - self.limit_time + 20000)
                                 self.limit_time = 20000 + self.pausa_time2
                                 self.level2 = False
                                 self.level3 = True
                                 self.player.rect.midleft
-                            if self.level3 == True:
+                            elif self.level3 == True:
+                                print("aqui 3")
                                 self.pausa_time2 = (
                                     self.pause_time_controller - self.limit_time + 20000)
                                 self.limit_time = 20000 + self.pausa_time2

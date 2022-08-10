@@ -341,8 +341,6 @@ class Window(Sprite):
             os.path.join("resources", "images", "continuar.png"))
 
         rect = image.get_rect()
-        print(pos_x, pos_y)
-        print(image.get_width(),image.get_height())
         self.screen.blit(image, (pos_x, pos_y))
         
 
