@@ -223,7 +223,10 @@ class Game(Scenes):
         self.level1_active = False
         self.level2_active = False
         self.level3_active = False
-        self.a=0;self.b=0;self.c=0  # as plane is hidden behing planet to stop collision pointer counting(just once)
+        self.a = 0
+        self.b = 0
+        # as plane is hidden behing planet to stop collision pointer counting(just once)
+        self.c = 0
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()
@@ -257,7 +260,6 @@ class Game(Scenes):
             # create first rocks to don´t have problems with create method
             if self.create_leve_rock == True and contador == 1 or contador % 30 == 0:
                 self.created_rock_small = self.create_rocks_small()
-                
 
             ### UPDATE OBJECTS SETUP ###
 
@@ -272,13 +274,16 @@ class Game(Scenes):
             self.rocks_small.update()
 
             if self.level1_active:
-                self.level1_planet.update_planet1(self.activate_level_control, self.player)
+                self.level1_planet.update_planet1(
+                    self.activate_level_control, self.player)
                 self.planet_group.update()
             if self.level2_active:
-                self.level2_planet.update_planet2(self.activate_level_control, self.player)
+                self.level2_planet.update_planet2(
+                    self.activate_level_control, self.player)
                 self.planet_group.update()
             if self.level3_active:
-                self.level3_planet.update_planet3(self.activate_level_control, self.player)
+                self.level3_planet.update_planet3(
+                    self.activate_level_control, self.player)
                 self.planet_group.update()
 
             plane_crash = pg.sprite.spritecollide(
@@ -297,7 +302,7 @@ class Game(Scenes):
                             self.rocks_small.remove(rock)
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
-            
+
             if plane_crash and self.activate_level_control == False:
                 self.remove_life = self.lifes_counter.lost_life()
                 if self.remove_life == 0:
@@ -309,11 +314,12 @@ class Game(Scenes):
             self.paint_background()
 
             self.planet_group.draw(self.screen)
-            if self.plane_in_planet1:# level window
-                self.screen.blit(self.level_window.image, self.level_window.rect)
+            if self.plane_in_planet1:  # level window
+                self.screen.blit(self.level_window.image,
+                                 self.level_window.rect)
                 self.message_completed = "NIVEL COMPLETADO"
-                self.level_window.draw_text(self.message_completed) 
-                self.level_window.draw_points(self.pointer.value) 
+                self.level_window.draw_text(self.message_completed)
+                self.level_window.draw_points(self.pointer.value)
                 self.level_window.click_continue()
 
             self.screen.blit(self.player.image, self.player.rect)  # PLayer
@@ -330,8 +336,6 @@ class Game(Scenes):
 
             # draw lifes counting
             self.lifes_counter.paint_lifes(self.screen)
-
-            
 
             # level and planet draw
 
@@ -378,7 +382,6 @@ class Game(Scenes):
             pos_x = WIDTH
             pos_y = randint(0, HEIGHT)
             self.rock_object_small = Rock_small(pos_x, pos_y)
-            print("si")
             self.rocks_small.add(self.rock_object_small)
 
     def remove_rock_small(self, rock):
@@ -386,45 +389,43 @@ class Game(Scenes):
 
     def get_level_time_controller(self, time0, time1):
         real_time = (time1 - time0)
+
         self.planet_group = pg.sprite.GroupSingle()
         self.plane_in_planet1 = False
         self.plane_in_planet2 = False
         self.plane_in_planet3 = False
-        if real_time < 10000:
+        print(real_time)
+        if real_time < 30000:
             #self.level1 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
-            
-            
 
             print("level 1")
 
-        elif 10000 + self.pausa_time < real_time < self.limit_time + 20000:
+        elif 30000 + self.pausa_time <= real_time < self.limit_time + 60000:
             #self.level2 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
-            
+
             print("level2")
-            
-        elif self.limit_time + 20000 + self.pausa_time2 < real_time < self.limit_time + 20000 + self.pausa_time2 + 30000:
+
+        elif self.limit_time + 60000 + self.pausa_time2 <= real_time < self.limit_time + 10000 + self.pausa_time2 + 60000:
 
             #self.level3 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
-            
+
             print("level 3")
         else:
             print("niveles")
             self.create_leve_rock = False
-            
 
             # pause_time_controller = pg.time.get_ticks()
             if self.rock_object_small.rect.x <= - 20:
-                
-                
+
                 self.activate_level_control = True
                 self.shot_exist_2 = False
                 if self.level1:
@@ -443,37 +444,37 @@ class Game(Scenes):
                     """
                     rect de planeta da error comprobar
                     """
-                    
-                    self.plane_in_planet1 = pg.sprite.spritecollide(self.player, self.planet_group, False)
+
+                    self.plane_in_planet1 = pg.sprite.spritecollide(
+                        self.player, self.planet_group, False)
 
                 if self.level2_active:
 
-                    #self.level2_planet.update_planet2(self.activate_level_control, self.player)                  
-                    self.plane_in_planet2 = pg.sprite.spritecollide(self.player, self.planet_group, False)
+                    #self.level2_planet.update_planet2(self.activate_level_control, self.player)
+                    self.plane_in_planet2 = pg.sprite.spritecollide(
+                        self.player, self.planet_group, False)
                 if self.level3_active:
                     #self.level3_planet.update_planet3(self.activate_level_control, self.player)
-                    self.plane_in_planet3 = pg.sprite.spritecollide(self.player, self.planet_group, False)
+                    self.plane_in_planet3 = pg.sprite.spritecollide(
+                        self.player, self.planet_group, False)
 
-                
                 if self.plane_in_planet1:
-                    if self.a==0:
+                    if self.a == 0:
                         self.pointer.increase_points(100)
-                        self.a+=1
+                        self.a += 1
                 if self.plane_in_planet2:
-                    if self.b==0:
-                        self.b+=1
+                    if self.b == 0:
+                        self.b += 1
                         self.pointer.increase_points(200)
                 if self.plane_in_planet3:
-                    if self.c==0:
-                        self.c+=1
+                    if self.c == 0:
+                        self.c += 1
                         self.pointer.increase_points(400)
 
-                
-                #self.level_window.draw_points(self.pointer.value)
-                
-                #self.level_window.click_continue()
-                #self.level_window.draw_text()
-                
+                # self.level_window.draw_points(self.pointer.value)
+
+                # self.level_window.click_continue()
+                # self.level_window.draw_text()
 
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
@@ -488,12 +489,17 @@ class Game(Scenes):
                             self.pause_time_controller = pg.time.get_ticks()
                             if self.level1 == True:  # necesitamos la informacion del level 1 para prepar el nivel 2
                                 self.pausa_time = (
-                                    self.pause_time_controller - 10000)
-                                print("aqui 1")
-                                self.limit_time = 10000 + self.pausa_time
+                                    self.pause_time_controller - 30000)
+
+                                self.limit_time = 30000 + self.pausa_time
                                 self.level1 = False
                                 self.level2 = True
                                 self.player.rect.midleft
+                                print("aqui 1")
+                                print(self.pause_time_controller)
+                                print(self.pausa_time)
+                                print(self.limit_time)
+
                             elif self.level2 == True:
                                 print("aqui 2")
                                 self.pausa_time2 = (
@@ -502,6 +508,9 @@ class Game(Scenes):
                                 self.level2 = False
                                 self.level3 = True
                                 self.player.rect.midleft
+                                print(self.pause_time_controller)
+                                print(self.pausa_time2)
+                                print(self.limit_time)
                             elif self.level3 == True:
                                 print("aqui 3")
                                 self.pausa_time2 = (
@@ -509,6 +518,8 @@ class Game(Scenes):
                                 self.limit_time = 20000 + self.pausa_time2
                                 self.level3 = False
                                 self.player.rect.midleft
+                                print(self.pausa_time2)
+                                print(self.limit_time)
                                 if self.level1 == False and self.level2 == False and self.level3 == False:
                                     self.exit = True
                                     print("termino")
@@ -529,5 +540,3 @@ class Game(Scenes):
         key = pg.key.get_pressed()
         if key[pg.K_e]:
             return True
-
-
