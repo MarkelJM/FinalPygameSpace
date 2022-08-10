@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Bullet, Completed, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_small
+from .objects import Bullet, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_small
 
 
 class Scenes:
@@ -199,7 +199,7 @@ class Game(Scenes):
         self.pointer = Points()
 
         self.clock = pg.time.Clock()
-        self.level_window = Completed(self.screen)
+        self.level_window = Window(self.screen)
 
     def play(self):
 
@@ -309,6 +309,12 @@ class Game(Scenes):
             self.paint_background()
 
             self.planet_group.draw(self.screen)
+            if self.plane_in_planet1:# level window
+                self.screen.blit(self.level_window.image, self.level_window.rect)
+                self.message_completed = "NIVEL COMPLETADO"
+                self.level_window.draw_text(self.message_completed) 
+                self.level_window.draw_points(self.pointer.value) 
+                self.level_window.click_continue()
 
             self.screen.blit(self.player.image, self.player.rect)  # PLayer
 
@@ -464,9 +470,10 @@ class Game(Scenes):
                         self.c+=1
                         self.pointer.increase_points(400)
 
-                self.level_window.draw_points(self.pointer.value)
-                #self.level_window.draw_text()
-                self.level_window.click_continue()
+                
+                #self.level_window.draw_points(self.pointer.value)
+                
+                #self.level_window.click_continue()
                 #self.level_window.draw_text()
                 
 
@@ -474,7 +481,7 @@ class Game(Scenes):
                     if event.type == pg.MOUSEBUTTONDOWN:
                         pressed_key = pg.mouse.get_pressed()
                         mouse_pos = pg.mouse.get_pos()
-                        if pressed_key[0] and 120 <= mouse_pos[0] <= 200 and 230 <= mouse_pos[1] <= 290:
+                        if pressed_key[0] and 80 <= mouse_pos[0] <= 447 and 165 <= mouse_pos[1] <= 261:
 
                             # indicarlo en el init como pausa_time_controller= 0
                             self.pause_time_controller = pg.time.get_ticks()

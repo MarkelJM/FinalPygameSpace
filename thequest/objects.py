@@ -302,28 +302,28 @@ class Level_3(Sprite):
                     self.player.rect.y = HEIGHT/2
 
 
-class Completed(Sprite):
+class Window(Sprite):
     def __init__(self, screen):
         super().__init__()
         self.screen = screen
-        self.wn_x = 10
-        self.wn_y = 10
-        self.wn_width = 300
-        self.wn_height = 300
+        self.wn_x_margin = 10
+        self.wn_y_margin = 30
+        
         self.continue_height = 60
-        pg.draw.rect(screen, (255, 255, 255), (self.wn_x,
-                     self.wn_y, self.wn_width, self.wn_height))
+        self.image = pg.image.load(
+            os.path.join("resources", "images", "window.png"))
+
+        self.rect = self.image.get_rect(midleft=(self.wn_x_margin, self.wn_y_margin))
 
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 30)
 
-        self.message_completed = "NIVEL COMPLETADO"
-        self.message_pos_level = self.wn_y + 30
+       
         
         #self.draw_text(message_completed, message_pos_level)
 
-        self.text_continue = "CONTINUAR"
-        self.text_continue_position = self.wn_height - self.continue_height - 10
+        #self.text_continue = "CONTINUAR"
+        #self.text_continue_position = self.wn_height - self.continue_height - 10
         #self.draw_text(text_continue, text_continue_position)
 
         
@@ -331,30 +331,40 @@ class Completed(Sprite):
         #self.click_continue()
         print("play")
         
-
+    
     def click_continue(self):
-        self.continue_width = 80
-        self.continue_height = 60
+        
 
-        pos_x = (self.wn_width - self.continue_width)/2
-        pos_y = self.wn_height - self.continue_height - 20  # 20 de margen inferior
-        self.rec_continue = pg.draw.rect(self.screen, (0, 0, 0,), (pos_x, pos_y,
-                     self.continue_width, self.continue_height))
-        self.screen.blit(self.screen, (pos_x, pos_y))
+        pos_x = 80
+        pos_y = self.image.get_height() - 350
+        image = pg.image.load(
+            os.path.join("resources", "images", "continuar.png"))
 
-    def draw_text(self, message1, position):
+        rect = image.get_rect()
+        print(pos_x, pos_y)
+        print(image.get_width(),image.get_height())
+        self.screen.blit(image, (pos_x, pos_y))
+        
 
-        text = self.tipography.render(message1, True, MESSAGE_COLOUR)
+    def draw_text(self,message):
+        
+        pos_y = self.wn_y_margin + 30
+
+        text = self.tipography.render(message, True, MESSAGE_COLOUR)
         width_text = text.get_width()
-        pos_x = (self.wn_width - width_text) / 2
+        pos_x = (self.image.get_width() - width_text) / 2
 
-        self.screen.blit(text, (pos_x, position))
+        self.screen.blit(text, (pos_x, pos_y))
 
     def draw_points(self,  points):
 
         message = f"Puntos: {points}"
         text = self.tipography.render(message, True, MESSAGE_COLOUR)
         width_text = text.get_width()
-        pos_x = (self.wn_width - width_text) / 2
-        pos_y = self.wn_height + 150
+        pos_x = (self.image.get_width() - width_text) / 2
+        pos_y = 100 
         self.screen.blit(text, (pos_x, pos_y))
+
+    
+        
+
