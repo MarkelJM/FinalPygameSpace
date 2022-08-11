@@ -122,7 +122,8 @@ class LifesCounting():
         return self.lifes
 
     def no_lifes(self):
-        return True
+        if self.lifes == 0:
+            return True
 
     def paint_lifes(self, screen):
 

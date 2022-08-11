@@ -88,8 +88,9 @@ class Home(Scenes):
 
     def change_Game_Home(self):
         return False
-
-
+    
+    def game_over(self):
+        return False
 class Information(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
@@ -200,10 +201,10 @@ class Game(Scenes):
 
         self.clock = pg.time.Clock()
         self.level_window = Window(self.screen)
-
+        self.exit = False
     def play(self):
 
-        self.exit = False
+        
         contador = 0
         #counting_bullet_time = 0
         self.bullet_timer0 = 0
@@ -308,7 +309,8 @@ class Game(Scenes):
                 self.remove_life = self.lifes_counter.lost_life()
                 if self.remove_life == 0:
 
-                    self.without_lifes = self.lifes_counter.no_lifes()
+                    self.change_Game_Home()
+                    self.exit = False
 
             # self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -395,14 +397,14 @@ class Game(Scenes):
         self.plane_in_planet1 = False
         self.plane_in_planet2 = False
         self.plane_in_planet3 = False
-        print(self.real_time)
+        #print(self.real_time)
         if self.real_time < 30000:
             #self.level1 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
 
-            print("level 1")
+           # print("level 1")
 
         elif 30000 + self.gap_time + self.pausa_time <= self.real_time < self.limit_time + 60000:
             self.level2 = True
@@ -410,7 +412,7 @@ class Game(Scenes):
             self.activate_level_control = False
             self.shot_exist_2 = True
 
-            print("level2")
+           # print("level2")
 
         elif self.limit_time +self.pausa_time2 +self.gap_time <=  self.real_time < self.limit_time + 120000:
 
@@ -419,9 +421,9 @@ class Game(Scenes):
             self.activate_level_control = False
             self.shot_exist_2 = True
 
-            print("level 3")
+           # print("level 3")
         else:
-            print("niveles")
+           # print("niveles")
             self.create_leve_rock = False
 
             # pause_time_controller = pg.time.get_ticks()
@@ -497,36 +499,36 @@ class Game(Scenes):
                                 self.level1 = False
                                 
                                 self.player.rect.midleft
-                                print("aqui 1")
-                                print(self.pause_time_controller)
-                                print(self.real_time)
-                                print(self.gap_time)
-                                print(self.pausa_time)
-                                print(self.limit_time)
+                                #print("aqui 1")
+                                #print(self.pause_time_controller)
+                                #print(self.real_time)
+                                #print(self.gap_time)
+                                #print(self.pausa_time)
+                                #print(self.limit_time)
 
                             elif self.level2 == True:
-                                print("aqui 2")
+                                #print("aqui 2")
                                 self.pausa_time2 = (
                                     self.pause_time_controller - self.limit_time + 60000)
                                 self.limit_time = 30000  + self.pausa_time
                                 self.level2 = False
                                 
                                 self.player.rect.midleft
-                                print(self.real_time)
-                                print(self.gap_time)
-                                print(self.pause_time_controller)
-                                print(self.pausa_time2)
-                                print(self.limit_time)
+                                #print(self.real_time)
+                                #print(self.gap_time)
+                                #print(self.pause_time_controller)
+                                #print(self.pausa_time2)
+                                #print(self.limit_time)
                             elif self.level3 == True:
-                                print("aqui 3")
+                                #print("aqui 3")
                                 self.pausa_time2 = (
                                     self.pause_time_controller - self.limit_time + 60000)
                                 self.limit_time = 60000 + 30000 
                                 self.level3 = False
                                 self.player.rect.midleft
-                                print(self.pausa_time2)
-                                print(self.limit_time)
-                                if self.level1 == False and self.level2 == False and self.level3 == False:
+                               # print(self.pausa_time2)
+                                #print(self.limit_time)
+                            if self.level1 == False and self.level2 == False and self.level3 == False:
                                     self.exit = True
                                     print("termino")
 
@@ -544,5 +546,10 @@ class Game(Scenes):
 
     def change_Game_Home(self):
         key = pg.key.get_pressed()
-        if key[pg.K_e]:
+        if key[pg.K_e]  :
             return True
+    def game_over(self):
+        if self.lifes_counter.lifes == 0:
+            return True
+
+    

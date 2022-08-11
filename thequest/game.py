@@ -43,27 +43,28 @@ class MainGame:
         que devuelva true y no pida nada
         """       
         
-        current_scene = Home(self.display)
+        self.current_scene = Home(self.display)
         
         change = False
         
         while not change:
-            current_scene.play()
-            if current_scene.change_Home_Information() == True:
-                current_scene = Information(self.display)
-            elif current_scene.change_Home_Game() == True:
-                current_scene = Game(self.display)
-            elif current_scene.change_Information_Home() == True:
-                current_scene = Home(self.display)
-            elif current_scene.change_Information_Game() == True:
-                current_scene = Game(self.display)
-            elif current_scene.change_Game_Home() == True:
-                current_scene = Home(self.display)
+            self.current_scene.play()
+            if self.current_scene.change_Home_Information() == True:
+                self.current_scene = Information(self.display)
+            elif self.current_scene.change_Home_Game() == True:
+                self.current_scene = Game(self.display)
+            elif self.current_scene.change_Information_Home() == True:
+                self.current_scene = Home(self.display)
+            elif self.current_scene.change_Information_Game() == True:
+                self.current_scene = Game(self.display)
+            elif self.current_scene.change_Game_Home() == True:
+                self.current_scene = Home(self.display)
                 
             """implementar para que salga de game cuando vidas  se queden en 0"""
-            if current_scene == Game(self.display) and current_scene.remove_life == 0:
-                print("si game.py")
-                current_scene = Home(self.display)
+            if self.current_scene.exit == False and self.current_scene.game_over() == True:
+            
+                print("salio")
+                self.current_scene = Home(self.display)
             
             
         
