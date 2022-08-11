@@ -217,6 +217,7 @@ class Game(Scenes):
         self.pausa_time = 60000
         self.pausa_time2 = 60000
         self.limit_time = 60000
+        self.gap_time = 0
         self.level1 = True
         self.level2 = False
         self.level3 = False
@@ -388,14 +389,14 @@ class Game(Scenes):
         self.rocks_small.remove(rock)
 
     def get_level_time_controller(self, time0, time1):
-        real_time = (time1 - time0)
+        self.real_time = (time1 - time0)
 
         self.planet_group = pg.sprite.GroupSingle()
         self.plane_in_planet1 = False
         self.plane_in_planet2 = False
         self.plane_in_planet3 = False
-        print(real_time)
-        if real_time < 30000:
+        print(self.real_time)
+        if self.real_time < 30000:
             #self.level1 = True
             self.create_leve_rock = True
             self.activate_level_control = False
@@ -403,17 +404,17 @@ class Game(Scenes):
 
             print("level 1")
 
-        elif 30000 + self.pausa_time <= real_time < self.limit_time + 60000:
-            #self.level2 = True
+        elif 30000 + self.gap_time + self.pausa_time <= self.real_time < self.limit_time + 60000:
+            self.level2 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
 
             print("level2")
 
-        elif self.limit_time + 60000 + self.pausa_time2 <= real_time < self.limit_time + 10000 + self.pausa_time2 + 60000:
+        elif self.limit_time + 60000 + self.pausa_time2 <= self.real_time < self.limit_time + 60000 + self.pausa_time2 + 60000:
 
-            #self.level3 = True
+            self.level3 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
@@ -487,35 +488,40 @@ class Game(Scenes):
 
                             # indicarlo en el init como pausa_time_controller= 0
                             self.pause_time_controller = pg.time.get_ticks()
+                            self.gap_time = self.pause_time_controller -self.real_time
                             if self.level1 == True:  # necesitamos la informacion del level 1 para prepar el nivel 2
                                 self.pausa_time = (
                                     self.pause_time_controller - 30000)
 
                                 self.limit_time = 30000 + self.pausa_time
                                 self.level1 = False
-                                self.level2 = True
+                                
                                 self.player.rect.midleft
                                 print("aqui 1")
                                 print(self.pause_time_controller)
+                                print(self.real_time)
+                                print(self.gap_time)
                                 print(self.pausa_time)
                                 print(self.limit_time)
 
                             elif self.level2 == True:
                                 print("aqui 2")
                                 self.pausa_time2 = (
-                                    self.pause_time_controller - self.limit_time + 20000)
-                                self.limit_time = 20000 + self.pausa_time2
+                                    self.pause_time_controller - self.limit_time + 60000)
+                                self.limit_time = 60000 + self.pausa_time2
                                 self.level2 = False
-                                self.level3 = True
+                                
                                 self.player.rect.midleft
+                                print(self.real_time)
+                                print(self.gap_time)
                                 print(self.pause_time_controller)
                                 print(self.pausa_time2)
                                 print(self.limit_time)
                             elif self.level3 == True:
                                 print("aqui 3")
                                 self.pausa_time2 = (
-                                    self.pause_time_controller - self.limit_time + 20000)
-                                self.limit_time = 20000 + self.pausa_time2
+                                    self.pause_time_controller - self.limit_time + 60000)
+                                self.limit_time = 60000 + self.pausa_time2
                                 self.level3 = False
                                 self.player.rect.midleft
                                 print(self.pausa_time2)
