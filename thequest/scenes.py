@@ -412,7 +412,7 @@ class Game(Scenes):
 
             print("level2")
 
-        elif self.limit_time + 60000 + self.pausa_time2 <= self.real_time < self.limit_time + 60000 + self.pausa_time2 + 60000:
+        elif self.limit_time +self.pausa_time2 +self.gap_time <=  self.real_time < self.limit_time + 120000:
 
             self.level3 = True
             self.create_leve_rock = True
@@ -493,7 +493,7 @@ class Game(Scenes):
                                 self.pausa_time = (
                                     self.pause_time_controller - 30000)
 
-                                self.limit_time = 30000 + self.pausa_time
+                                self.limit_time = 30000 + self.pausa_time -2000
                                 self.level1 = False
                                 
                                 self.player.rect.midleft
@@ -508,7 +508,7 @@ class Game(Scenes):
                                 print("aqui 2")
                                 self.pausa_time2 = (
                                     self.pause_time_controller - self.limit_time + 60000)
-                                self.limit_time = 60000 + self.pausa_time2
+                                self.limit_time = 30000  + self.pausa_time
                                 self.level2 = False
                                 
                                 self.player.rect.midleft
@@ -521,7 +521,7 @@ class Game(Scenes):
                                 print("aqui 3")
                                 self.pausa_time2 = (
                                     self.pause_time_controller - self.limit_time + 60000)
-                                self.limit_time = 60000 + self.pausa_time2
+                                self.limit_time = 60000 + 30000 
                                 self.level3 = False
                                 self.player.rect.midleft
                                 print(self.pausa_time2)
