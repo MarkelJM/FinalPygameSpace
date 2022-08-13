@@ -14,15 +14,17 @@ class Plane(Sprite):
     x_margin = 20
     speed = 10
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
 
         self.image = pg.image.load(
             os.path.join("resources", "images", "plane.png"))
-
-        self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
+      
+        self.rect = self.image.get_rect(**kwargs)
+        #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
 
     def update(self, status):
+        
         if status == False:
             button = pg.key.get_pressed()
             if button[pg.K_RIGHT]:

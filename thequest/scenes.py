@@ -189,7 +189,8 @@ class Game(Scenes):
         super().__init__(screen)
         bg_file = os.path.join("resources", "images", "background2.png")
         self.background = pg.image.load(bg_file)
-        self.player = Plane()
+        self.x_margin = 20
+        self.player = Plane(midleft=(self.x_margin, HEIGHT/2))
 
         self.rocks_groups_small = self.rock_group_small()
         #self.rocks_groups_medium = self.rock_group_medium()
@@ -284,11 +285,11 @@ class Game(Scenes):
 
             # ROCK CREATER CONTROLLER
             # create first rocks to don´t have problems with create method
-            if self.create_leve_rock == True and contador_small == 1 or contador_small % 10 == 0:
+            if self.create_leve_rock == True and contador_small == 1 or contador_small % 20 == 0:
                 self.created_rock_small = self.create_rocks_small()
             #if self.create_leve_rock == True and contador_medium == 1 or contador_medium % 5 == 0:
                 #self.created_rock_medium = self.create_rocks_medium()
-            if self.create_leve_rock == True and contador_large == 1 or contador_large % 6 == 0:
+            if self.create_leve_rock == True and contador_large == 1 or contador_large % 20 == 0:
                 self.created_rock_large = self.create_rocks_large()
 
             ### UPDATE OBJECTS SETUP ###
@@ -609,8 +610,8 @@ class Game(Scenes):
 
                                 self.limit_time = 30000 + self.pausa_time - 2000
                                 self.level1 = False
-
-                                self.player.rect.midleft
+                                #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
+                                
                                 print("aqui 1")
                                 # print(self.pause_time_controller)
                                 # print(self.real_time)
