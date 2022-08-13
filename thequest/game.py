@@ -60,9 +60,9 @@ class MainGame:
             elif self.current_scene.change_Game_Home() == True:
                 self.current_scene = Home(self.display)
                 
-            """implementar para que salga de game cuando vidas  se queden en 0"""
-            if self.current_scene.exit == False and self.current_scene.game_over() == True:
-            
+           
+            elif self.current_scene.game_over() == True:
+                """implementar para que salga de game cuando vidas  se queden en 0"""
                 print("salio")
                 self.current_scene = Home(self.display)
             

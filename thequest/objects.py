@@ -1,6 +1,6 @@
 import os
 from random import randint
-from turtle import width
+
 
 
 import pygame as pg
@@ -48,7 +48,7 @@ class Rock_small(Sprite):
         super().__init__()
 
         self.image = pg.image.load(os.path.join(
-            "resources", "images", "rock_yellow0.png"))
+            "resources", "images", "rock_yellow2.png"))
         self.pos_y = position_y
         self.pos_x = position_x
         self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y)
@@ -91,6 +91,80 @@ class Rock_small(Sprite):
         self.rock_size = self.rock_list[self.size_number]
         return self.rock_size
         """
+
+    def choose_speed(self):
+        self.list_speed = SPEED_LIST
+        self.speed_number = randint(0, 2)
+        self.rock_speed = self.list_speed[self.speed_number]
+
+        return self.rock_speed
+
+    def update(self):
+
+        if self.rect.x > 0:
+            self.rect.x -= self.rock_speed
+
+        if self.rect.x < 0 or self.rect.x == 0:
+            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
+
+class Rock_medium(Sprite):
+    def __init__(self, position_x, position_y):  # , points
+        super().__init__()
+
+        self.image = pg.image.load(os.path.join(
+            "resources", "images", "rock_yellow1.png"))
+        self.pos_y = position_y
+        self.pos_x = position_x
+        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y)
+
+        self.rock_speed = self.choose_speed()
+        self.rock_final_life = 2
+        #rock_life = self.get_lifes()
+        #self.rock_final_life = rock_life
+        #self.rock_point = self.get_points()
+
+    def rock_lost_life(self):
+        self.rock_final_life = self.rock_final_life - 1
+        return self.rock_final_life
+
+    
+
+    def choose_speed(self):
+        self.list_speed = SPEED_LIST
+        self.speed_number = randint(0, 2)
+        self.rock_speed = self.list_speed[self.speed_number]
+
+        return self.rock_speed
+
+    def update(self):
+
+        if self.rect.x > 0:
+            self.rect.x -= self.rock_speed
+
+        if self.rect.x < 0 or self.rect.x == 0:
+            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
+    
+
+class Rock_large(Sprite):
+    def __init__(self, position_x, position_y):  # , points
+        super().__init__()
+
+        self.image = pg.image.load(os.path.join(
+            "resources", "images", "rock_yellow0.png"))
+        self.pos_y = position_y
+        self.pos_x = position_x
+        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y)
+
+        self.rock_speed = self.choose_speed()
+        self.rock_final_life = 2
+        #rock_life = self.get_lifes()
+        #self.rock_final_life = rock_life
+        #self.rock_point = self.get_points()
+
+    def rock_lost_life(self):
+        self.rock_final_life = self.rock_final_life - 1
+        return self.rock_final_life
+
 
     def choose_speed(self):
         self.list_speed = SPEED_LIST
@@ -365,5 +439,28 @@ class Window(Sprite):
         self.screen.blit(text, (pos_x, pos_y))
 
     
+class Game_Over(Sprite):
+    def __init__(self,screen):
+        super().__init__()
+        self.screen = screen
+        self.pos_x= 0
+        self.pos_y = 0
         
+        
+        self.image = pg.image.load(os.path.join("resources", "images", "background3.png"))
 
+        self.rect = self.image.get_rect(x=self.pos_x, y=self.pos_y)
+
+        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipography = pg.font.Font(font_file, 45)
+    
+    def draw_text(self,message, pos_y):
+        #message = "GAME OVER"
+        #pos_y = 100
+
+        text = self.tipography.render(message, True, MESSAGE_COLOUR)
+        width_text = text.get_width()
+        pos_x = (self.image.get_width() - width_text) / 2
+
+        self.screen.blit(text, (pos_x, pos_y))
+            
