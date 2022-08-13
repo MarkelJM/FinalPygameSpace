@@ -211,7 +211,13 @@ class Game(Scenes):
         self.level_window = Window(self.screen)
         self.exit = False
         self.remove_life = 3
-
+        bullet_effect = os.path.join("resources", "sounds", "shot.wav")
+        self.bullet_sound = pg.mixer.Sound(bullet_effect)
+        hit_effect = os.path.join("resources", "sounds", "Game_hit.wav")
+        self.explosion_sound = pg.mixer.Sound(hit_effect)
+        background_music = os.path.join("resources", "sounds", "music.mp3")
+        self.music = pg.mixer.music.load(background_music)
+        pg.mixer.music.play(-1)
     def play(self):
 
         contador_small = 0
@@ -266,6 +272,7 @@ class Game(Scenes):
                             self.shot = self.create_bullet()
                             self.shot = self.create_bullet()
                             self.shot = self.create_bullet()
+                            self.bullet_sound.play()
                             self.shot_exist == True
 
                     #counting_bullet_time += 1
@@ -277,7 +284,7 @@ class Game(Scenes):
 
             # ROCK CREATER CONTROLLER
             # create first rocks to don´t have problems with create method
-            if self.create_leve_rock == True and contador_small == 1 or contador_small % 4 == 0:
+            if self.create_leve_rock == True and contador_small == 1 or contador_small % 10 == 0:
                 self.created_rock_small = self.create_rocks_small()
             #if self.create_leve_rock == True and contador_medium == 1 or contador_medium % 5 == 0:
                 #self.created_rock_medium = self.create_rocks_medium()
@@ -335,6 +342,7 @@ class Game(Scenes):
                 for rock in rock_small_bullet_crash:
                     for bullet in rock_small_bullet_crash[rock]:
                         rock_life = self.rock_object_small.rock_lost_life()
+                        self.explosion_sound.play()
                         if rock_life == 0:
                             self.pointer.increase_points(15)
                             self.rocks_small.remove(rock)
@@ -343,6 +351,7 @@ class Game(Scenes):
                 for rock in rock_medium_bullet_crash:
                     for bullet in rock_medium_bullet_crash[rock]:
                         rock_life = self.rock_object_medium.rock_lost_life()
+                        self.explosion_sound.play()
                         if rock_life == 0:
                             self.pointer.increase_points(10)
                             self.rocks_medium.remove(rock)
@@ -351,6 +360,7 @@ class Game(Scenes):
                 for rock in rock_large_bullet_crash:
                     for bullet in rock_large_bullet_crash[rock]:
                         rock_life = self.rock_object_large.rock_lost_life()
+                        self.explosion_sound.play()
                         if rock_life == 0:
                             self.pointer.increase_points(5)
                             self.rocks_large.remove(rock)
@@ -410,6 +420,7 @@ class Game(Scenes):
                 self.restart = "Pulsa 'X' para ir a Inicio"
                 self.game_end.draw_text(self.restart, HEIGHT - 100)
                 self.game_over()
+                pg.mixer.music.pause()
 
             pg.display.flip()
             self.clock.tick(FPS)
