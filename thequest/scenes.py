@@ -6,7 +6,7 @@ from random import randint
 
 import pygame as pg
 
-from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
+from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS_LEVEL,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
 from .objects import Bullet, Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points,Rock_large,Rock_medium, Rock_small
 
 
@@ -240,7 +240,7 @@ class Game(Scenes):
         self.b = 0
         # as plane is hidden behing planet to stop collision pointer counting(just once)
         self.c = 0
-
+        
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()
@@ -439,7 +439,7 @@ class Game(Scenes):
     def create_rocks_small(self):
         if self.create_leve_rock == True:
             pos_x = WIDTH
-            repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
+            repeated = randint(0, MAXIMUM_REPEATED_ROCKS_LEVEL)
             for i in range(repeated):
                 pos_y = randint(0, HEIGHT)
                 self.rock_object_small = Rock_small(pos_x,pos_y)
@@ -465,7 +465,7 @@ class Game(Scenes):
     def create_rocks_medium(self):
         if self.create_leve_rock == True:
             pos_x = WIDTH
-            repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
+            repeated = randint(0, MAXIMUM_REPEATED_ROCKS_LEVEL)
             for i in range(repeated):
                 pos_y = randint(0, HEIGHT)
                 self.rock_object_medium = Rock_medium(pos_x,pos_y)
@@ -482,7 +482,7 @@ class Game(Scenes):
     def create_rocks_large(self):
         if self.create_leve_rock == True:
             pos_x = WIDTH
-            repeated = randint(0, MAXIMUM_REPEATED_ROCKS)
+            repeated = randint(0, MAXIMUM_REPEATED_ROCKS_LEVEL)
             for i in range(repeated):
                 pos_y = randint(0, HEIGHT)
                 self.rock_object_large = Rock_large(pos_x,pos_y)
