@@ -18,14 +18,14 @@ class Plane(Sprite):
         super().__init__()
 
         self.image = pg.image.load(
-            os.path.join("resources", "images", "plane.png"))
+            os.path.join("resources", "images", "plane.png")) #charge image
       
-        self.rect = self.image.get_rect(**kwargs)
-        #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
+        self.rect = self.image.get_rect(**kwargs) #get rect V1
+        #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2)) #get rect V2
 
     def update(self, status):
         
-        if status == False:
+        if status == False: #boolean to know if game has control-->while Plane is active(between levels)
             button = pg.key.get_pressed()
             if button[pg.K_RIGHT]:
                 self.rect.x += self.speed
@@ -46,22 +46,22 @@ class Plane(Sprite):
 
 
 class Rock_small(Sprite):
-    def __init__(self, position_x, position_y):  # , points
+    def __init__(self, position_x, position_y):  
         super().__init__()
 
         self.image = pg.image.load(os.path.join(
-            "resources", "images", "rock_yellow2.png"))
+            "resources", "images", "rock_yellow2.png"))#charge image
         self.pos_y = position_y
         self.pos_x = position_x
-        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y)
+        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y) #get the rect
 
-        self.rock_speed = self.choose_speed()
+        self.rock_speed = self.choose_speed() #the method return a random number to define the speed
         self.rock_final_life = 2
         #rock_life = self.get_lifes()
         #self.rock_final_life = rock_life
         #self.rock_point = self.get_points()
 
-    def rock_lost_life(self):
+    def rock_lost_life(self): #after collide with gun will lose a life(currently not working properly)
         self.rock_final_life = self.rock_final_life - 1
         return self.rock_final_life
 
@@ -94,11 +94,10 @@ class Rock_small(Sprite):
         return self.rock_size
         """
 
-    def choose_speed(self):
+    def choose_speed(self): #return a random life
         self.list_speed = SPEED_LIST
         self.speed_number = randint(0, 2)
         self.rock_speed = self.list_speed[self.speed_number]
-
         return self.rock_speed
 
     def update(self):
@@ -107,10 +106,10 @@ class Rock_small(Sprite):
             self.rect.x -= self.rock_speed
 
         if self.rect.x < 0 or self.rect.x == 0:
-            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
+            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN #instead of deleted in x = 0 will dispaerr later
 
-class Rock_medium(Sprite):
-    def __init__(self, position_x, position_y):  # , points
+class Rock_medium(Sprite): #as rock:small
+    def __init__(self, position_x, position_y):  
         super().__init__()
 
         self.image = pg.image.load(os.path.join(
@@ -147,7 +146,7 @@ class Rock_medium(Sprite):
             self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
     
 
-class Rock_large(Sprite):
+class Rock_large(Sprite):#as rock small
     def __init__(self, position_x, position_y):  # , points
         super().__init__()
 
@@ -192,16 +191,16 @@ class LifesCounting():
             "resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 20)
 
-    def lost_life(self):
+    def lost_life(self): #after hits lost life for rocks and plane
 
         self.lifes -= 1
         return self.lifes
 
-    def no_lifes(self):
+    def no_lifes(self): #not working
         if self.lifes == 0:
             return True
 
-    def paint_lifes(self, screen):
+    def paint_lifes(self, screen): 
 
         message = f"Vidas: {self.lifes}"
         text = self.tipography.render(message, True, MESSAGE_COLOUR)
@@ -273,7 +272,7 @@ class Level_1(Sprite):
         self.player = player
         if status == True:
             
-            if self.rect.x > WIDTH - self.image.get_width():
+            if self.rect.x > WIDTH - self.image.get_width(): #planet moves an appear in the screen
                 self.rect.x -= self.speed_planet
         
             
@@ -281,7 +280,7 @@ class Level_1(Sprite):
                 self.rect.x = WIDTH - self.image.get_width()
                 
 
-            self.player.rect.x += self.speed_planet
+            self.player.rect.x += self.speed_planet #takes plane control and it is moved to hit the planet
             
             if self.player.rect.x >= WIDTH - self.image.get_width()  :
                 self.player.rect.x = WIDTH - self.image.get_width()

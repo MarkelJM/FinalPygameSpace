@@ -1,5 +1,7 @@
 #General information and details
 
+
+#####  SCREEN DIMENSIONS #####
 WIDTH = 1145
 HEIGHT = 700
 
@@ -29,4 +31,4 @@ ROCK_LIFE_LIST = [4,3,2]
 ROCK_MARGIN_OUT_SCREEN = 500
 
 BULLET_SPEED = 10
-BULLET_MARGIN_OUT_SCREEN = 100
+BULLET_MARGIN_OUT_SCREEN = 100 #before remove the bullet  it will stop 100 after the WIDTH
