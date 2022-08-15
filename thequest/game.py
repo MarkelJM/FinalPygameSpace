@@ -73,7 +73,10 @@ class MainGame:
            
             elif self.current_scene.game_over() == True:
                 """implementar para que salga de game cuando vidas  se queden en 0"""
-                print("salio")
+                
+                self.current_scene = Home(self.display)
+            
+            elif self.current_scene.change_HallofFame_Home() == True:
                 self.current_scene = Home(self.display)
    
     

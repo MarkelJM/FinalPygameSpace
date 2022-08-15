@@ -465,3 +465,27 @@ class Game_Over(Sprite):
 
         self.screen.blit(text, (pos_x, pos_y))
             
+class Game_ended(Sprite):
+    def __init__(self,screen):
+        super().__init__()
+        self.screen = screen
+        self.pos_x= 0
+        self.pos_y = 0
+        
+        
+        self.image = pg.image.load(os.path.join("resources", "images", "background3.png"))
+
+        self.rect = self.image.get_rect(x=self.pos_x, y=self.pos_y)
+
+        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipography = pg.font.Font(font_file, 45)
+    
+    def draw_text(self,message, pos_y):
+        #message = "GAME OVER"
+        #pos_y = 100
+
+        text = self.tipography.render(message, True, MESSAGE_COLOUR)
+        width_text = text.get_width()
+        pos_x = (self.image.get_width() - width_text) / 2
+
+        self.screen.blit(text, (pos_x, pos_y))

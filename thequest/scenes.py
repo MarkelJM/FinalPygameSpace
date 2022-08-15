@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS_LEVEL,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Bullet, Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
+from .objects import Bullet,Game_ended,Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
 
 
 class Scenes:
@@ -89,7 +89,13 @@ class Home(Scenes):
     def change_Game_Home(self):
         return False
 
+    def change_HallofFame_Home(self):
+        return False
+
     def game_over(self):
+        return False
+    
+    def game_finished(self):
         return False
 
 
@@ -179,8 +185,14 @@ class Information(Scenes):
 
     def change_Game_Home(self):
         return False
+    
+    def change_HallofFame_Home(self):
+        return False
 
     def game_over(self):
+        return False
+    
+    def game_finished(self):
         return False
 
 
@@ -211,6 +223,7 @@ class Game(Scenes):
 
         self.clock = pg.time.Clock()  # time attribute, but not the timing
         self.level_window = Window(self.screen)  # create class attribute
+        self.game_finished = Game_ended(self.screen)#game finished pop up, with congrats and to go to HoF
 
         bullet_effect = os.path.join("resources", "sounds", "shot.wav")
         self.bullet_sound = pg.mixer.Sound(bullet_effect)
@@ -256,7 +269,8 @@ class Game(Scenes):
         self.b = 0  # variable, because planet and plane hit is continusly hits, so it controls how many times gives points
         # as plane is hidden behing planet to stop collision pointer counting(just once)
         self.c = 0  # variable, because planet and plane hit is continusly hits, so it controls how many times gives points
-
+        self.game_over_active = False # to activate event in game over pop up and go back to Home
+        self.game_ended = False #pop up antes del hall of fame, mensaje de juego terminado 
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()  # each loop timing
@@ -269,8 +283,10 @@ class Game(Scenes):
             contador_large += 1
 
             for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_x:
-                    self.game_over()
+                if self.game_over_active == True and event.type == pg.KEYDOWN and event.key == pg.K_x:
+                    self.exit = True
+                if self.game_ended == True and event.type == pg.KEYDOWN and event.key == pg.K_w:
+                    self.exit = True
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
 
@@ -427,13 +443,23 @@ class Game(Scenes):
                 self.planet_group.update()
             ### GAME OVER POP UP ###
             if self.remove_life <= 0:
-                print("no lvidas")
+                print("no vidas")
                 self.screen.blit(self.game_end.image, self.game_end.rect)
                 self.game_over_message = "GAME OVER"
                 self.game_end.draw_text(self.game_over_message, 300)
                 self.restart = "Pulsa 'X' para ir a Inicio"
                 self.game_end.draw_text(self.restart, HEIGHT - 100)
-                self.game_over()
+                self.game_over_active = True
+                pg.mixer.music.pause()
+
+            if self.game_ended == True:
+                print("juego terminado")
+                self.screen.blit(self.game_finished.image, self.game_finished.rect)
+                self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
+                self.game_end.draw_text(self.congratulation_text, 300)
+                self.HoF_message = "Pulsa 'W' para ir a Inicio"
+                self.game_end.draw_text(self.HoF_message, HEIGHT - 100)
+                self.game_over_active = True
                 pg.mixer.music.pause()
 
             pg.display.flip()
@@ -679,14 +705,22 @@ class Game(Scenes):
     def change_Information_Game(self):
         return False
 
-    def change_Game_Home(self):
+    def change_Game_Home(self): #read message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        """!!!!!!!!!!currently not working to decide if it should work or not"""
         key = pg.key.get_pressed()
         if key[pg.K_e]:
             return True
+    def change_HallofFame_Home(self):
+        return False
 
     def game_over(self):
         key = pg.key.get_pressed()
         if key[pg.K_x]:
+            return True
+    
+    def game_finished(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_w]:
             return True
 
 
@@ -755,4 +789,7 @@ class HallofFame(Scenes):
             return True
 
     def game_over(self):
+        return False
+
+    def game_finished(self):
         return False
