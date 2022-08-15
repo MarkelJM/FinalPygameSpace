@@ -26,7 +26,7 @@ class Home(Scenes):
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, MAIN_TEXT_SIZE)
 
-        self.message = "'Space' to start playing"
+        self.message = "'B' to start playing"
         self.information_text = "Push 'I' to read  game´s history and how to play"
         self.message_pos = 0.75 * HEIGHT
         self.information_pos = self.message_pos + MAIN_TEXT_SIZE + TEXT_MARGIN
@@ -38,7 +38,7 @@ class Home(Scenes):
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_a:
+                if event.type == pg.KEYDOWN and event.key == pg.K_i:
                     exit = True
                 if event.type == pg.KEYDOWN and event.key == pg.K_b:
                     exit = True
@@ -72,7 +72,7 @@ class Home(Scenes):
 
     def change_Home_Information(self):
         key = pg.key.get_pressed()
-        if key[pg.K_a]:
+        if key[pg.K_i]:
             return True
 
     def change_Home_Game(self):
@@ -688,3 +688,71 @@ class Game(Scenes):
         key = pg.key.get_pressed()
         if key[pg.K_x]:
             return True
+
+
+class HallofFame(Scenes):
+    def __init__(self, screen: pg.Surface):
+        super().__init__(screen)
+
+        
+
+        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipography = pg.font.Font(font_file, MAIN_TEXT_SIZE)
+
+        self.message = "HALL OF FAME"
+        self.sub_message= "LAS MEJORES PUNTUACIONES"
+        self.message_pos = 0.1 * HEIGHT
+        self.sub_message_pos = self.message_pos + MAIN_TEXT_SIZE + TEXT_MARGIN
+    
+    def play(self):
+        exit = False
+
+        while not exit:
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    exit = True
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:
+                    exit = True
+                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                    exit = True
+
+                    # go to information scene
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    sys.exit()
+
+            self.screen.fill(BACKGROUND_COLOUR)
+            self.draw_text(self.message, self.message_pos)
+            self.draw_text(self.sub_message, self.sub_message_pos)
+
+            pg.display.flip()
+    def draw_text(self, text_input, sum_pos_y):
+
+        text = self.tipography.render(text_input, True, MESSAGE_COLOUR)
+        width_text = text.get_width()
+        pos_x = (WIDTH - width_text) / 2
+
+        self.screen.blit(text, (pos_x, sum_pos_y))
+    
+    def change_Home_Information(self):
+        return False
+
+    def change_Home_Game(self):
+        return False
+
+    def change_Information_Home(self):
+        return False
+
+    def change_Information_Game(self):
+        return False
+
+    def change_Game_Home(self):
+        return False
+    
+    def change_HallofFame_Home(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_q]:
+            return True
+
+    def game_over(self):
+        return False
