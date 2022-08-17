@@ -6,7 +6,7 @@ from random import randint
 import pygame as pg
 from pygame.sprite import Sprite
 
-from thequest import BULLET_MARGIN_OUT_SCREEN, BULLET_SPEED, HEIGHT, MAIN_POINTS, MESSAGE_COLOUR, ROCK_LIFE_LIST, ROCK_MARGIN_OUT_SCREEN, SPEED_LIST, WIDTH
+from thequest import BULLET_MARGIN_OUT_SCREEN, BULLET_SPEED, HEIGHT, MAIN_POINTS, MAIN_POINTS2, MESSAGE_COLOUR, ROCK_LIFE_LIST, ROCK_MARGIN_OUT_SCREEN, SPEED_LIST, WIDTH
 
 
 class Plane(Sprite):
@@ -44,6 +44,66 @@ class Plane(Sprite):
                 if self.rect.bottom > HEIGHT:
                     self.rect.bottom = HEIGHT
 
+class Rock(Sprite):
+    def __init__(self, position_x, position_y):  
+        super().__init__()
+        self.image = self.choose_size()
+        
+        self.pos_y = position_y
+        self.pos_x = position_x
+        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y) #get the rect
+
+        self.rock_speed = self.choose_speed() #the method return a random number to define the speed
+        #self.rock_final_life = 2
+        rock_life = self.get_lifes()
+        self.rock_final_life = rock_life
+        self.rock_point = self.get_points()
+
+    def rock_lost_life(self): #after collide with gun will lose a life(currently not working properly)
+        self.rock_final_life = self.rock_final_life - 1
+        return self.rock_final_life
+
+    
+    def get_lifes(self):
+        self.rock_life_list = ROCK_LIFE_LIST
+        self.hits = self.rock_life_list[self.size_number]
+        
+        return self.hits
+        
+     
+    def get_points(self):
+        points_list = MAIN_POINTS2
+        size_table = points_list[self.size_number]
+        points = size_table[self.speed_number]
+        
+        return points
+        
+    
+    def choose_size(self):
+        self.rock_list = []
+        for i in range(3):
+            self.rock_list.append(pg.image.load(
+                    os.path.join("resources", "images", f"rock_yellow{i}.png")))
+        
+        self.size_number = randint(0,2)
+
+        self.rock_size = self.rock_list[self.size_number]
+        return self.rock_size
+        
+
+    def choose_speed(self): #return a random life
+        self.list_speed = SPEED_LIST
+        self.speed_number = randint(0, 2)
+        self.rock_speed = self.list_speed[self.speed_number]
+        return self.rock_speed
+
+    def update(self):
+
+        if self.rect.x > 0:
+            self.rect.x -= self.rock_speed
+
+        if self.rect.x < 0 or self.rect.x == 0:
+            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN #instead of deleted in x = 0 will dispaerr later
 
 class Rock_small(Sprite):
     def __init__(self, position_x, position_y):  

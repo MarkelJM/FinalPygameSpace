@@ -1,201 +1,3 @@
-
-
-import os
-import sys
-from random import randint
-
-import pygame as pg
-
-from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS_LEVEL,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Rock, Bullet,Game_ended,Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
-
-
-class Scenes:
-    def __init__(self, screen: pg.Surface):
-        self.screen = screen
-
-
-class Home(Scenes):
-    # first scene, home
-    def __init__(self, screen: pg.Surface):
-        super().__init__(screen)
-
-        self.logo = pg.image.load(
-            os.path.join("resources", "images", "icon.png"))
-
-        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
-        self.tipography = pg.font.Font(font_file, MAIN_TEXT_SIZE)
-
-        self.message = "'B' to start playing"
-        self.information_text = "Push 'I' to read  game´s history and how to play"
-        self.message_pos = 0.75 * HEIGHT
-        self.information_pos = self.message_pos + MAIN_TEXT_SIZE + TEXT_MARGIN
-
-    def play(self):
-        exit = False
-
-        while not exit:
-            for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_i:
-                    exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                    exit = True
-
-                    # go to information scene
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    sys.exit()
-
-            self.screen.fill(BACKGROUND_COLOUR)
-
-            self.draw_logo()
-            self.draw_text(self.message, self.message_pos)
-            self.draw_text(self.information_text, self.information_pos)
-
-            pg.display.flip()
-
-    def draw_logo(self):
-        width_logo = self.logo.get_width()
-        pos_x = (WIDTH - width_logo) / 2
-        pos_y = HEIGHT / 3
-        self.screen.blit(self.logo, (pos_x, pos_y))
-
-    def draw_text(self, text_input, sum_pos_y):
-
-        text = self.tipography.render(text_input, True, MESSAGE_COLOUR)
-        width_text = text.get_width()
-        pos_x = (WIDTH - width_text) / 2
-
-        self.screen.blit(text, (pos_x, sum_pos_y))
-
-    def change_Home_Information(self):
-        key = pg.key.get_pressed()
-        if key[pg.K_i]:
-            return True
-
-    def change_Home_Game(self):
-        key = pg.key.get_pressed()
-        if key[pg.K_b]:
-            return True
-
-    def change_Information_Home(self):
-        return False
-
-    def change_Information_Game(self):
-        return False
-
-    def change_Game_Home(self):
-        return False
-
-    def change_HallofFame_Home(self):
-        return False
-
-    def game_over(self):
-        return False
-    
-    def game_finished(self):
-        return False
-
-
-class Information(Scenes):
-    def __init__(self, screen: pg.Surface):
-        super().__init__(screen)
-
-        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
-        self.tipography = pg.font.Font(font_file, 20)
-        ### Game messages or instructions ###
-        self.message = "'Space' to go back"
-        self.information_text_1 = " Viaja de planeta en planeta"
-        self.information_text_2 = "- EL objetivo es no ser golpeado por las rocas espaciales"
-        self.information_text_3 = "- Al subir de nivel aumentará la dificultad"
-        self.information_text_4 = "- Tendrás 3 vidas"
-
-        self.message_pos = 0.3 * HEIGHT
-        # to separate diferent lines, actually it should be in __init__
-        self.separator = MAIN_TEXT_SIZE + TEXT_MARGIN
-        self.information_pos = self.message_pos + self.separator
-
-    def play(self):
-
-        exit = False
-
-        while not exit:
-            for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_c:
-
-                    exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_d:
-                    exit = True
-
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    sys.exit()
-
-            self.screen.fill(BACKGROUND_COLOUR)
-
-            self.draw_text(self.message, self.message_pos)
-            self.draw_text(self.information_text_1,
-                           self.information_pos + self.separator)
-            self.draw_text(self.information_text_2,
-                           self.information_pos + self.separator*2)
-            self.draw_text(self.information_text_3,
-                           self.information_pos + self.separator*3)
-            self.draw_text(self.information_text_4,
-                           self.information_pos + self.separator*4)
-
-            pg.display.flip()
-
-    def write_text(self):
-        # creating
-
-        self.information_text_1 = " Viaja de planeta en planeta"
-        self.information_text_2 = "- EL objetivo es no ser golpeado por las rocas espaciales"
-        self.information_text_3 = "- Al subir de nivel aumentará la dificultad"
-        self.information_text_4 = "- Tendrás 3 vidas"
-
-        self.text_list = [self.information_text_1, self.information_text_2,
-                          self.information_text_3, self.information_text_4]
-        self.line_amount = len(self.text_list)
-
-    def draw_text(self, text_input, sum_pos_y):
-
-        text = self.tipography.render(text_input, True, MESSAGE_COLOUR)
-        width_text = text.get_width()
-        pos_x = (WIDTH - width_text) / 2
-
-        self.screen.blit(text, (pos_x, sum_pos_y))
-
-    def change_Information_Home(self):
-        key = pg.key.get_pressed()
-        if key[pg.K_c]:
-            return True
-
-    def change_Information_Game(self):
-        key = pg.key.get_pressed()
-        if key[pg.K_d]:
-            return True
-
-    def change_Home_Information(self):
-        return False
-
-    def change_Home_Game(self):
-        return False
-
-    def change_Game_Home(self):
-        return False
-    
-    def change_HallofFame_Home(self):
-        return False
-
-    def game_over(self):
-        return False
-    
-    def game_finished(self):
-        return False
-
-
 class Game(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
@@ -204,8 +6,9 @@ class Game(Scenes):
         self.x_margin = 20
         self.player = Plane(midleft=(self.x_margin, HEIGHT/2))
 
-        self.rocks_groups = self.rock_group()  # create method attribute
-        
+        self.rocks_groups_small = self.rock_group_small()  # create method attribute
+        #self.rocks_groups_medium = self.rock_group_medium()
+        self.rocks_groups_large = self.rock_group_large()  # create method attribute
         self.activate_level_control = False
         self.lifes_counter = LifesCounting(
             LIFES, self.activate_level_control)  # create class attribute
@@ -231,19 +34,20 @@ class Game(Scenes):
         background_music = os.path.join("resources", "sounds", "music.mp3")
         self.music = pg.mixer.music.load(background_music)
         pg.mixer.music.play(-1)
-        # boolean to activate the option of creating exactly rocks
-        self.create_leve_rock = True
+
         self.remove_life = 3  # three lifes
 
     def play(self):
         self.exit = False  # loop breaker variable
-        contador = 0  # instead of using timing, counting to know when to create small rocks
-        
+        contador_small = 0  # instead of using timing, counting to know when to create small rocks
+        # contador_medium = 0   #instead of using timing, counting to know when to create medium rocks
+        contador_large = 0  # instead of using timing, counting to know when to create large rocks
         #counting_bullet_time = 0
         self.bullet_timer0 = 0  # instead of using timing, counting to know when to create bullets
         self.shot_exist = False  # boolean to know if shot is created
         self.shot_exist_2 = True  # boolean to know if shot is created 2
-        
+        # boolean to activate the option of creating exactly rocks
+        self.create_leve_rock = True
         # boolean to determinate if controls are locked
         self.activate_level_control = False
         self.time_start = pg.time.get_ticks()  # game start time
@@ -276,8 +80,9 @@ class Game(Scenes):
                 self.time_start, self.time_loop)
             # control all level aspects, levels, windows etc.
             """self.timer está en desarrollo"""
-            contador += 1  # increase each loop allows to controll when  creat rock
-            
+            contador_small += 1  # increase each loop allows to controll when  creat rock
+            #contador_medium +=1
+            contador_large += 1
 
             for event in pg.event.get():
                 if self.game_over_active == True and event.type == pg.KEYDOWN and event.key == pg.K_x:
@@ -294,8 +99,8 @@ class Game(Scenes):
                         if self.activate_level_control == False and self.shot_exist_2 == True:
 
                             self.shot = self.create_bullet()
-                            #self.shot = self.create_bullet()
-                            #self.shot = self.create_bullet()
+                            self.shot = self.create_bullet()
+                            self.shot = self.create_bullet()
                             self.bullet_sound.play()
                             self.shot_exist == True
 
@@ -309,9 +114,12 @@ class Game(Scenes):
 
             ### ROCK CREATER CONTROLLER ###
             # create first rocks to don´t have problems with create method
-            if self.create_leve_rock == True and contador == 1 or contador % 20 == 0:
-                self.created_rock = self.create_rocks()
-            
+            if self.create_leve_rock == True and contador_small == 1 or contador_small % 20 == 0:
+                self.created_rock_small = self.create_rocks_small()
+            # if self.create_leve_rock == True and contador_medium == 1 or contador_medium % 5 == 0:
+                #self.created_rock_medium = self.create_rocks_medium()
+            if self.create_leve_rock == True and contador_large == 1 or contador_large % 20 == 0:
+                self.created_rock_large = self.create_rocks_large()
 
             ### UPDATE OBJECTS SETUP ###
 
@@ -322,10 +130,14 @@ class Game(Scenes):
                 self.bullet_object.update()
             self.bullets.update()
 
-            self.rock_object.update()
-            self.rocks.update()
+            self.rock_object_small.update()
+            self.rocks_small.update()
 
-            
+            # self.rock_object_medium.update()
+            # self.rocks_medium.update()
+
+            self.rock_object_large.update()
+            self.rocks_large.update()
             ###  UPDATE PLANET MOVEMENT IF  EACH LEVEL BOOLEAN IS ACTIVATED  ###
             if self.level1_active:
                 self.level1_planet.update_planet1(
@@ -341,28 +153,59 @@ class Game(Scenes):
                 self.planet_group.update()
             ### KNOW IF COLLISION ARE EXISTING  ###
             plane_crash_small = pg.sprite.spritecollide(
-                self.player, self.rocks, True)  # plane-rock crask
-            rock_bullet_crash = pg.sprite.groupcollide(
-                self.rocks, self.bullets, False, True, pg.sprite.collide_mask)  # plane-rock crask
-            
+                self.player, self.rocks_small, True)  # plane-rock crask
+            rock_small_bullet_crash = pg.sprite.groupcollide(
+                self.rocks_small, self.bullets, False, True, pg.sprite.collide_mask)  # plane-rock crask
+            """
+            plane_crash_medium = pg.sprite.spritecollide(
+                self.player, self.rocks_medium, True)  # plane-rock crask
+            rock_medium_bullet_crash = pg.sprite.groupcollide(
+                self.rocks_medium, self.bullets, False, True, pg.sprite.collide_mask)
+            """
+            plane_crash_large = pg.sprite.spritecollide(
+                self.player, self.rocks_large, True)  # plane-rock crask
+            rock_large_bullet_crash = pg.sprite.groupcollide(
+                self.rocks_large, self.bullets, False, True, pg.sprite.collide_mask)
             ### POINTER ###
 
-            if rock_bullet_crash:
-                for rock in rock_bullet_crash:
-                    for bullet in rock_bullet_crash[rock]:
-                        rock_life = rock.rock_lost_life()  # IF CRASK ROCK LOST LIFE
+            if rock_small_bullet_crash:
+                for rock in rock_small_bullet_crash:
+                    for bullet in rock_small_bullet_crash[rock]:
+                        rock_life = self.rock_object_small.rock_lost_life()  # IF CRASK ROCK LOST LIFE
                         self.explosion_sound.play()  # explosion sound done
                         if rock_life == 0:  # if lifes 0 gives point and remove the rock
                             self.pointer.increase_points(15)
-                            self.rocks.remove(rock)
-            
+                            self.rocks_small.remove(rock)
+            """ 
+            if rock_medium_bullet_crash:
+                for rock in rock_medium_bullet_crash:
+                    for bullet in rock_medium_bullet_crash[rock]:
+                        rock_life = self.rock_object_medium.rock_lost_life()
+                        self.explosion_sound.play()
+                        if rock_life == 0:
+                            self.pointer.increase_points(10)
+                            self.rocks_medium.remove(rock)
+            """
+            if rock_large_bullet_crash:  # as before mentioned with small rocks
+                for rock in rock_large_bullet_crash:
+                    for bullet in rock_large_bullet_crash[rock]:
+                        rock_life = self.rock_object_large.rock_lost_life()
+                        self.explosion_sound.play()
+                        if rock_life == 0:
+                            self.pointer.increase_points(5)
+                            self.rocks_large.remove(rock)
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
             ### PLANE CRASH CONTROLLER ###
             if plane_crash_small and self.activate_level_control == False:
                 # plane lost a life if crashed small rock
                 self.remove_life = self.lifes_counter.lost_life()
-            
+            """    
+            if plane_crash_medium and self.activate_level_control == False:
+                self.remove_life = self.lifes_counter.lost_life()
+            """
+            if plane_crash_large and self.activate_level_control == False:  # as small rock
+                self.remove_life = self.lifes_counter.lost_life()
 
             # self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -382,8 +225,9 @@ class Game(Scenes):
 
             # draw in the game rocks
 
-            self.rocks.draw(self.screen)
-            
+            self.rocks_small.draw(self.screen)
+            # self.rocks_medium.draw(self.screen)
+            self.rocks_large.draw(self.screen)
             # draw bullet
 
             self.bullets.draw(self.screen)
@@ -440,26 +284,65 @@ class Game(Scenes):
 
     ### Create Rock group ###
 
-    def rock_group(self):
+    def rock_group_small(self):
 
-        self.rocks = pg.sprite.Group()
-        self.rocks.empty()
+        self.rocks_small = pg.sprite.Group()
+        self.rocks_small.empty()
 
-    def create_rocks(self):
+    def create_rocks_small(self):
         if self.create_leve_rock == True:
             pos_x = WIDTH
             repeated = randint(0, MAXIMUM_REPEATED_ROCKS_LEVEL)
             for i in range(repeated):
                 pos_y = randint(0, HEIGHT)
-                self.rock_object = Rock(pos_x, pos_y)
-                self.rocks.add(self.rock_object)
+                self.rock_object_small = Rock_small(pos_x, pos_y)
+                self.rocks_small.add(self.rock_object_small)
 
-       
+        """
+        if self.create_leve_rock == True:
+            pos_x = WIDTH
+            pos_y = randint(0, HEIGHT)
+            self.rock_object_small = Rock_small(pos_x, pos_y)
+            self.rocks_small.add(self.rock_object_small)
+            """
 
-    def remove_rock(self, rock):
-        self.rocks.remove(rock)
+    def remove_rock_small(self, rock):
+        self.rocks_small.remove(rock)
 
-   
+    """
+    def rock_group_medium(self):
+
+        self.rocks_medium = pg.sprite.Group()
+        self.rocks_medium.empty()
+
+    def create_rocks_medium(self):
+        if self.create_leve_rock == True:
+            pos_x = WIDTH
+            repeated = randint(0, MAXIMUM_REPEATED_ROCKS_LEVEL)
+            for i in range(repeated):
+                pos_y = randint(0, HEIGHT)
+                self.rock_object_medium = Rock_medium(pos_x,pos_y)
+                self.rocks_medium.add(self.rock_object_medium)
+    def remove_rock_medium(self, rock):
+        self.rocks_medium.remove(rock)
+    """
+
+    def rock_group_large(self):
+
+        self.rocks_large = pg.sprite.Group()
+        self.rocks_large.empty()
+
+    def create_rocks_large(self):
+        if self.create_leve_rock == True:
+            pos_x = WIDTH
+            repeated = randint(0, MAXIMUM_REPEATED_ROCKS_LEVEL)
+            for i in range(repeated):
+                pos_y = randint(0, HEIGHT)
+                self.rock_object_large = Rock_large(pos_x, pos_y)
+                self.rocks_large.add(self.rock_object_large)
+
+    def remove_rock_large(self, rock):
+        self.rocks_large.remove(rock)
 
     def get_level_time_controller(self, time0, time1):
         # to know each loop time, to know in which level should be
@@ -641,74 +524,3 @@ class Game(Scenes):
         key = pg.key.get_pressed()
         if key[pg.K_w]:
             return True
-
-
-class HallofFame(Scenes):
-    def __init__(self, screen: pg.Surface):
-        super().__init__(screen)
-
-        
-
-        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
-        self.tipography = pg.font.Font(font_file, MAIN_TEXT_SIZE)
-
-        self.message = "HALL OF FAME"
-        self.sub_message= "LAS MEJORES PUNTUACIONES"
-        self.message_pos = 0.1 * HEIGHT
-        self.sub_message_pos = self.message_pos + MAIN_TEXT_SIZE + TEXT_MARGIN
-    
-    def play(self):
-        exit = False
-
-        while not exit:
-            for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_a:
-                    exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                    exit = True
-
-                    # go to information scene
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    sys.exit()
-
-            self.screen.fill(BACKGROUND_COLOUR)
-            self.draw_text(self.message, self.message_pos)
-            self.draw_text(self.sub_message, self.sub_message_pos)
-
-            pg.display.flip()
-    def draw_text(self, text_input, sum_pos_y):
-
-        text = self.tipography.render(text_input, True, MESSAGE_COLOUR)
-        width_text = text.get_width()
-        pos_x = (WIDTH - width_text) / 2
-
-        self.screen.blit(text, (pos_x, sum_pos_y))
-    
-    def change_Home_Information(self):
-        return False
-
-    def change_Home_Game(self):
-        return False
-
-    def change_Information_Home(self):
-        return False
-
-    def change_Information_Game(self):
-        return False
-
-    def change_Game_Home(self):
-        return False
-    
-    def change_HallofFame_Home(self):
-        key = pg.key.get_pressed()
-        if key[pg.K_q]:
-            return True
-
-    def game_over(self):
-        return False
-
-    def game_finished(self):
-        return False
