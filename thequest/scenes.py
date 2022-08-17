@@ -503,7 +503,7 @@ class Game(Scenes):
             self.create_leve_rock = False
 
             # pause_time_controller = pg.time.get_ticks()
-            if self.rock_object_small.rect.x <= - 20:  # when last rock created is out screen the controll starts
+            if self.rock_object.rect.x <= - 20:  # when last rock created is out screen the controll starts
 
                 self.activate_level_control = True
                 self.shot_exist_2 = False
