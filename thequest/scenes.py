@@ -253,7 +253,7 @@ class Game(Scenes):
         # variable, this number is to don´t disturb level timing later are redefined
         self.pausa_time = 60000
         # variable, this number is to don´t disturb level timing later are redefined
-        self.pausa_time2 = 60000
+        self.pausa_time2 = 120000
         # variable, this number is to don´t disturb level timing later are redefined
         self.limit_time = 60000
         # variable to know how time gap between real time and level bottom cliced(it shouldn´t exist)
@@ -480,7 +480,7 @@ class Game(Scenes):
 
             print("level2")
 
-        elif self.limit_time <= self.real_time < self.limit_time + 120000:
+        elif self.pausa_time2 <= self.real_time < self.pausa_time2 + 120000:
             # level 3 timing and booleans
             self.level3 = True
             self.create_leve_rock = True
@@ -562,11 +562,11 @@ class Game(Scenes):
 
                             # indicarlo en el init como pausa_time_controller= 0
                             self.pause_time_controller = pg.time.get_ticks()
-                            self.gap_time = self.pause_time_controller - self.real_time
+                            
                             if self.level1 == True:  # adapt timer for nexts levels, before game restart
                                 self.pausa_time = (
                                     self.pause_time_controller - 30000)
-
+                                self.gap_time = self.pause_time_controller - self.real_time
                                 self.limit_time = self.pause_time_controller - self.gap_time
                                 self.level1 = False
                                 #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
@@ -580,9 +580,10 @@ class Game(Scenes):
 
                             elif self.level2 == True:  # adapt timer for next level, before game restart
                                 print("aqui 2")
-                                self.pausa_time2 = (
-                                    self.pause_time_controller - self.limit_time + 60000)
-                                self.limit_time = self.pause_time_controller - self.gap_time
+                                self.gap_time = self.pause_time_controller - self.real_time
+                                self.pausa_time2 = self.pause_time_controller - self.gap_time 
+                                
+                                #self.limit_time = self.pause_time_controller - self.pausa_time2 
                                 self.level2 = False
 
                                 self.player.rect.midleft
