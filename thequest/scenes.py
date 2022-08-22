@@ -271,6 +271,10 @@ class Game(Scenes):
         # to activate event in game over pop up and go back to Home
         self.game_over_active = False
         self.game_ended = False  # pop up antes del hall of fame, mensaje de juego terminado
+        self.level1_done = False
+        self.level2_done = False
+        self.level3_done = False
+        
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()  # each loop timing
@@ -324,6 +328,11 @@ class Game(Scenes):
 
             self.rock_object.update()
             self.rocks.update()
+            for rocas in self.rocks:
+                if rocas.rect.x < 0:
+                    self.rocks.remove(rocas)
+
+                
 
             ###  UPDATE PLANET MOVEMENT IF  EACH LEVEL BOOLEAN IS ACTIVATED  ###
             if self.level1_active:
@@ -409,6 +418,8 @@ class Game(Scenes):
                 pg.mixer.music.pause()
 
             if self.game_ended == True:
+                
+                
                 print("juego terminado")
                 self.screen.blit(self.game_finished.image,
                                  self.game_finished.rect)
@@ -570,7 +581,7 @@ class Game(Scenes):
                                 self.limit_time = self.pause_time_controller - self.gap_time
                                 self.level1 = False
                                 #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
-
+                                self.level1_done = True
                                 print("aqui 1")
                                 print(self.pause_time_controller)
                                 print(self.real_time)
@@ -585,6 +596,7 @@ class Game(Scenes):
                                 
                                 #self.limit_time = self.pause_time_controller - self.pausa_time2 
                                 self.level2 = False
+                                self.level2_done = True
 
                                 self.player.rect.midleft
                                 print(self.real_time)
@@ -598,12 +610,13 @@ class Game(Scenes):
                                     self.pause_time_controller - self.limit_time + 60000)
                                 self.limit_time = 60000 + 30000
                                 self.level3 = False
+                                self.level3_done = True
                                 self.player.rect.midleft
                                 print(self.pausa_time2)
                                 print(self.limit_time)
-                            if self.level1 == False and self.level2 == False and self.level3 == False:
+                            if self.level1_done == True and self.level2_done == True and self.level3_done == True:
                                 # to know that game has ended and Hall Of Fame scene should start
-
+                                self.game_ended = True
                                 print("termino")
 
     def change_Home_Information(self):
