@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS_LEVEL,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Rock, Bullet,Game_ended,Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
+from .objects import Rock, Bullet, Game_ended, Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
 
 
 class Scenes:
@@ -94,7 +94,7 @@ class Home(Scenes):
 
     def game_over(self):
         return False
-    
+
     def game_finished(self):
         return False
 
@@ -185,13 +185,13 @@ class Information(Scenes):
 
     def change_Game_Home(self):
         return False
-    
+
     def change_HallofFame_Home(self):
         return False
 
     def game_over(self):
         return False
-    
+
     def game_finished(self):
         return False
 
@@ -205,7 +205,7 @@ class Game(Scenes):
         self.player = Plane(midleft=(self.x_margin, HEIGHT/2))
 
         self.rocks_groups = self.rock_group()  # create method attribute
-        
+
         self.activate_level_control = False
         self.lifes_counter = LifesCounting(
             LIFES, self.activate_level_control)  # create class attribute
@@ -222,7 +222,8 @@ class Game(Scenes):
 
         self.clock = pg.time.Clock()  # time attribute, but not the timing
         self.level_window = Window(self.screen)  # create class attribute
-        self.game_finished = Game_ended(self.screen)#game finished pop up, with congrats and to go to HoF
+        # game finished pop up, with congrats and to go to HoF
+        self.game_finished = Game_ended(self.screen)
 
         bullet_effect = os.path.join("resources", "sounds", "shot.wav")
         self.bullet_sound = pg.mixer.Sound(bullet_effect)
@@ -238,12 +239,12 @@ class Game(Scenes):
     def play(self):
         self.exit = False  # loop breaker variable
         contador = 0  # instead of using timing, counting to know when to create small rocks
-        
+
         #counting_bullet_time = 0
         self.bullet_timer0 = 0  # instead of using timing, counting to know when to create bullets
         self.shot_exist = False  # boolean to know if shot is created
         self.shot_exist_2 = True  # boolean to know if shot is created 2
-        
+
         # boolean to determinate if controls are locked
         self.activate_level_control = False
         self.time_start = pg.time.get_ticks()  # game start time
@@ -267,8 +268,9 @@ class Game(Scenes):
         self.b = 0  # variable, because planet and plane hit is continusly hits, so it controls how many times gives points
         # as plane is hidden behing planet to stop collision pointer counting(just once)
         self.c = 0  # variable, because planet and plane hit is continusly hits, so it controls how many times gives points
-        self.game_over_active = False # to activate event in game over pop up and go back to Home
-        self.game_ended = False #pop up antes del hall of fame, mensaje de juego terminado 
+        # to activate event in game over pop up and go back to Home
+        self.game_over_active = False
+        self.game_ended = False  # pop up antes del hall of fame, mensaje de juego terminado
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()  # each loop timing
@@ -277,7 +279,6 @@ class Game(Scenes):
             # control all level aspects, levels, windows etc.
             """self.timer está en desarrollo"""
             contador += 1  # increase each loop allows to controll when  creat rock
-            
 
             for event in pg.event.get():
                 if self.game_over_active == True and event.type == pg.KEYDOWN and event.key == pg.K_x:
@@ -311,7 +312,6 @@ class Game(Scenes):
             # create first rocks to don´t have problems with create method
             if self.create_leve_rock == True and contador == 1 or contador % 20 == 0:
                 self.created_rock = self.create_rocks()
-            
 
             ### UPDATE OBJECTS SETUP ###
 
@@ -325,7 +325,6 @@ class Game(Scenes):
             self.rock_object.update()
             self.rocks.update()
 
-            
             ###  UPDATE PLANET MOVEMENT IF  EACH LEVEL BOOLEAN IS ACTIVATED  ###
             if self.level1_active:
                 self.level1_planet.update_planet1(
@@ -344,7 +343,7 @@ class Game(Scenes):
                 self.player, self.rocks, True)  # plane-rock crask
             rock_bullet_crash = pg.sprite.groupcollide(
                 self.rocks, self.bullets, False, True, pg.sprite.collide_mask)  # plane-rock crask
-            
+
             ### POINTER ###
 
             if rock_bullet_crash:
@@ -353,16 +352,15 @@ class Game(Scenes):
                         rock_life = rock.rock_lost_life()  # IF CRASK ROCK LOST LIFE
                         self.explosion_sound.play()  # explosion sound done
                         if rock_life == 0:  # if lifes 0 gives point and remove the rock
-                            self.pointer.increase_points(15)
+
+                            self.pointer.increase_points(rock.get_points())
                             self.rocks.remove(rock)
-            
 
             """implementar para que salga de game cuando vidas  se queden en 0"""
             ### PLANE CRASH CONTROLLER ###
             if plane_crash_small and self.activate_level_control == False:
                 # plane lost a life if crashed small rock
                 self.remove_life = self.lifes_counter.lost_life()
-            
 
             # self.screen.fill(BACKGROUND_COLOUR)
             ###  PAINT BACKGROUND METHOD    ###
@@ -383,7 +381,7 @@ class Game(Scenes):
             # draw in the game rocks
 
             self.rocks.draw(self.screen)
-            
+
             # draw bullet
 
             self.bullets.draw(self.screen)
@@ -412,7 +410,8 @@ class Game(Scenes):
 
             if self.game_ended == True:
                 print("juego terminado")
-                self.screen.blit(self.game_finished.image, self.game_finished.rect)
+                self.screen.blit(self.game_finished.image,
+                                 self.game_finished.rect)
                 self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
                 self.game_end.draw_text(self.congratulation_text, 300)
                 self.HoF_message = "Pulsa 'W' para ir a Inicio"
@@ -454,12 +453,8 @@ class Game(Scenes):
                 self.rock_object = Rock(pos_x, pos_y)
                 self.rocks.add(self.rock_object)
 
-       
-
     def remove_rock(self, rock):
         self.rocks.remove(rock)
-
-   
 
     def get_level_time_controller(self, time0, time1):
         # to know each loop time, to know in which level should be
@@ -469,16 +464,14 @@ class Game(Scenes):
         self.plane_in_planet1 = False
         self.plane_in_planet2 = False
         self.plane_in_planet3 = False
-        # print(self.real_time)
+        print(self.real_time)
         if self.real_time < 30000:  # level 1 timing and booleans
             #self.level1 = True
             self.create_leve_rock = True
             self.activate_level_control = False
             self.shot_exist_2 = True
 
-            print("level 1")
-
-        elif 30000 + self.gap_time + self.pausa_time <= self.real_time < self.limit_time + 60000:
+        elif self.limit_time <= self.real_time < self.limit_time + 60000:
             # level 2 timing and booleans
             self.level2 = True
             self.create_leve_rock = True
@@ -487,7 +480,7 @@ class Game(Scenes):
 
             print("level2")
 
-        elif self.limit_time + 5000 + self.pausa_time2 + self.gap_time <= self.real_time < self.limit_time + 120000:
+        elif self.limit_time <= self.real_time < self.limit_time + 120000:
             # level 3 timing and booleans
             self.level3 = True
             self.create_leve_rock = True
@@ -496,7 +489,7 @@ class Game(Scenes):
 
             print("level 3")
         else:
-            """if it is not in level is because thanks to time controler, like gap, limit and pauses
+            """if it is not in level is because thanks to time controller, like gap, limit and pauses
             means that planet are in movement, plane control activated etc and window pop up is shown
             """
            # print("niveles")
@@ -574,30 +567,30 @@ class Game(Scenes):
                                 self.pausa_time = (
                                     self.pause_time_controller - 30000)
 
-                                self.limit_time = 30000 + self.pausa_time - 2000
+                                self.limit_time = self.pause_time_controller - self.gap_time
                                 self.level1 = False
                                 #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
 
                                 print("aqui 1")
-                                # print(self.pause_time_controller)
-                                # print(self.real_time)
-                                # print(self.gap_time)
-                                # print(self.pausa_time)
-                                # print(self.limit_time)
+                                print(self.pause_time_controller)
+                                print(self.real_time)
+                                print(self.gap_time)
+                                print(self.pausa_time)
+                                print(self.limit_time)
 
                             elif self.level2 == True:  # adapt timer for next level, before game restart
                                 print("aqui 2")
                                 self.pausa_time2 = (
                                     self.pause_time_controller - self.limit_time + 60000)
-                                self.limit_time = 30000 + self.pausa_time
+                                self.limit_time = self.pause_time_controller - self.gap_time
                                 self.level2 = False
 
                                 self.player.rect.midleft
-                                # print(self.real_time)
-                                # print(self.gap_time)
-                                # print(self.pause_time_controller)
-                                # print(self.pausa_time2)
-                                # print(self.limit_time)
+                                print(self.real_time)
+                                print(self.gap_time)
+                                print(self.pause_time_controller)
+                                print(self.pausa_time2)
+                                print(self.limit_time)
                             elif self.level3 == True:  # adapt timer for the last level, before game restart
                                 print("aqui 3")
                                 self.pausa_time2 = (
@@ -605,8 +598,8 @@ class Game(Scenes):
                                 self.limit_time = 60000 + 30000
                                 self.level3 = False
                                 self.player.rect.midleft
-                               # print(self.pausa_time2)
-                                # print(self.limit_time)
+                                print(self.pausa_time2)
+                                print(self.limit_time)
                             if self.level1 == False and self.level2 == False and self.level3 == False:
                                 # to know that game has ended and Hall Of Fame scene should start
 
@@ -624,11 +617,12 @@ class Game(Scenes):
     def change_Information_Game(self):
         return False
 
-    def change_Game_Home(self): #read message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    def change_Game_Home(self):  # read message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         """!!!!!!!!!!currently not working to decide if it should work or not"""
         key = pg.key.get_pressed()
         if key[pg.K_e]:
             return True
+
     def change_HallofFame_Home(self):
         return False
 
@@ -636,7 +630,7 @@ class Game(Scenes):
         key = pg.key.get_pressed()
         if key[pg.K_x]:
             return True
-    
+
     def game_finished(self):
         key = pg.key.get_pressed()
         if key[pg.K_w]:
@@ -647,16 +641,14 @@ class HallofFame(Scenes):
     def __init__(self, screen: pg.Surface):
         super().__init__(screen)
 
-        
-
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, MAIN_TEXT_SIZE)
 
         self.message = "HALL OF FAME"
-        self.sub_message= "LAS MEJORES PUNTUACIONES"
+        self.sub_message = "LAS MEJORES PUNTUACIONES"
         self.message_pos = 0.1 * HEIGHT
         self.sub_message_pos = self.message_pos + MAIN_TEXT_SIZE + TEXT_MARGIN
-    
+
     def play(self):
         exit = False
 
@@ -679,6 +671,7 @@ class HallofFame(Scenes):
             self.draw_text(self.sub_message, self.sub_message_pos)
 
             pg.display.flip()
+
     def draw_text(self, text_input, sum_pos_y):
 
         text = self.tipography.render(text_input, True, MESSAGE_COLOUR)
@@ -686,7 +679,7 @@ class HallofFame(Scenes):
         pos_x = (WIDTH - width_text) / 2
 
         self.screen.blit(text, (pos_x, sum_pos_y))
-    
+
     def change_Home_Information(self):
         return False
 
@@ -701,7 +694,7 @@ class HallofFame(Scenes):
 
     def change_Game_Home(self):
         return False
-    
+
     def change_HallofFame_Home(self):
         key = pg.key.get_pressed()
         if key[pg.K_q]:
