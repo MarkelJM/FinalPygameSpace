@@ -274,7 +274,7 @@ class Game(Scenes):
         self.level1_done = False
         self.level2_done = False
         self.level3_done = False
-        
+
         while not self.exit:
 
             self.time_loop = pg.time.get_ticks()  # each loop timing
@@ -331,8 +331,6 @@ class Game(Scenes):
             for rocas in self.rocks:
                 if rocas.rect.x < 0:
                     self.rocks.remove(rocas)
-
-                
 
             ###  UPDATE PLANET MOVEMENT IF  EACH LEVEL BOOLEAN IS ACTIVATED  ###
             if self.level1_active:
@@ -418,8 +416,7 @@ class Game(Scenes):
                 pg.mixer.music.pause()
 
             if self.game_ended == True:
-                
-                
+
                 print("juego terminado")
                 self.screen.blit(self.game_finished.image,
                                  self.game_finished.rect)
@@ -427,7 +424,7 @@ class Game(Scenes):
                 self.game_end.draw_text(self.congratulation_text, 300)
                 self.HoF_message = "Pulsa 'W' para ir a Inicio"
                 self.game_end.draw_text(self.HoF_message, HEIGHT - 100)
-                self.game_over_active = True
+                
                 pg.mixer.music.pause()
 
             pg.display.flip()
@@ -573,7 +570,7 @@ class Game(Scenes):
 
                             # indicarlo en el init como pausa_time_controller= 0
                             self.pause_time_controller = pg.time.get_ticks()
-                            
+
                             if self.level1 == True:  # adapt timer for nexts levels, before game restart
                                 self.pausa_time = (
                                     self.pause_time_controller - 30000)
@@ -592,9 +589,9 @@ class Game(Scenes):
                             elif self.level2 == True:  # adapt timer for next level, before game restart
                                 print("aqui 2")
                                 self.gap_time = self.pause_time_controller - self.real_time
-                                self.pausa_time2 = self.pause_time_controller - self.gap_time 
-                                
-                                #self.limit_time = self.pause_time_controller - self.pausa_time2 
+                                self.pausa_time2 = self.pause_time_controller - self.gap_time
+
+                                #self.limit_time = self.pause_time_controller - self.pausa_time2
                                 self.level2 = False
                                 self.level2_done = True
 
@@ -668,12 +665,9 @@ class HallofFame(Scenes):
 
         while not exit:
             for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                if event.type == pg.KEYDOWN and event.key == pg.K_q:
                     exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_a:
-                    exit = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                    exit = True
+                
 
                     # go to information scene
                 if event.type == pg.QUIT:

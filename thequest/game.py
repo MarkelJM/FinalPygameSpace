@@ -5,7 +5,7 @@ import pygame as pg
 
 
 from thequest import WIDTH, HEIGHT
-from thequest.scenes import  Home, Information, Game
+from thequest.scenes import  HallofFame, Home, Information, Game
 from thequest.objects import LifesCounting as LC
 
 
@@ -73,8 +73,11 @@ class MainGame:
            
             elif self.current_scene.game_over() == True:
                 """implementar para que salga de game cuando vidas  se queden en 0"""
-                
                 self.current_scene = Home(self.display)
+
+            elif self.current_scene.game_finished() == True:
+                """implementar para que salga de game cuando vidas  se queden en 0"""
+                self.current_scene = HallofFame(self.display)
             
             elif self.current_scene.change_HallofFame_Home() == True:
                 self.current_scene = Home(self.display)
