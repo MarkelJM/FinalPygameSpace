@@ -1,20 +1,24 @@
 import operator
 import sqlite3
-
+import os
+import pygame as pg
+from thequest import MESSAGE_COLOUR, WIDTH, HEIGHT
 from unittest import result
 
 
 class DBManager:
     def __init__(self, link):
         self.link = link
+        font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
+        self.tipography = pg.font.Font(font_file, 45)
 
     def get_DB(self):
-        query = 'SELECT * FROM scoreboard ORDER BY score DESC'
+        query = 'SELECT * FROM HallofFamescore ORDER BY score DESC'
         connection = sqlite3.connect(self.link)
         path = connection.cursor()
         path.execute(query)
 
-        self.scores = []
+        #self.scores = []
         column_name = []
 
         for column in path.description:
@@ -31,7 +35,7 @@ class DBManager:
 
         connection.close()
 
-        return self.scores
+        return self.moves
 
     def update_DB(self, points):
         self.points = points
@@ -56,12 +60,27 @@ class DBManager:
                 print("Por favor, debe ser más de 3 caracteres y menos de 8 caracteres")
 
     def insert_data_DB(self, link , name, points):
-        query = f'INSERT INTO tabla1 (player, score) VALUES (name={name}, points={points})'
+        query = f'INSERT INTO HallofFamescore (player, score) VALUES (name={name}, points={points})'
         connection = sqlite3.connect(link)
         path = connection.cursor()
         path.execute(query)
         connection.commit()
         connection.close()
+
+    def draw_thebest(self, message, pos_y):
+
+        """if there is not problem with the message, because of double information
+        we don´t need this method
+        """
+        #def draw_text(self,message, pos_y):
+        #message = "GAME OVER"
+        #pos_y = 100
+
+        text = self.tipography.render(message, True, MESSAGE_COLOUR)
+        width_text = text.get_width()
+        pos_x = (WIDTH - width_text) / 2
+
+        self.screen.blit(text, (pos_x, pos_y))
 
 
 

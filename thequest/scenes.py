@@ -664,7 +664,8 @@ class HallofFame(Scenes):
         self.sub_message = "LAS MEJORES PUNTUACIONES"
         self.message_pos = 0.1 * HEIGHT
         self.sub_message_pos = self.message_pos + MAIN_TEXT_SIZE + TEXT_MARGIN
-
+        self.database = DBManager(BBDD)
+        self.db_list = self.database.get_DB()
     def play(self):
         exit = False
 
@@ -683,7 +684,45 @@ class HallofFame(Scenes):
             self.draw_text(self.message, self.message_pos)
             self.draw_text(self.sub_message, self.sub_message_pos)
 
+            i = 0
+            for key, value in self.db_list.items():
+                key
+
+
+            """
+            #crear  self.crear_texto() en en bucle!!!!!!!!!!!!!usar un 'break' cuando i  sea igual a 5!!!
+
+            def crear_texto(self):
+                tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 40)
+                tipografia_titulo = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 60)
+                csv_file = "puntuaciones.csv"
+                valores = extrae_valores_records(csv_file)
+                nombres = extrae_nombres_records(csv_file)
+                borde = 100
+                texto_titulo = pg.font.Font.render(tipografia_titulo, "Records", True, (255, 255, 255))
+                self.pantalla.blit(texto_titulo, ((ANCHO-texto_titulo.get_width())/2, 20))
+                for index in range(len(valores)):
+                    texto_nombre = pg.font.Font.render(tipografia, nombres[index], True, (255, 255, 255))
+                    texto_record = pg.font.Font.render(tipografia, str(valores[index]), True, (255, 255, 255))
+                    pos_x = ANCHO/2 - texto_nombre.get_width()
+                    pos_x2 = ANCHO/2 + borde/2
+                    pos_y = index*texto_nombre.get_height() + borde*1.5
+                    self.pantalla.blit(texto_nombre, (pos_x, pos_y))
+                    self.pantalla.blit(texto_record, (pos_x2, pos_y))
+                pg.display.flip()
+            """
+
+
+
+            #self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
+            #self.game_end.draw_text(self.congratulation_text, 300)
+
+
+
             pg.display.flip()
+
+
+    
 
     def draw_text(self, text_input, sum_pos_y):
 
