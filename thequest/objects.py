@@ -311,6 +311,8 @@ class Points():
         pos_x = 20
         pos_y = HEIGHT-text.get_height() - 10
         screen.blit(text, (pos_x, pos_y))
+    def show_points(self):
+        return self.value
 
 
 class Level_1(Sprite):

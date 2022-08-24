@@ -1,5 +1,6 @@
 import operator
 import sqlite3
+
 from unittest import result
 
 
@@ -40,8 +41,7 @@ class DBManager:
                 name = self.ask_name()
                 if name != TypeError:
                     # ordena el diccionario segun los values
-                    db_update = sorted(
-                        self.moves(), key=operator.itemgetter(1))
+                    db_update = sorted(self.moves(), key=operator.itemgetter(1))
                     eliminated = db_update.popitem()
 
     def ask_name(self):
@@ -54,6 +54,16 @@ class DBManager:
                     loop = False
             except:
                 print("Por favor, debe ser más de 3 caracteres y menos de 8 caracteres")
+
+    def insert_data_DB(self, link , name, points):
+        query = f'INSERT INTO tabla1 (player, score) VALUES (name={name}, points={points})'
+        connection = sqlite3.connect(link)
+        path = connection.cursor()
+        path.execute(query)
+        connection.commit()
+        connection.close()
+
+
 
 
 """

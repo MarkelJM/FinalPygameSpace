@@ -8,7 +8,8 @@ import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS_LEVEL,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
 from .objects import Rock, Bullet, Game_ended, Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
-
+from .records2 import DBManager
+BBDD = 'data/DBscore.db'
 
 class Scenes:
     def __init__(self, screen: pg.Surface):
@@ -236,6 +237,8 @@ class Game(Scenes):
         self.create_leve_rock = True
         self.remove_life = 3  # three lifes
 
+        self.database =  DBManager(BBDD)
+
     def play(self):
         self.exit = False  # loop breaker variable
         contador = 0  # instead of using timing, counting to know when to create small rocks
@@ -424,6 +427,8 @@ class Game(Scenes):
                 self.game_end.draw_text(self.congratulation_text, 300)
                 self.HoF_message = "Pulsa 'W' para ir a Inicio"
                 self.game_end.draw_text(self.HoF_message, HEIGHT - 100)
+                name_player = self.database.ask_name()
+                self.database.insert_data_DB(BBDD, name_player, self.pointer.show_points())
                 
                 pg.mixer.music.pause()
 
