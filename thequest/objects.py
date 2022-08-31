@@ -21,11 +21,13 @@ class Plane(Sprite):
 
         self.rect = self.image.get_rect(**kwargs)  # get rect V1
         # self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2)) #get rect V2
+        self.angle = 0
+        self.total_angle = 0
 
-    def update(self, status):
+    def update(self, landing, screen):
 
         # boolean to know if game has control-->while Plane is active(between levels)
-        if status == False:
+        if landing == False:
             button = pg.key.get_pressed()
             if button[pg.K_RIGHT]:
                 self.rect.x += self.speed
@@ -43,14 +45,18 @@ class Plane(Sprite):
                 self.rect.y += self.speed
                 if self.rect.bottom > HEIGHT:
                     self.rect.bottom = HEIGHT
+            screen.blit(self.image, self.rect)  # PLayer
+            """añadir blit con imagen original y quitar el loop del Game linea 309"""
+        else:
+            image_origin_center = self.image.get_rect(center=(self.rect.x,self.rect.y)).center
+            if self.total_angle < 180:
+                self.total_angle += 5
 
-        if status == True:
-            image_origin_center = self.image.get_rect().center
-            angle = 0
-            for i in range(0, 181, 5):
-                angle = 0 +i
-                self.image_rotated = pg.transform.rotate(self.image, angle)
-                self.image_rotated.get_rect().center = image_origin_center
+            image_rotated = pg.transform.rotate(self.image, self.total_angle)
+            img_rotated_rect = image_rotated.get_rect(center=image_origin_center)
+            #image_rotated.get_rect().center = image_origin_center
+            screen.blit(image_rotated, img_rotated_rect)
+            """añadir blit con imagen rotada"""
             #pg.transform.rotate(self.image, 181)
             # for angle in range(181):
             #pg.transform.rotate(self.image, angle)

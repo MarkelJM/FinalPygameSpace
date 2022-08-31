@@ -315,6 +315,8 @@ class Game(Scenes):
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
+            ###  PAINT BACKGROUND METHOD    ###
+            self.paint_background()
 
             ### ROCK CREATER CONTROLLER ###
             # create first rocks to don´t have problems with create method
@@ -323,7 +325,7 @@ class Game(Scenes):
 
             ### UPDATE OBJECTS SETUP ###
 
-            self.player.update(self.activate_level_control)
+            self.player.update(self.activate_level_control, self.screen)
 
             if self.shot_exist:
 
@@ -374,8 +376,7 @@ class Game(Scenes):
                 self.remove_life = self.lifes_counter.lost_life()
 
             # self.screen.fill(BACKGROUND_COLOUR)
-            ###  PAINT BACKGROUND METHOD    ###
-            self.paint_background()
+            
 
             self.planet_group.draw(self.screen)
             ### POP UP A WINDOW TO SHOW A MESSAGE IF YOU PASSED/WIN THE  LEVEL  ###
@@ -387,7 +388,7 @@ class Game(Scenes):
                 self.level_window.draw_points(self.pointer.value)
                 self.level_window.click_continue()  # pop up of bottom
 
-            self.screen.blit(self.player.image, self.player.rect)  # PLayer
+            """self.screen.blit(self.player.image, self.player.rect)  # PLayer"""
 
             # draw in the game rocks
 
