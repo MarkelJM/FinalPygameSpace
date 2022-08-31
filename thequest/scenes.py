@@ -11,6 +11,7 @@ from .objects import Rock, Bullet, Game_ended, Game_Over, Window, Level_1, Level
 from .records2 import DBManager
 BBDD = 'data/DBscore.db'
 
+
 class Scenes:
     def __init__(self, screen: pg.Surface):
         self.screen = screen
@@ -237,7 +238,7 @@ class Game(Scenes):
         self.create_leve_rock = True
         self.remove_life = 3  # three lifes
 
-        self.database =  DBManager(BBDD)
+        self.database = DBManager(BBDD)
 
     def play(self):
         self.exit = False  # loop breaker variable
@@ -428,8 +429,11 @@ class Game(Scenes):
                 self.HoF_message = "Pulsa 'W' para ir a Inicio"
                 self.game_end.draw_text(self.HoF_message, HEIGHT - 100)
                 name_player = self.database.ask_name()
-                self.database.insert_data_DB(BBDD, name_player, self.pointer.show_points())
-                
+                puntos = self.pointer.show_points()
+                print(puntos)
+                self.database.insert_data_DB(
+                    BBDD, name_player, self.pointer.show_points())
+
                 pg.mixer.music.pause()
 
             pg.display.flip()
@@ -502,9 +506,7 @@ class Game(Scenes):
 
             print("level 3")
         else:
-            """if it is not in level is because thanks to time controller, like gap, limit and pauses
-            means that planet are in movement, plane control activated etc and window pop up is shown
-            """
+            
            # print("niveles")
             self.create_leve_rock = False
 
@@ -526,9 +528,7 @@ class Game(Scenes):
                     self.level3_active = True
                 if self.level1_active:
                     #self.levels.update_planet1(self.activate_level_control, self.player)
-                    """
-                    rect de planeta da error comprobar
-                    """
+                    
 
                     self.plane_in_planet1 = pg.sprite.spritecollide(
                         self.player, self.planet_group, False)
@@ -666,6 +666,7 @@ class HallofFame(Scenes):
         self.sub_message_pos = self.message_pos + MAIN_TEXT_SIZE + TEXT_MARGIN
         self.database = DBManager(BBDD)
         self.db_list = self.database.get_DB()
+
     def play(self):
         exit = False
 
@@ -673,7 +674,6 @@ class HallofFame(Scenes):
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_q:
                     exit = True
-                
 
                     # go to information scene
                 if event.type == pg.QUIT:
@@ -685,8 +685,16 @@ class HallofFame(Scenes):
             self.draw_text(self.sub_message, self.sub_message_pos)
 
             i = 0
+            text_pos_y =0.3 * HEIGHT
             for key, value in self.db_list.items():
-                key
+                record_message = f"nombre={key}:puntos={value}"
+                self.database.draw_thebest(record_message, text_pos_y)
+                i += 1
+                text_pos_y += 50
+                if i == 5:
+                    break
+
+
 
 
             """
@@ -712,17 +720,10 @@ class HallofFame(Scenes):
                 pg.display.flip()
             """
 
-
-
             #self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
             #self.game_end.draw_text(self.congratulation_text, 300)
 
-
-
             pg.display.flip()
-
-
-    
 
     def draw_text(self, text_input, sum_pos_y):
 
