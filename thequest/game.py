@@ -24,22 +24,7 @@ class MainGame:
             os.path.join("resources", "images", "icon.png"))
         pg.display.set_icon(icon)
         
-        """
-        #this code is going to be used and implemented in case I am not able to change from game over 
-        # to home or Hall of Fame
-
-        self.scenes = [
-            Home(self.display),
-            Information(self.display),
-            Game(self.display)         
-            ]
-
-        #implement start method
-        def start(self):
-        # in loop lineal
-        for scene in self.scenes:
-            scene.play()
-            """
+       
             
                    
             

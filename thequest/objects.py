@@ -46,20 +46,18 @@ class Plane(Sprite):
                 if self.rect.bottom > HEIGHT:
                     self.rect.bottom = HEIGHT
             screen.blit(self.image, self.rect)  # PLayer
-            """añadir blit con imagen original y quitar el loop del Game linea 309"""
+
         else:
-            image_origin_center = self.image.get_rect(center=(self.rect.x,self.rect.y)).center
+            image_origin_center = self.image.get_rect(
+                center=(self.rect.x, self.rect.y)).center
             if self.total_angle < 180:
                 self.total_angle += 5
 
             image_rotated = pg.transform.rotate(self.image, self.total_angle)
-            img_rotated_rect = image_rotated.get_rect(center=image_origin_center)
+            img_rotated_rect = image_rotated.get_rect(
+                center=image_origin_center)
             #image_rotated.get_rect().center = image_origin_center
             screen.blit(image_rotated, img_rotated_rect)
-            """añadir blit con imagen rotada"""
-            #pg.transform.rotate(self.image, 181)
-            # for angle in range(181):
-            #pg.transform.rotate(self.image, angle)
 
 
 class Rock(Sprite):

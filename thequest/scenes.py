@@ -225,7 +225,7 @@ class Game(Scenes):
         self.clock = pg.time.Clock()  # time attribute, but not the timing
         self.level_window = Window(self.screen)  # create class attribute
         # game finished pop up, with congrats and to go to HoF
-        self.game_finished = Game_ended(self.screen)
+        self.game_completed = Game_ended(self.screen)
 
         bullet_effect = os.path.join("resources", "sounds", "shot.wav")
         self.bullet_sound = pg.mixer.Sound(bullet_effect)
@@ -278,6 +278,7 @@ class Game(Scenes):
         self.level1_done = False
         self.level2_done = False
         self.level3_done = False
+        name_request = 0 #para que pida una sola vez el no
 
         while not self.exit:
 
@@ -292,6 +293,7 @@ class Game(Scenes):
                 if self.game_over_active == True and event.type == pg.KEYDOWN and event.key == pg.K_x:
                     self.exit = True
                 if self.game_ended == True and event.type == pg.KEYDOWN and event.key == pg.K_w:
+                    print("pulsando W")
                     self.exit = True
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
@@ -423,17 +425,18 @@ class Game(Scenes):
             if self.game_ended == True:
 
                 print("juego terminado")
-                self.screen.blit(self.game_finished.image,
-                                 self.game_finished.rect)
+                self.screen.blit(self.game_completed.image,
+                                 self.game_completed.rect)
                 self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
                 self.game_end.draw_text(self.congratulation_text, 300)
                 self.HoF_message = "Pulsa 'W' para ir a Inicio"
                 self.game_end.draw_text(self.HoF_message, HEIGHT - 100)
-                name_player = self.database.ask_name()
-                puntos = self.pointer.show_points()
-                print(puntos)
-                self.database.insert_data_DB(
-                    BBDD, name_player, self.pointer.show_points())
+                
+                if name_request == 0:
+                    name_player = self.database.ask_name()
+                    name_request += 1
+                    self.database.insert_data_DB(
+                        BBDD, name_player, self.pointer.show_points())
 
                 pg.mixer.music.pause()
 
@@ -482,7 +485,7 @@ class Game(Scenes):
         self.plane_in_planet1 = False
         self.plane_in_planet2 = False
         self.plane_in_planet3 = False
-        print(self.real_time)
+        #print(self.real_time)
         if self.real_time < 30000:  # level 1 timing and booleans
             #self.level1 = True
             self.create_leve_rock = True
@@ -689,7 +692,7 @@ class HallofFame(Scenes):
             text_pos_y =0.3 * HEIGHT
             for key, value in self.db_list.items():
                 record_message = f"nombre={key}:puntos={value}"
-                self.database.draw_thebest(record_message, text_pos_y)
+                self.database.draw_thebest(self.screen, record_message, text_pos_y)
                 i += 1
                 text_pos_y += 50
                 if i == 5:
@@ -698,28 +701,7 @@ class HallofFame(Scenes):
 
 
 
-            """
-            #crear  self.crear_texto() en en bucle!!!!!!!!!!!!!usar un 'break' cuando i  sea igual a 5!!!
-
-            def crear_texto(self):
-                tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 40)
-                tipografia_titulo = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 60)
-                csv_file = "puntuaciones.csv"
-                valores = extrae_valores_records(csv_file)
-                nombres = extrae_nombres_records(csv_file)
-                borde = 100
-                texto_titulo = pg.font.Font.render(tipografia_titulo, "Records", True, (255, 255, 255))
-                self.pantalla.blit(texto_titulo, ((ANCHO-texto_titulo.get_width())/2, 20))
-                for index in range(len(valores)):
-                    texto_nombre = pg.font.Font.render(tipografia, nombres[index], True, (255, 255, 255))
-                    texto_record = pg.font.Font.render(tipografia, str(valores[index]), True, (255, 255, 255))
-                    pos_x = ANCHO/2 - texto_nombre.get_width()
-                    pos_x2 = ANCHO/2 + borde/2
-                    pos_y = index*texto_nombre.get_height() + borde*1.5
-                    self.pantalla.blit(texto_nombre, (pos_x, pos_y))
-                    self.pantalla.blit(texto_record, (pos_x2, pos_y))
-                pg.display.flip()
-            """
+            
 
             #self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
             #self.game_end.draw_text(self.congratulation_text, 300)

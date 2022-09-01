@@ -13,7 +13,7 @@ class DBManager:
         self.tipography = pg.font.Font(font_file, 45)
 
     def get_DB(self):
-        query = 'SELECT * FROM HallofFamescore ORDER BY score DESC'
+        query = 'SELECT * FROM HallofFamescore ORDER BY score_records DESC'
         connection = sqlite3.connect(self.link)
         path = connection.cursor()
         path.execute(query)
@@ -60,27 +60,27 @@ class DBManager:
             except:
                 print("Por favor, debe ser más de 3 caracteres y menos de 8 caracteres")
 
+        return name
+
     def insert_data_DB(self, link, name, points):
-        query = f'INSERT INTO HallofFamescore (player_records, score_records) VALUES (?,?)'
+        print(name, points)
+        query = 'INSERT INTO HallofFamescore (player_records, score_records) VALUES (?,?)'
         connection = sqlite3.connect(link)
         path = connection.cursor()
-        path.execute(query,(name, points) )
+        path.execute(query, (name, points))
         connection.commit()
         connection.close()
 
-    def draw_thebest(self, message, pos_y):
+    def draw_thebest(self,screen, message, pos_y):
         """if there is not problem with the message, because of double information
         we don´t need this method
         """
         # def draw_text(self,message, pos_y):
         #message = "GAME OVER"
         #pos_y = 100
-
+        self.screen = screen
         text = self.tipography.render(message, True, MESSAGE_COLOUR)
         width_text = text.get_width()
         pos_x = (WIDTH - width_text) / 2
 
         self.screen.blit(text, (pos_x, pos_y))
-
-
-
