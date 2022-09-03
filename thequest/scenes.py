@@ -9,6 +9,7 @@ import pygame as pg
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS_LEVEL,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
 from .objects import Rock, Bullet, Game_ended, Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
 from .records2 import DBManager
+from .inputbox import InputBox
 BBDD = 'data/DBscore.db'
 
 
@@ -278,7 +279,7 @@ class Game(Scenes):
         self.level1_done = False
         self.level2_done = False
         self.level3_done = False
-        name_request = 0 #para que pida una sola vez el no
+        name_request = 0  # para que pida una sola vez el no
 
         while not self.exit:
 
@@ -378,7 +379,6 @@ class Game(Scenes):
                 self.remove_life = self.lifes_counter.lost_life()
 
             # self.screen.fill(BACKGROUND_COLOUR)
-            
 
             self.planet_group.draw(self.screen)
             ### POP UP A WINDOW TO SHOW A MESSAGE IF YOU PASSED/WIN THE  LEVEL  ###
@@ -429,11 +429,14 @@ class Game(Scenes):
                                  self.game_completed.rect)
                 self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
                 self.game_end.draw_text(self.congratulation_text, 300)
-                self.HoF_message = "Pulsa 'W' para ir a Inicio"
+                self.HoF_message = "Pulsa 'W' para ir a Hall of Fame"
                 self.game_end.draw_text(self.HoF_message, HEIGHT - 100)
-                
+                inputbox = InputBox(self.screen) ##
+
                 if name_request == 0:
-                    name_player = self.database.ask_name()
+                    #name_player = self.database.ask_name()
+                    inputbox = InputBox(self.screen)
+                    name_player = inputbox.get_text()
                     name_request += 1
                     self.database.insert_data_DB(
                         BBDD, name_player, self.pointer.show_points())
@@ -485,7 +488,7 @@ class Game(Scenes):
         self.plane_in_planet1 = False
         self.plane_in_planet2 = False
         self.plane_in_planet3 = False
-        #print(self.real_time)
+        # print(self.real_time)
         if self.real_time < 30000:  # level 1 timing and booleans
             #self.level1 = True
             self.create_leve_rock = True
@@ -510,7 +513,7 @@ class Game(Scenes):
 
             print("level 3")
         else:
-            
+
            # print("niveles")
             self.create_leve_rock = False
 
@@ -532,7 +535,6 @@ class Game(Scenes):
                     self.level3_active = True
                 if self.level1_active:
                     #self.levels.update_planet1(self.activate_level_control, self.player)
-                    
 
                     self.plane_in_planet1 = pg.sprite.spritecollide(
                         self.player, self.planet_group, False)
@@ -689,19 +691,20 @@ class HallofFame(Scenes):
             self.draw_text(self.sub_message, self.sub_message_pos)
 
             i = 0
-            text_pos_y =0.3 * HEIGHT
+            text_pos_y = 0.3 * HEIGHT
+            for list_item in self.db_list:
+                self.database.draw_thebest(self.screen, "nombre", text_pos_y)
+
+            i += 1
+            text_pos_y += 50
+            if i == 5:
+                break
+            """
             for key, value in self.db_list.items():
+                
                 record_message = f"nombre={key}:puntos={value}"
-                self.database.draw_thebest(self.screen, record_message, text_pos_y)
-                i += 1
-                text_pos_y += 50
-                if i == 5:
-                    break
-
-
-
-
-            
+                self.database.draw_thebest(self.screen, f"nombre={key}:puntos={value}", text_pos_y)
+                """
 
             #self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
             #self.game_end.draw_text(self.congratulation_text, 300)

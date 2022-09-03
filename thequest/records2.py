@@ -10,28 +10,30 @@ class DBManager:
     def __init__(self, link):
         self.link = link
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
-        self.tipography = pg.font.Font(font_file, 45)
+        self.tipography = pg.font.Font(font_file, 15)
+        self.text = ""  # to write record name
 
     def get_DB(self):
-        query = 'SELECT * FROM HallofFamescore ORDER BY score_records DESC'
+        query = 'SELECT * FROM HallofFamescore ORDER BY score_records DESC LIMIT 5'
         connection = sqlite3.connect(self.link)
         path = connection.cursor()
         path.execute(query)
 
-        #self.scores = []
         column_name = []
 
         for column in path.description:
             column_name.append(column[0])
 
         info = path.fetchall()
+        self.moves = []
+
         for dato in info:
-            self.moves = {}
+            move = {}
             i = 0
             for name in column_name:
-                self.moves[name] = dato[i]
+                move[name] = dato[i]
                 i += 1
-            # self.scores.append(moves)
+            self.moves.append(move)
 
         connection.close()
 
@@ -49,6 +51,7 @@ class DBManager:
                         self.moves(), key=operator.itemgetter(1))
                     eliminated = db_update.popitem()
 
+    """
     def ask_name(self):
         loop = True
         while loop:
@@ -61,6 +64,36 @@ class DBManager:
                 print("Por favor, debe ser más de 3 caracteres y menos de 8 caracteres")
 
         return name
+        """
+
+    def ask_name(self,screen):
+        self.screen = screen
+        salir = False
+        while not salir:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_BACKSPACE and len(self.text) > 0:
+                        self.text = self.text[:-1]
+                    elif event.key == pg.K_RETURN:
+                        salir = True
+                    else:
+                        self.text += event.unicode
+            # self.pintar()
+            pg.display.flip()
+        return self.text
+    
+    def pintar(self): #no lo uso, es de toni
+        pg.draw.rect(self.screen, self.color_fondo, self.fondo)
+        self.pantalla.blit(self.titulo, (self.x_titulo, self.y_titulo))
+
+        superficie_texto = self.tipografia.render(
+            self.texto, True, self.color_texto, self.color_fondo)
+        pos_x = self.x_titulo
+        pos_y = self.y_titulo + self.titulo.get_height()
+        self.pantalla.blit(superficie_texto, (pos_x, pos_y))
+    
 
     def insert_data_DB(self, link, name, points):
         print(name, points)
@@ -71,7 +104,7 @@ class DBManager:
         connection.commit()
         connection.close()
 
-    def draw_thebest(self,screen, message, pos_y):
+    def draw_thebest(self, screen, message, pos_y):
         """if there is not problem with the message, because of double information
         we don´t need this method
         """
