@@ -23,9 +23,10 @@ class DBManager:
 
         for column in path.description:
             column_name.append(column[0])
-
+        print(column_name)
         info = path.fetchall()
         self.moves = []
+        print(info)
 
         for dato in info:
             move = {}
@@ -36,7 +37,7 @@ class DBManager:
             self.moves.append(move)
 
         connection.close()
-
+        print(self.moves)
         return self.moves
 
     def update_DB(self, points):
@@ -104,16 +105,20 @@ class DBManager:
         connection.commit()
         connection.close()
 
-    def draw_thebest(self, screen, message, pos_y):
+    def draw_thebest(self, screen, message, pos_y, dictionary):
         """if there is not problem with the message, because of double information
         we don´t need this method
         """
         # def draw_text(self,message, pos_y):
         #message = "GAME OVER"
         #pos_y = 100
+        message_str = str(message)
         self.screen = screen
-        text = self.tipography.render(message, True, MESSAGE_COLOUR)
+        text = self.tipography.render(message_str, True, MESSAGE_COLOUR)
         width_text = text.get_width()
-        pos_x = (WIDTH - width_text) / 2
+        if dictionary == "key":
+            pos_x = (WIDTH/2) - width_text -10
+        elif dictionary == "values":
+            pos_x = (WIDTH/2) + 10
 
         self.screen.blit(text, (pos_x, pos_y))

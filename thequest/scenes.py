@@ -428,10 +428,10 @@ class Game(Scenes):
                 self.screen.blit(self.game_completed.image,
                                  self.game_completed.rect)
                 self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
-                self.game_end.draw_text(self.congratulation_text, 300)
+                self.game_end.draw_text(self.congratulation_text, 100)
                 self.HoF_message = "Pulsa 'W' para ir a Hall of Fame"
                 self.game_end.draw_text(self.HoF_message, HEIGHT - 100)
-                inputbox = InputBox(self.screen) ##
+                inputbox = InputBox(self.screen)
 
                 if name_request == 0:
                     #name_player = self.database.ask_name()
@@ -675,7 +675,7 @@ class HallofFame(Scenes):
 
     def play(self):
         exit = False
-
+        i = 0
         while not exit:
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN and event.key == pg.K_q:
@@ -690,16 +690,19 @@ class HallofFame(Scenes):
             self.draw_text(self.message, self.message_pos)
             self.draw_text(self.sub_message, self.sub_message_pos)
 
-            i = 0
             text_pos_y = 0.3 * HEIGHT
             for list_item in self.db_list:
-                self.database.draw_thebest(self.screen, "nombre", text_pos_y)
-
-            i += 1
-            text_pos_y += 50
-            if i == 5:
-                break
+                self.database.draw_thebest(
+                    self.screen, list_item["player_records"], text_pos_y, "key")
+                self.database.draw_thebest(
+                    self.screen, list_item["score_records"], text_pos_y, "values")
+                text_pos_y += 50
             """
+                i += 1
+                
+                if i == 5:
+                    break
+            
             for key, value in self.db_list.items():
                 
                 record_message = f"nombre={key}:puntos={value}"
