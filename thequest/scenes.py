@@ -233,8 +233,8 @@ class Game(Scenes):
         hit_effect = os.path.join("resources", "sounds", "Game_hit.wav")
         self.explosion_sound = pg.mixer.Sound(hit_effect)
         background_music = os.path.join("resources", "sounds", "music.mp3")
-        self.music = pg.mixer.music.load(background_music)
-        pg.mixer.music.play(-1)
+        # self.music = pg.mixer.music.load(background_music)   ##MUSICCCCCCC
+        # pg.mixer.music.play(-1)
         # boolean to activate the option of creating exactly rocks
         self.create_leve_rock = True
         self.remove_life = 3  # three lifes
@@ -258,7 +258,7 @@ class Game(Scenes):
         # variable, this number is to don´t disturb level timing later are redefined
         self.pausa_time = 60000
         # variable, this number is to don´t disturb level timing later are redefined
-        self.pausa_time2 = 120000
+        self.pausa_time2 = 130000
         # variable, this number is to don´t disturb level timing later are redefined
         self.limit_time = 60000
         # variable to know how time gap between real time and level bottom cliced(it shouldn´t exist)
@@ -285,7 +285,7 @@ class Game(Scenes):
 
             self.time_loop = pg.time.get_ticks()  # each loop timing
             self.timer = self.get_level_time_controller(
-                self.time_start, self.time_loop)
+                self.time_start, self.time_loop,self.game_ended )
             # control all level aspects, levels, windows etc.
             """self.timer está en desarrollo"""
             contador += 1  # increase each loop allows to controll when  creat rock
@@ -293,6 +293,9 @@ class Game(Scenes):
             for event in pg.event.get():
                 if self.game_over_active == True and event.type == pg.KEYDOWN and event.key == pg.K_x:
                     self.exit = True
+                if event.type == pg.KEYDOWN:
+                    print(event.type, event.key)
+                print(self.game_ended)
                 if self.game_ended == True and event.type == pg.KEYDOWN and event.key == pg.K_w:
                     print("pulsando W")
                     self.exit = True
@@ -381,14 +384,6 @@ class Game(Scenes):
             # self.screen.fill(BACKGROUND_COLOUR)
 
             self.planet_group.draw(self.screen)
-            ### POP UP A WINDOW TO SHOW A MESSAGE IF YOU PASSED/WIN THE  LEVEL  ###
-            if self.plane_in_planet1:  # level window
-                self.screen.blit(self.level_window.image,
-                                 self.level_window.rect)
-                self.message_completed = "NIVEL COMPLETADO"
-                self.level_window.draw_text(self.message_completed)
-                self.level_window.draw_points(self.pointer.value)
-                self.level_window.click_continue()  # pop up of bottom
 
             """self.screen.blit(self.player.image, self.player.rect)  # PLayer"""
 
@@ -411,6 +406,15 @@ class Game(Scenes):
             if self.activate_level_control:
                 self.planet_group.draw(self.screen)
                 self.planet_group.update()
+
+            ### POP UP A WINDOW TO SHOW A MESSAGE IF YOU PASSED/WIN THE  LEVEL  ###
+            if self.plane_in_planet1:  # level window
+                self.screen.blit(self.level_window.image,
+                                 self.level_window.rect)
+                self.message_completed = "NIVEL COMPLETADO"
+                self.level_window.draw_text(self.message_completed)
+                self.level_window.draw_points(self.pointer.value)
+                self.level_window.click_continue()  # pop up of bottom
             ### GAME OVER POP UP ###
             if self.remove_life <= 0:
                 print("no vidas")
@@ -420,7 +424,7 @@ class Game(Scenes):
                 self.restart = "Pulsa 'X' para ir a Inicio"
                 self.game_end.draw_text(self.restart, HEIGHT - 100)
                 self.game_over_active = True
-                pg.mixer.music.pause()
+                # pg.mixer.music.pause()   MUSIC
 
             if self.game_ended == True:
 
@@ -441,7 +445,7 @@ class Game(Scenes):
                     self.database.insert_data_DB(
                         BBDD, name_player, self.pointer.show_points())
 
-                pg.mixer.music.pause()
+                # pg.mixer.music.pause() #########MUSIC NO BORRAR
 
             pg.display.flip()
             self.clock.tick(FPS)
@@ -480,152 +484,157 @@ class Game(Scenes):
     def remove_rock(self, rock):
         self.rocks.remove(rock)
 
-    def get_level_time_controller(self, time0, time1):
-        # to know each loop time, to know in which level should be
-        self.real_time = (time1 - time0)
+    def get_level_time_controller(self, time0, time1,game_end_status):
+        if game_end_status == False:
+            # to know each loop time, to know in which level should be
+            self.real_time = (time1 - time0)
 
-        self.planet_group = pg.sprite.GroupSingle()
-        self.plane_in_planet1 = False
-        self.plane_in_planet2 = False
-        self.plane_in_planet3 = False
-        # print(self.real_time)
-        if self.real_time < 30000:  # level 1 timing and booleans
-            #self.level1 = True
-            self.create_leve_rock = True
-            self.activate_level_control = False
-            self.shot_exist_2 = True
+            self.planet_group = pg.sprite.GroupSingle()
+            self.plane_in_planet1 = False
+            self.plane_in_planet2 = False
+            self.plane_in_planet3 = False
+            # print(self.real_time)
+            if self.real_time < 30000:  # level 1 timing and booleans
+                #self.level1 = True
+                self.create_leve_rock = True
+                self.activate_level_control = False
+                self.shot_exist_2 = True
 
-        elif self.limit_time <= self.real_time < self.limit_time + 60000:
-            # level 2 timing and booleans
-            self.level2 = True
-            self.create_leve_rock = True
-            self.activate_level_control = False
-            self.shot_exist_2 = True
+            elif self.limit_time <= self.real_time < self.limit_time + 60000:
+                # level 2 timing and booleans
+                self.level2 = True
+                self.create_leve_rock = True
+                self.activate_level_control = False
+                self.shot_exist_2 = True
 
-            print("level2")
+                print("level2")
 
-        elif self.pausa_time2 <= self.real_time < self.pausa_time2 + 120000:
-            # level 3 timing and booleans
-            self.level3 = True
-            self.create_leve_rock = True
-            self.activate_level_control = False
-            self.shot_exist_2 = True
+            elif self.pausa_time2 <= self.real_time < self.pausa_time2 + 120000:
+                # level 3 timing and booleans
+                self.level3 = True
+                self.create_leve_rock = True
+                self.activate_level_control = False
+                self.shot_exist_2 = True
 
-            print("level 3")
-        else:
+                print("level 3")
+            else:
 
-           # print("niveles")
-            self.create_leve_rock = False
+                print("niveles")
+                self.create_leve_rock = False
 
-            # pause_time_controller = pg.time.get_ticks()
-            if self.rock_object.rect.x <= - 20:  # when last rock created is out screen the controll starts
+                # pause_time_controller = pg.time.get_ticks()
+                if self.rock_object.rect.x <= - 20:  # when last rock created is out screen the controll starts
 
-                self.activate_level_control = True
-                self.shot_exist_2 = False
-                if self.level1:
-                    self.planet_group.add(self.level1_planet)
-                    self.level1_active = True
-                if self.level2:
-                    self.planet_group.remove(self.level1_planet)
-                    self.planet_group.add(self.level2_planet)
-                    self.level2_active = True
-                if self.level3:
-                    self.planet_group.remove(self.level2_planet)
-                    self.planet_group.add(self.level3_planet)
-                    self.level3_active = True
-                if self.level1_active:
-                    #self.levels.update_planet1(self.activate_level_control, self.player)
+                    self.activate_level_control = True
+                    self.shot_exist_2 = False
+                    if self.level1:
+                        self.planet_group.add(self.level1_planet)
+                        self.level1_active = True
+                    if self.level2:
+                        self.planet_group.remove(self.level1_planet)
+                        self.planet_group.add(self.level2_planet)
+                        self.level2_active = True
+                    if self.level3:
+                        self.planet_group.remove(self.level2_planet)
+                        self.planet_group.add(self.level3_planet)
+                        self.level3_active = True
+                    if self.level1_active:
+                        #self.levels.update_planet1(self.activate_level_control, self.player)
 
-                    self.plane_in_planet1 = pg.sprite.spritecollide(
-                        self.player, self.planet_group, False)
+                        self.plane_in_planet1 = pg.sprite.spritecollide(
+                            self.player, self.planet_group, False)
 
-                if self.level2_active:
+                    if self.level2_active:
 
-                    #self.level2_planet.update_planet2(self.activate_level_control, self.player)
-                    self.plane_in_planet2 = pg.sprite.spritecollide(
-                        self.player, self.planet_group, False)
-                if self.level3_active:
-                    #self.level3_planet.update_planet3(self.activate_level_control, self.player)
-                    self.plane_in_planet3 = pg.sprite.spritecollide(
-                        self.player, self.planet_group, False)
+                        #self.level2_planet.update_planet2(self.activate_level_control, self.player)
+                        self.plane_in_planet2 = pg.sprite.spritecollide(
+                            self.player, self.planet_group, False)
+                    if self.level3_active:
+                        #self.level3_planet.update_planet3(self.activate_level_control, self.player)
+                        self.plane_in_planet3 = pg.sprite.spritecollide(
+                            self.player, self.planet_group, False)
 
-                if self.plane_in_planet1:
-                    # as plane and planet hit all the time(during this time) just increase once all the level points
-                    if self.a == 0:
-                        self.pointer.increase_points(100)
-                        self.a += 1
-                if self.plane_in_planet2:
-                    if self.b == 0:  # as before
-                        self.b += 1
-                        self.pointer.increase_points(200)
-                if self.plane_in_planet3:
-                    if self.c == 0:  # as before
-                        self.c += 1
-                        self.pointer.increase_points(400)
+                    if self.plane_in_planet1:
+                        # as plane and planet hit all the time(during this time) just increase once all the level points
+                        if self.a == 0:
+                            self.pointer.increase_points(100)
+                            self.level1_done = True
+                            self.a += 1
+                    if self.plane_in_planet2:
+                        if self.b == 0:  # as before
+                            self.level2_done = True
+                            self.b += 1
+                            self.pointer.increase_points(200)
+                    if self.plane_in_planet3:
+                        if self.c == 0:  # as before
+                            self.level3_done = True
+                            self.c += 1
+                            self.pointer.increase_points(400)
 
-                # self.level_window.draw_points(self.pointer.value)
+                    if self.level1_done == True and self.level2_done == True and self.level3_done == True:
+                        # to know that game has ended and Hall Of Fame scene should start
+                        self.game_ended = True
+                    # self.level_window.draw_points(self.pointer.value)
 
-                # self.level_window.click_continue()
-                # self.level_window.draw_text()
+                    # self.level_window.click_continue()
+                    # self.level_window.draw_text()
 
-                for event in pg.event.get():  # as main event checker are locked to dont creeate shots etc
-                    # new event checr to exit and to know if mouse is clicking in continue bottom
-                    if event.type == pg.QUIT:
-                        pg.quit()
-                        sys.exit()
-                    if event.type == pg.MOUSEBUTTONDOWN:
-                        pressed_key = pg.mouse.get_pressed()
-                        mouse_pos = pg.mouse.get_pos()
-                        if pressed_key[0] and 80 <= mouse_pos[0] <= 447 and 165 <= mouse_pos[1] <= 261:
-                            # mouse clicking area
+                    for event in pg.event.get():  # as main event checker are locked to dont creeate shots etc
+                        # new event checr to exit and to know if mouse is clicking in continue bottom
+                        if event.type == pg.KEYDOWN:
+                            print(event.type, event.key)
+                        if event.type == pg.QUIT:
+                            pg.quit()
+                            sys.exit()
+                        if event.type == pg.MOUSEBUTTONDOWN:
+                            pressed_key = pg.mouse.get_pressed()
+                            mouse_pos = pg.mouse.get_pos()
+                            if pressed_key[0] and 80 <= mouse_pos[0] <= 447 and 165 <= mouse_pos[1] <= 261:
+                                # mouse clicking area
 
-                            # indicarlo en el init como pausa_time_controller= 0
-                            self.pause_time_controller = pg.time.get_ticks()
+                                # indicarlo en el init como pausa_time_controller= 0
+                                self.pause_time_controller = pg.time.get_ticks()
 
-                            if self.level1 == True:  # adapt timer for nexts levels, before game restart
-                                self.pausa_time = (
-                                    self.pause_time_controller - 30000)
-                                self.gap_time = self.pause_time_controller - self.real_time
-                                self.limit_time = self.pause_time_controller - self.gap_time
-                                self.level1 = False
-                                #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
-                                self.level1_done = True
-                                print("aqui 1")
-                                print(self.pause_time_controller)
-                                print(self.real_time)
-                                print(self.gap_time)
-                                print(self.pausa_time)
-                                print(self.limit_time)
+                                if self.level1 == True:  # adapt timer for nexts levels, before game restart
+                                    #self.pausa_time = (self.pause_time_controller - 30000)
+                                    self.gap_time = self.pause_time_controller - self.real_time
+                                    self.limit_time = self.pause_time_controller - self.gap_time
+                                    self.level1 = False
+                                    #self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2))
 
-                            elif self.level2 == True:  # adapt timer for next level, before game restart
-                                print("aqui 2")
-                                self.gap_time = self.pause_time_controller - self.real_time
-                                self.pausa_time2 = self.pause_time_controller - self.gap_time
+                                    print("aqui 1")
+                                    print(self.pause_time_controller)
+                                    print(self.real_time)
+                                    print(self.gap_time)
+                                    print(self.pausa_time)
+                                    print(self.limit_time)
 
-                                #self.limit_time = self.pause_time_controller - self.pausa_time2
-                                self.level2 = False
-                                self.level2_done = True
+                                elif self.level2 == True:  # adapt timer for next level, before game restart
+                                    print("aqui 2")
+                                    self.gap_time = self.pause_time_controller - self.real_time
+                                    self.pausa_time2 = self.pause_time_controller - self.gap_time
 
-                                self.player.rect.midleft
-                                print(self.real_time)
-                                print(self.gap_time)
-                                print(self.pause_time_controller)
-                                print(self.pausa_time2)
-                                print(self.limit_time)
-                            elif self.level3 == True:  # adapt timer for the last level, before game restart
-                                print("aqui 3")
-                                self.pausa_time2 = (
-                                    self.pause_time_controller - self.limit_time + 60000)
-                                self.limit_time = 60000 + 30000
-                                self.level3 = False
-                                self.level3_done = True
-                                self.player.rect.midleft
-                                print(self.pausa_time2)
-                                print(self.limit_time)
-                            if self.level1_done == True and self.level2_done == True and self.level3_done == True:
-                                # to know that game has ended and Hall Of Fame scene should start
-                                self.game_ended = True
-                                print("termino")
+                                    #self.limit_time = self.pause_time_controller - self.pausa_time2
+                                    self.level2 = False
+
+                                    self.player.rect.midleft
+                                    print(self.real_time)
+                                    print(self.gap_time)
+                                    print(self.pause_time_controller)
+                                    print(self.pausa_time2)
+                                    print(self.limit_time)
+                                elif self.level3 == True:  # adapt timer for the last level, before game restart
+                                    print("aqui 3")
+                                    self.pausa_time2 = (
+                                        self.pause_time_controller - self.limit_time + 60000)
+                                    #self.limit_time = 60000 + 30000
+                                    self.level3 = False
+
+                                    self.player.rect.midleft
+                                    print(self.pausa_time2)
+                                    print(self.limit_time)
+
+                                    print("termino")
 
     def change_Home_Information(self):
         return False
