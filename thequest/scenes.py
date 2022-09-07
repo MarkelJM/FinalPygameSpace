@@ -220,7 +220,7 @@ class Game(Scenes):
         # self.no_life = LifesCounting.no_lifes()
         self.bullets_groups = self.bullet_group()  # create method attribute
         self.game_end = Game_Over(self.screen)  # create class attribute
-
+        self.rock_object = Rock(WIDTH, HEIGHT)
         self.pointer = Points()  # create class attribute
 
         self.clock = pg.time.Clock()  # time attribute, but not the timing
@@ -285,7 +285,7 @@ class Game(Scenes):
 
             self.time_loop = pg.time.get_ticks()  # each loop timing
             self.timer = self.get_level_time_controller(
-                self.time_start, self.time_loop,self.game_ended )
+                self.time_start, self.time_loop, self.game_ended)
             # control all level aspects, levels, windows etc.
             """self.timer está en desarrollo"""
             contador += 1  # increase each loop allows to controll when  creat rock
@@ -484,7 +484,7 @@ class Game(Scenes):
     def remove_rock(self, rock):
         self.rocks.remove(rock)
 
-    def get_level_time_controller(self, time0, time1,game_end_status):
+    def get_level_time_controller(self, time0, time1, game_end_status):
         if game_end_status == False:
             # to know each loop time, to know in which level should be
             self.real_time = (time1 - time0)

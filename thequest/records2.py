@@ -113,6 +113,8 @@ class DBManager:
         #message = "GAME OVER"
         #pos_y = 100
         message_str = str(message)
+        if message_str == "":
+            message_str = self.no_name_record(message_str)
         self.screen = screen
         text = self.tipography.render(message_str, True, MESSAGE_COLOUR)
         width_text = text.get_width()
@@ -122,3 +124,10 @@ class DBManager:
             pos_x = (WIDTH/2) + 10
 
         self.screen.blit(text, (pos_x, pos_y))
+
+    def no_name_record(self, name):
+        name_anonimo = "Anonimo"
+        if name == "":
+            return name_anonimo
+            
+
