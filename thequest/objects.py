@@ -20,14 +20,13 @@ class Plane(Sprite):
             os.path.join("resources", "images", "plane.png"))  # charge image
 
         self.rect = self.image.get_rect(**kwargs)  # get rect V1
-        # self.rect = self.image.get_rect(midleft=(self.x_margin, HEIGHT/2)) #get rect V2
+
         self.angle = 0
         self.total_angle = 0
 
     def update(self, landing, screen):
 
-        # boolean to know if game has control-->while Plane is active(between levels)
-        if landing == False:
+        if landing == False:  # boolean to know if game has control-->while Plane is active(between levels)
             button = pg.key.get_pressed()
             if button[pg.K_RIGHT]:
                 self.rect.x += self.speed
@@ -56,7 +55,6 @@ class Plane(Sprite):
             image_rotated = pg.transform.rotate(self.image, self.total_angle)
             img_rotated_rect = image_rotated.get_rect(
                 center=image_origin_center)
-            #image_rotated.get_rect().center = image_origin_center
             screen.blit(image_rotated, img_rotated_rect)
 
 
@@ -72,12 +70,12 @@ class Rock(Sprite):
 
         # the method return a random number to define the speed
         self.rock_speed = self.choose_speed()
-        #self.rock_final_life = 2
+
         rock_life = self.get_lifes()
         self.rock_final_life = rock_life
         self.rock_point = self.get_points()
 
-    # after collide with gun will lose a life(currently not working properly)
+    # after collide with gun will lose a life
     def rock_lost_life(self):
         self.rock_final_life = self.rock_final_life - 1
         return self.rock_final_life
@@ -119,146 +117,6 @@ class Rock(Sprite):
 
         if self.rect.x < 0 or self.rect.x == 0:
             # instead of deleted in x = 0 will dispaerr later
-            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
-
-
-class Rock_small(Sprite):
-    def __init__(self, position_x, position_y):
-        super().__init__()
-
-        self.image = pg.image.load(os.path.join(
-            "resources", "images", "rock_yellow2.png"))  # charge image
-        self.pos_y = position_y
-        self.pos_x = position_x
-        self.rect = self.image.get_rect(
-            x=self.pos_x,  y=self.pos_y)  # get the rect
-
-        # the method return a random number to define the speed
-        self.rock_speed = self.choose_speed()
-        self.rock_final_life = 2
-        #rock_life = self.get_lifes()
-        #self.rock_final_life = rock_life
-        #self.rock_point = self.get_points()
-
-    # after collide with gun will lose a life(currently not working properly)
-    def rock_lost_life(self):
-        self.rock_final_life = self.rock_final_life - 1
-        return self.rock_final_life
-
-    """
-    def get_lifes(self):
-        self.rock_life_list = ROCK_LIFE_LIST
-        self.hits = self.rock_life_list[self.size_number]
-        
-        return self.hits
-        """
-    """ 
-    def get_points(self):
-        points_list = MAIN_POINTS
-        size_table = points_list[self.size_number]
-        points = size_table[self.speed_number]
-        
-        return points
-        """
-    """ 
-    def choose_size(self):
-        self.rock_list = []
-        for i in range(3):
-            self.rock_list.append(
-                
-            )
-        
-        self.size_number = randint(0,2)
-
-        self.rock_size = self.rock_list[self.size_number]
-        return self.rock_size
-        """
-
-    def choose_speed(self):  # return a random life
-        self.list_speed = SPEED_LIST
-        self.speed_number = randint(0, 2)
-        self.rock_speed = self.list_speed[self.speed_number]
-        return self.rock_speed
-
-    def update(self):
-
-        if self.rect.x > 0:
-            self.rect.x -= self.rock_speed
-
-        if self.rect.x < 0 or self.rect.x == 0:
-            # instead of deleted in x = 0 will dispaerr later
-            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
-
-
-class Rock_medium(Sprite):  # as rock:small
-    def __init__(self, position_x, position_y):
-        super().__init__()
-
-        self.image = pg.image.load(os.path.join(
-            "resources", "images", "rock_yellow1.png"))
-        self.pos_y = position_y
-        self.pos_x = position_x
-        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y)
-
-        self.rock_speed = self.choose_speed()
-        self.rock_final_life = 2
-        #rock_life = self.get_lifes()
-        #self.rock_final_life = rock_life
-        #self.rock_point = self.get_points()
-
-    def rock_lost_life(self):
-        self.rock_final_life = self.rock_final_life - 1
-        return self.rock_final_life
-
-    def choose_speed(self):
-        self.list_speed = SPEED_LIST
-        self.speed_number = randint(0, 2)
-        self.rock_speed = self.list_speed[self.speed_number]
-
-        return self.rock_speed
-
-    def update(self):
-
-        if self.rect.x > 0:
-            self.rect.x -= self.rock_speed
-
-        if self.rect.x < 0 or self.rect.x == 0:
-            self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
-
-
-class Rock_large(Sprite):  # as rock small
-    def __init__(self, position_x, position_y):  # , points
-        super().__init__()
-
-        self.image = pg.image.load(os.path.join(
-            "resources", "images", "rock_yellow0.png"))
-        self.pos_y = position_y
-        self.pos_x = position_x
-        self.rect = self.image.get_rect(x=self.pos_x,  y=self.pos_y)
-
-        self.rock_speed = self.choose_speed()
-        self.rock_final_life = 2
-        #rock_life = self.get_lifes()
-        #self.rock_final_life = rock_life
-        #self.rock_point = self.get_points()
-
-    def rock_lost_life(self):
-        self.rock_final_life = self.rock_final_life - 1
-        return self.rock_final_life
-
-    def choose_speed(self):
-        self.list_speed = SPEED_LIST
-        self.speed_number = randint(0, 2)
-        self.rock_speed = self.list_speed[self.speed_number]
-
-        return self.rock_speed
-
-    def update(self):
-
-        if self.rect.x > 0:
-            self.rect.x -= self.rock_speed
-
-        if self.rect.x < 0 or self.rect.x == 0:
             self.rect.x = 0 - ROCK_MARGIN_OUT_SCREEN
 
 
@@ -466,15 +324,6 @@ class Window(Sprite):
         font_file = os.path.join("resources", "fonts", "CabinSketch-Bold.ttf")
         self.tipography = pg.font.Font(font_file, 30)
 
-        #self.draw_text(message_completed, message_pos_level)
-
-        #self.text_continue = "CONTINUAR"
-        #self.text_continue_position = self.wn_height - self.continue_height - 10
-        #self.draw_text(text_continue, text_continue_position)
-
-        # self.draw_points(points)
-        # self.click_continue()
-        print("play")
 
     def click_continue(self):
 
@@ -522,8 +371,7 @@ class Game_Over(Sprite):
         self.tipography = pg.font.Font(font_file, 45)
 
     def draw_text(self, message, pos_y):
-        #message = "GAME OVER"
-        #pos_y = 100
+
 
         text = self.tipography.render(message, True, MESSAGE_COLOUR)
         width_text = text.get_width()
@@ -548,8 +396,7 @@ class Game_ended(Sprite):
         self.tipography = pg.font.Font(font_file, 45)
 
     def draw_text(self, message, pos_y):
-        #message = "GAME OVER"
-        #pos_y = 100
+
 
         text = self.tipography.render(message, True, MESSAGE_COLOUR)
         width_text = text.get_width()

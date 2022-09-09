@@ -2,7 +2,7 @@ import operator
 import sqlite3
 import os
 import pygame as pg
-from thequest import MESSAGE_COLOUR, WIDTH, HEIGHT
+from thequest import MESSAGE_COLOUR, WIDTH
 from unittest import result
 
 
@@ -52,22 +52,7 @@ class DBManager:
                         self.moves(), key=operator.itemgetter(1))
                     eliminated = db_update.popitem()
 
-    """
-    def ask_name(self):
-        loop = True
-        while loop:
-            name = input(
-                "¿Con qué nombre o caracter quieres grabar la puntuación?(máximo 8 y mínimo 3 caracteres): ")
-            try:
-                if len(name) >= 3 and len(name) <= 8:
-                    loop = False
-            except:
-                print("Por favor, debe ser más de 3 caracteres y menos de 8 caracteres")
-
-        return name
-        """
-
-    def ask_name(self,screen):
+    def ask_name(self, screen):
         self.screen = screen
         salir = False
         while not salir:
@@ -81,11 +66,10 @@ class DBManager:
                         salir = True
                     else:
                         self.text += event.unicode
-            # self.pintar()
+
             pg.display.flip()
         return self.text
-    
-    def pintar(self): #no lo uso, es de toni
+
         pg.draw.rect(self.screen, self.color_fondo, self.fondo)
         self.pantalla.blit(self.titulo, (self.x_titulo, self.y_titulo))
 
@@ -94,7 +78,6 @@ class DBManager:
         pos_x = self.x_titulo
         pos_y = self.y_titulo + self.titulo.get_height()
         self.pantalla.blit(superficie_texto, (pos_x, pos_y))
-    
 
     def insert_data_DB(self, link, name, points):
         print(name, points)
@@ -106,12 +89,7 @@ class DBManager:
         connection.close()
 
     def draw_thebest(self, screen, message, pos_y, dictionary):
-        """if there is not problem with the message, because of double information
-        we don´t need this method
-        """
-        # def draw_text(self,message, pos_y):
-        #message = "GAME OVER"
-        #pos_y = 100
+
         message_str = str(message)
         if message_str == "":
             message_str = self.no_name_record(message_str)
@@ -119,15 +97,14 @@ class DBManager:
         text = self.tipography.render(message_str, True, MESSAGE_COLOUR)
         width_text = text.get_width()
         if dictionary == "key":
-            pos_x = (WIDTH/2) - width_text -10
+            pos_x = (WIDTH/2) - width_text - 10
         elif dictionary == "values":
             pos_x = (WIDTH/2) + 10
 
         self.screen.blit(text, (pos_x, pos_y))
 
     def no_name_record(self, name):
+        """name_anonimo = "Anonimo"
+        if name == "":"""
         name_anonimo = "Anonimo"
-        if name == "":
-            return name_anonimo
-            
-
+        return name_anonimo
