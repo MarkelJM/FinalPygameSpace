@@ -7,7 +7,7 @@ from random import randint
 import pygame as pg
 
 from . import BACKGROUND_COLOUR, FPS, HEIGHT, LIFES, MAIN_TEXT_SIZE, MAXIMUM_REPEATED_ROCKS_LEVEL,  MESSAGE_COLOUR, TEXT_MARGIN,  WIDTH
-from .objects import Rock, Bullet, Game_ended, Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points, Rock_large, Rock_medium, Rock_small
+from .objects import Rock, Bullet, Game_ended, Game_Over, Window, Level_1, Level_2, Level_3, LifesCounting, Plane, Points
 from .records2 import DBManager
 from .inputbox import InputBox
 BBDD = 'data/DBscore.db'
@@ -237,7 +237,7 @@ class Game(Scenes):
         pg.mixer.music.play(-1)
         # flag to activate the option of creating exactly rocks
         self.create_leve_rock = True
-        #self.remove_life = 3  # three lifes
+        self.remove_life = 3  # three lifes
 
         self.database = DBManager(BBDD)
 
@@ -614,6 +614,9 @@ class Game(Scenes):
         return False
 
     def change_Information_Game(self):
+        return False
+
+    def change_Game_Home(self):
         return False
 
 

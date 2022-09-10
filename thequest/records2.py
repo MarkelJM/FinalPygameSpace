@@ -79,6 +79,8 @@ class DBManager:
         pos_y = self.y_titulo + self.titulo.get_height()
         self.pantalla.blit(superficie_texto, (pos_x, pos_y))
 
+        
+
     def insert_data_DB(self, link, name, points):
         print(name, points)
         query = 'INSERT INTO HallofFamescore (player_records, score_records) VALUES (?,?)'
