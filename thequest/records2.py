@@ -14,6 +14,7 @@ class DBManager:
         self.text = ""  # to write record name
 
     def get_DB(self):
+        """cretaes a list with dict inside"""
         query = 'SELECT * FROM HallofFamescore ORDER BY score_records DESC LIMIT 5'
         connection = sqlite3.connect(self.link)
         path = connection.cursor()
@@ -23,10 +24,10 @@ class DBManager:
 
         for column in path.description:
             column_name.append(column[0])
-        print(column_name)
+        
         info = path.fetchall()
         self.moves = []
-        print(info)
+        
 
         for dato in info:
             move = {}
@@ -37,9 +38,9 @@ class DBManager:
             self.moves.append(move)
 
         connection.close()
-        print(self.moves)
+        
         return self.moves
-
+    """
     def update_DB(self, points):
         self.points = points
 
@@ -51,6 +52,7 @@ class DBManager:
                     db_update = sorted(
                         self.moves(), key=operator.itemgetter(1))
                     eliminated = db_update.popitem()
+        """
 
     def ask_name(self, screen):
         self.screen = screen
@@ -69,7 +71,7 @@ class DBManager:
 
             pg.display.flip()
         return self.text
-
+        """
         pg.draw.rect(self.screen, self.color_fondo, self.fondo)
         self.pantalla.blit(self.titulo, (self.x_titulo, self.y_titulo))
 
@@ -78,6 +80,7 @@ class DBManager:
         pos_x = self.x_titulo
         pos_y = self.y_titulo + self.titulo.get_height()
         self.pantalla.blit(superficie_texto, (pos_x, pos_y))
+        """
 
         
 

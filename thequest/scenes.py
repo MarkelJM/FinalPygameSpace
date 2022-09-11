@@ -293,11 +293,10 @@ class Game(Scenes):
             for event in pg.event.get():
                 if self.game_over_active == True and event.type == pg.KEYDOWN and event.key == pg.K_x:
                     self.exit = True
-                if event.type == pg.KEYDOWN:
-                    print(event.type, event.key)
-                print(self.game_ended)
+                
+                    
                 if self.game_ended == True and event.type == pg.KEYDOWN and event.key == pg.K_w:
-                    print("pulsando W")
+                    
                     self.exit = True
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
@@ -410,18 +409,18 @@ class Game(Scenes):
                 self.level_window.click_continue()  # pop up of bottom
             ### GAME OVER POP UP ###
             if self.remove_life <= 0:
-                print("no vidas")
+                
                 self.screen.blit(self.game_end.image, self.game_end.rect)
                 self.game_over_message = "GAME OVER"
                 self.game_end.draw_text(self.game_over_message, 300)
                 self.restart = "Pulsa 'X' para ir a Inicio"
                 self.game_end.draw_text(self.restart, HEIGHT - 100)
                 self.game_over_active = True
-                # pg.mixer.music.pause()   MUSIC
+                pg.mixer.music.pause()   #MUSIC pause
 
             if self.game_ended == True:
 
-                print("juego terminado")
+                
                 self.screen.blit(self.game_completed.image,
                                  self.game_completed.rect)
                 self.congratulation_text = "¡FELICIDADES, JUEGO TERMINADO!"
@@ -485,7 +484,7 @@ class Game(Scenes):
             self.plane_in_planet1 = False
             self.plane_in_planet2 = False
             self.plane_in_planet3 = False
-            # print(self.real_time)
+            
             if self.real_time < 30000:  # level 1 timing and booleans
                 self.create_leve_rock = True
                 self.activate_level_control = False
@@ -563,8 +562,7 @@ class Game(Scenes):
 
                     for event in pg.event.get():  # as main event checker are locked to dont creeate shots etc
                         # new event checr to exit and to know if mouse is clicking in continue bottom
-                        if event.type == pg.KEYDOWN:
-                            print(event.type, event.key)
+                        
                         if event.type == pg.QUIT:
                             pg.quit()
                             sys.exit()
@@ -592,7 +590,7 @@ class Game(Scenes):
 
                                     self.level2 = False
 
-                                    #self.player.rect.midleft
+                                    
 
                                 elif self.level3 == True:  # adapt timer for the last level, before game restart
   
