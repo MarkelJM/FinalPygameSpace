@@ -40,19 +40,7 @@ class DBManager:
         connection.close()
         
         return self.moves
-    """
-    def update_DB(self, points):
-        self.points = points
-
-        for k, v in self.moves.items():
-            if str(self.points) > str(v):
-                name = self.ask_name()
-                if name != TypeError:
-                    # ordena el diccionario segun los values
-                    db_update = sorted(
-                        self.moves(), key=operator.itemgetter(1))
-                    eliminated = db_update.popitem()
-        """
+ 
 
     def ask_name(self, screen):
         self.screen = screen
@@ -71,17 +59,7 @@ class DBManager:
 
             pg.display.flip()
         return self.text
-        """
-        pg.draw.rect(self.screen, self.color_fondo, self.fondo)
-        self.pantalla.blit(self.titulo, (self.x_titulo, self.y_titulo))
-
-        superficie_texto = self.tipografia.render(
-            self.texto, True, self.color_texto, self.color_fondo)
-        pos_x = self.x_titulo
-        pos_y = self.y_titulo + self.titulo.get_height()
-        self.pantalla.blit(superficie_texto, (pos_x, pos_y))
-        """
-
+     
         
 
     def insert_data_DB(self, link, name, points):
@@ -109,7 +87,6 @@ class DBManager:
         self.screen.blit(text, (pos_x, pos_y))
 
     def no_name_record(self, name):
-        """name_anonimo = "Anonimo"
-        if name == "":"""
+        
         name_anonimo = "Anonimo"
         return name_anonimo

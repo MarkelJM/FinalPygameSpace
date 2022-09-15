@@ -1,5 +1,0 @@
-PASOS ATRAS:
-
-1- Cuand bida sea 0 saltar al Home o crear un Game Over
-2 - crear rocas: tamaño pequeño y mediano
-3- sonido general y sonido del momentos: explisones y al pulsar teclas
